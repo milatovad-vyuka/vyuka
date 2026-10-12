@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="cs" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartičky: Státy a Národnosti (Francouzština)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        frBlue: '#002395',
+                        frRed: '#ED2939',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Robust 3D Flip styles without backdrop-blur context bugs */
+        .card-container {
+            perspective: 1200px;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+        }
+        
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
+        }
+        
+        .card-face {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .card-front {
+            z-index: 2;
+            transform: rotateY(0deg);
+            -webkit-transform: rotateY(0deg);
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
+        }
+
+        .spz-plate {
+            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+            border: 2px solid #0f172a;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .spz-eu-strip {
+            background-color: #003399;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-full flex flex-col selection:bg-blue-200">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="flex h-10 w-12 rounded-lg overflow-hidden shadow border border-slate-200">
+                    <div class="w-1/3 bg-[#002395]"></div>
+                    <div class="w-1/3 bg-white"></div>
+                    <div class="w-1/3 bg-[#ED2939]"></div>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                        Státy a Národnosti
+                        <span class="text-xs bg-blue-100 text-blue-800 font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">Francouzština</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">21 procvičovacích kartiček s výslovností a SPZ</p>
+                </div>
+            </div>
+
+            <!-- View Modes & Controls -->
+            <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-sm font-medium">
+                <button id="btnModeCards" onclick="switchMode('cards')" class="px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 bg-white text-blue-700 shadow-sm font-bold">
+                    <i class="fa-solid fa-clone"></i>
+                    <span>Kartičky</span>
+                </button>
+                <button id="btnModeTable" onclick="switchMode('table')" class="px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-table-list"></i>
+                    <span>Přehled</span>
+                </button>
+                <button id="btnModeQuiz" onclick="switchMode('quiz')" class="px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Kvíz</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-6 flex flex-col">
+
+        <section id="viewCards" class="flex-grow flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
+            
+            <!-- Controls Bar above card -->
+            <div class="w-full flex flex-wrap items-center justify-between mb-3 text-sm text-slate-600 gap-2">
+                <div class="flex items-center gap-2">
+                    <span id="cardProgressText" class="font-bold text-slate-800">1 / 21</span>
+                    <span class="text-slate-400">|</span>
+                    <button onclick="shuffleCards()" class="hover:text-blue-600 transition flex items-center gap-1 text-xs bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm" title="Zamíchat kartičky">
+                        <i class="fa-solid fa-shuffle text-slate-500"></i> Zamíchat
+                    </button>
+                    <button onclick="resetProgress()" class="hover:text-red-600 transition flex items-center gap-1 text-xs bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-sm" title="Vynulovat naučené">
+                        <i class="fa-solid fa-rotate-right text-slate-500"></i> Reset
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="btnToggleSideMode" onclick="toggleAlwaysShowBoth()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:border-blue-400 transition shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-eye text-blue-600"></i> <span id="toggleSideModeLabel">Pouze 1 strana</span>
+                    </button>
+                    <button id="btnSlowSpeech" onclick="toggleSlowSpeech()" class="px-2 py-1 rounded-lg bg-white border border-slate-200 text-xs text-slate-600 hover:border-blue-300 transition shadow-sm" title="Rychlost výslovnosti">
+                        <i class="fa-solid fa-gauge-simple-high"></i> <span id="slowSpeechLabel">1.0x</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden mb-4 shadow-inner">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-600 to-indigo-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <div class="w-full h-[480px] sm:h-[500px] card-container select-none cursor-pointer group" onclick="flipCard()">
+                <div id="flashcard" class="card-inner shadow-xl">
+                    
+                    <!-- FRONT OF CARD (LÍC - Česky) -->
+                    <div class="card-face card-front p-6 sm:p-8 flex flex-col justify-between items-center text-center border-2 border-slate-200 bg-white shadow-md">
+                        
+                        <div class="w-full flex justify-between items-center">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                                🇨🇿 LÍC — ČESKY
+                            </span>
+                            <span id="learnedBadge" class="hidden text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check"></i> Naučeno
+                            </span>
+                        </div>
+
+                        <div class="my-auto flex flex-col items-center justify-center space-y-4">
+                            <div id="cardFlag" class="text-8xl drop-shadow transition-transform duration-300 group-hover:scale-105">
+                                🇫🇷
+                            </div>
+
+                            <div class="spz-plate rounded-md px-3.5 py-1.5 flex items-center gap-2.5 min-w-[130px] justify-center">
+                                <div class="spz-eu-strip text-white font-bold text-[10px] px-1 py-0.5 rounded flex flex-col items-center leading-none">
+                                    <span class="text-[8px] text-amber-300">★</span>
+                                    <span>EU</span>
+                                </div>
+                                <span id="cardSpz" class="font-mono font-black text-2xl tracking-wider text-slate-900">
+                                    F
+                                </span>
+                            </div>
+
+                            <h2 id="cardCzName" class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                                Francie
+                            </h2>
+                        </div>
+
+                        <div class="w-full pt-3 border-t border-slate-100 flex items-center justify-center text-xs text-blue-600 font-bold gap-2 bg-blue-50/50 py-2 rounded-xl border border-blue-100">
+                            <i class="fa-solid fa-arrows-rotate text-sm animate-spin-slow"></i>
+                            <span>Kliknutím otočte na francouzštinu</span>
+                        </div>
+                    </div>
+
+                    <!-- BACK OF CARD (RUB - Francouzština s výslovností) -->
+                    <div class="card-face card-back p-5 sm:p-6 flex flex-col justify-between border-2 border-blue-400 bg-gradient-to-b from-blue-50/40 via-white to-blue-50/30 shadow-md">
+                        
+                        <div class="w-full flex justify-between items-center border-b border-slate-200 pb-2">
+                            <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-blue-600 text-white flex items-center gap-1.5 shadow-sm">
+                                🇫🇷 RUB — FRANCOUZSKY
+                            </span>
+                            <span id="cardSpzBack" class="text-xs font-mono font-bold bg-slate-100 px-2.5 py-1 rounded-md border border-slate-300 text-slate-800">SPZ: F</span>
+                        </div>
+
+                        <div class="my-auto space-y-3 text-left">
+                            
+                            <!-- 1. State Item -->
+                            <div class="p-3.5 rounded-2xl bg-blue-100/60 border border-blue-300 hover:border-blue-500 transition shadow-sm">
+                                <div class="text-[11px] font-extrabold text-blue-800 uppercase tracking-wider mb-1 flex justify-between items-center">
+                                    <span>Stát (le pays)</span>
+                                    <span id="cardCzStateSub" class="text-slate-600 font-bold italic">Francie</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div id="cardFrState" class="text-xl sm:text-2xl font-black text-blue-950">la France</div>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <span class="text-xs text-slate-500 font-medium">Výslovnost:</span>
+                                            <span id="cardPronState" class="text-xs text-blue-800 font-mono font-extrabold bg-white px-2 py-0.5 rounded border border-blue-200">[la frans]</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="event.stopPropagation(); playAudio('state')" class="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md active:scale-95 transition" title="Přehrát výslovnost státu">
+                                        <i class="fa-solid fa-volume-high text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 2. Male Nationality -->
+                            <div class="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition shadow-sm">
+                                <div class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider mb-1 flex justify-between items-center">
+                                    <span>Národnost — Mužský rod (M)</span>
+                                    <span id="cardCzM" class="text-slate-500 font-semibold italic">Francouz</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div id="cardFrM" class="text-lg font-bold text-slate-900">Français</div>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <span class="text-xs text-slate-400 font-medium">Výslovnost:</span>
+                                            <span id="cardPronM" class="text-xs text-slate-700 font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-200">[fransé]</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="event.stopPropagation(); playAudio('m')" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 flex items-center justify-center transition active:scale-95 shadow-sm" title="Přehrát výslovnost (M)">
+                                        <i class="fa-solid fa-volume-high text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 3. Female Nationality -->
+                            <div class="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition shadow-sm">
+                                <div class="text-[11px] font-extrabold text-slate-600 uppercase tracking-wider mb-1 flex justify-between items-center">
+                                    <span>Národnost — Ženský rod (Ž)</span>
+                                    <span id="cardCzF" class="text-slate-500 font-semibold italic">Francouzka</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div id="cardFrF" class="text-lg font-bold text-slate-900">Française</div>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <span class="text-xs text-slate-400 font-medium">Výslovnost:</span>
+                                            <span id="cardPronF" class="text-xs text-slate-700 font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-200">[franséz]</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="event.stopPropagation(); playAudio('f')" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 flex items-center justify-center transition active:scale-95 shadow-sm" title="Přehrát výslovnost (Ž)">
+                                        <i class="fa-solid fa-volume-high text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer Audio all -->
+                        <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-xs">
+                            <button onclick="event.stopPropagation(); playAudioAll()" class="text-blue-800 font-extrabold flex items-center gap-2 bg-blue-100/80 hover:bg-blue-200 px-3.5 py-2 rounded-xl border border-blue-300 transition active:scale-95">
+                                <i class="fa-solid fa-circle-play text-base text-blue-600"></i> Přehrát vše za sebou
+                            </button>
+                            <span class="text-slate-500 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-rotate-left"></i> Otočit zpět
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full flex items-center justify-between gap-2 sm:gap-3 mt-4">
+                <button onclick="prevCard()" class="flex-1 py-3 px-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-bold hover:bg-slate-50 active:scale-95 transition shadow-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> <span class="hidden sm:inline">Předchozí</span>
+                </button>
+
+                <button onclick="flipCard()" class="py-3 px-5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold active:scale-95 transition shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Otočit</span>
+                </button>
+
+                <button id="btnMarkLearned" onclick="toggleLearnedCurrent()" class="px-4 py-3 rounded-xl border border-slate-300 bg-white hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 text-slate-700 font-bold transition active:scale-95 shadow-sm flex items-center gap-2" title="Označit jako naučené">
+                    <i id="learnedIcon" class="fa-regular fa-circle-check text-lg"></i>
+                    <span class="hidden sm:inline">Znám</span>
+                </button>
+
+                <button onclick="nextCard()" class="flex-1 py-3 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold active:scale-95 transition shadow-md flex items-center justify-center gap-2">
+                    <span class="hidden sm:inline">Další</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="mt-3 text-xs text-slate-500 text-center flex items-center justify-center gap-3">
+                <span><kbd class="px-1.5 py-0.5 bg-slate-200 rounded text-slate-700 font-mono">←</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-200 rounded text-slate-700 font-mono">→</kbd> Přepínání</span>
+                <span>•</span>
+                <span><kbd class="px-1.5 py-0.5 bg-slate-200 rounded text-slate-700 font-mono">Mezerník</kbd> Otočení</span>
+            </div>
+        </section>
+
+        <section id="viewTable" class="hidden flex-grow flex flex-col w-full">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
+                <div class="relative flex-1 min-w-[240px]">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="tableSearch" oninput="renderTable()" placeholder="Hledat podle státu, SPZ nebo národnosti..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-500">Filtr:</span>
+                    <select id="tableFilter" onchange="renderTable()" class="bg-slate-50 border border-slate-200 rounded-xl text-sm px-3 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">Všechny státy (21)</option>
+                        <option value="learned">Jen naučené</option>
+                        <option value="unlearned">K procvičení</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex-grow">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase font-bold text-slate-500 tracking-wider">
+                                <th class="py-3.5 px-4 text-center w-12">SPZ</th>
+                                <th class="py-3.5 px-4">Stát (CZ)</th>
+                                <th class="py-3.5 px-4">Stát (FR) & Výslovnost</th>
+                                <th class="py-3.5 px-4">Mužský rod (M)</th>
+                                <th class="py-3.5 px-4">Ženský rod (Ž)</th>
+                                <th class="py-3.5 px-4 text-center">Audio</th>
+                                <th class="py-3.5 px-4 text-center w-16">Stav</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-slate-100 text-sm">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="viewQuiz" class="hidden flex-grow flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
+            <div id="quizContainer" class="w-full bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl flex flex-col">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                    <div>
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Poznej francouzský název</span>
+                        <h3 class="text-xl font-bold text-slate-900">Procvičovací Kvíz</h3>
+                    </div>
+                    <div class="text-right">
+                        <div id="quizScoreText" class="text-lg font-extrabold text-blue-700">Skóre: 0 / 0</div>
+                        <div id="quizProgressText" class="text-xs text-slate-400">Otázka 1 z 10</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-6 text-center border border-slate-200/80 mb-6 flex flex-col items-center justify-center">
+                    <div id="quizFlag" class="text-6xl mb-3">🇫🇷</div>
+                    <div class="spz-plate rounded px-2.5 py-0.5 text-xs font-mono font-bold mb-2 inline-block">
+                        SPZ: <span id="quizSpz">F</span>
+                    </div>
+                    <h2 id="quizQuestionCz" class="text-2xl font-black text-slate-800">Francie</h2>
+                    <p class="text-xs text-slate-500 mt-1">Jak se řekne tento stát francouzsky?</p>
+                </div>
+
+                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                </div>
+
+                <div id="quizFeedback" class="hidden p-4 rounded-xl text-center font-bold text-sm mb-4">
+                </div>
+
+                <button id="btnQuizNext" onclick="nextQuizQuestion()" class="hidden w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition">
+                    Další otázka <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+            <div id="quizFinishScreen" class="hidden w-full bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center flex flex-col items-center">
+                <div class="w-20 h-20 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-4xl mb-4">
+                    🏆
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Kvíz Dokončen!</h3>
+                <p id="quizFinalResult" class="text-slate-600 mb-6">Dosáhli jste skóre 8 z 10 správných odpovědí.</p>
+                <button onclick="startQuiz()" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-md hover:bg-blue-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Spustit nový kvíz
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>Procvičování francouzských států a národností • 21 kartiček</span>
+            <span>Francouzská výslovnost s českým fonetickým přepisovacím klíčem</span>
+        </div>
+    </footer>
+
+    <script>
+        const countriesData = [
+            { id: 1, cz: "Francie", cz_m: "Francouz", cz_f: "Francouzka", flag: "🇫🇷", spz: "F", fr_state: "la France", pron_state: "la frans", fr_m: "Français", pron_m: "fransé", fr_f: "Française", pron_f: "franséz" },
+            { id: 2, cz: "Belgie", cz_m: "Belgičan", cz_f: "Belgičanka", flag: "🇧🇪", spz: "B", fr_state: "la Belgique", pron_state: "la belžik", fr_m: "Belge", pron_m: "belž", fr_f: "Belge", pron_f: "belž" },
+            { id: 3, cz: "Česká republika", cz_m: "Čech", cz_f: "Češka", flag: "🇨🇿", spz: "CZ", fr_state: "la République tchèque", pron_state: "la repüblik ček", fr_m: "Tchèque", pron_m: "ček", fr_f: "Tchèque", pron_f: "ček" },
+            { id: 4, cz: "Spojené státy (USA)", cz_m: "Američan", cz_f: "Američanka", flag: "🇺🇸", spz: "USA", fr_state: "les États-Unis", pron_state: "lez eta züni", fr_m: "Américain", pron_m: "amerikẽ", fr_f: "Américaine", pron_f: "ameriken" },
+            { id: 5, cz: "Polsko", cz_m: "Polák", cz_f: "Polka", flag: "🇵🇱", spz: "PL", fr_state: "la Pologne", pron_state: "la poloň", fr_m: "Polonais", pron_m: "polone", fr_f: "Polonaise", pron_f: "polonéz" },
+            { id: 6, cz: "Německo", cz_m: "Němec", cz_f: "Němka", flag: "🇩🇪", spz: "D", fr_state: "l'Allemagne", pron_state: "lalmaň", fr_m: "Allemand", pron_m: "almã", fr_f: "Allemande", pron_f: "almand" },
+            { id: 7, cz: "Švýcarsko", cz_m: "Švýcar", cz_f: "Švýcarka", flag: "🇨🇭", spz: "CH", fr_state: "la Suisse", pron_state: "la süis", fr_m: "Suisse", pron_m: "süis", fr_f: "Suisse", pron_f: "süis" },
+            { id: 8, cz: "Itálie", cz_m: "Ital", cz_f: "Italka", flag: "🇮🇹", spz: "I", fr_state: "l'Italie", pron_state: "litali", fr_m: "Italien", pron_m: "italijẽ", fr_f: "Italienne", pron_f: "italijen" },
+            { id: 9, cz: "Slovensko", cz_m: "Slovák", cz_f: "Slovenka", flag: "🇸🇰", spz: "SK", fr_state: "la Slovaquie", pron_state: "la slovaki", fr_m: "Slovaque", pron_m: "slovak", fr_f: "Slovaque", pron_f: "slovak" },
+            { id: 10, cz: "Maďarsko", cz_m: "Maďar", cz_f: "Maďarka", flag: "🇭🇺", spz: "H", fr_state: "la Hongrie", pron_state: "la ongri", fr_m: "Hongrois", pron_m: "ongroa", fr_f: "Hongroise", pron_f: "ongroaz" },
+            { id: 11, cz: "Ukrajina", cz_m: "Ukrajinec", cz_f: "Ukrajinka", flag: "🇺🇦", spz: "UA", fr_state: "l'Ukraïne", pron_state: "lükren", fr_m: "Ukraïnien", pron_m: "ukrainijẽ", fr_f: "Ukraïnienne", pron_f: "ukrainijen" },
+            { id: 12, cz: "Čína", cz_m: "Číňan", cz_f: "Číňanka", flag: "🇨🇳", spz: "CHN", fr_state: "la Chine", pron_state: "la šin", fr_m: "Chinois", pron_m: "šinua", fr_f: "Chinoise", pron_f: "šinuáz" },
+            { id: 13, cz: "Nizozemsko", cz_m: "Nizozemec", cz_f: "Nizozemka", flag: "🇳🇱", spz: "NL", fr_state: "les Pays-Bas", pron_state: "le pejba", fr_m: "Néerlandais", pron_m: "néerlandé", fr_f: "Néerlandaise", pron_f: "néerlandéz" },
+            { id: 14, cz: "Portugalsko", cz_m: "Portugalec", cz_f: "Portugalka", flag: "🇵🇹", spz: "P", fr_state: "le Portugal", pron_state: "lə portugal", fr_m: "Portugais", pron_m: "portuge", fr_f: "Portugaise", pron_f: "portugéz" },
+            { id: 15, cz: "Španělsko", cz_m: "Španěl", cz_f: "Španělka", flag: "🇪🇸", spz: "E", fr_state: "l'Espagne", pron_state: "lespaň", fr_m: "Espagnol", pron_m: "espaňol", fr_f: "Espagnole", pron_f: "espaňol" },
+            { id: 16, cz: "Maroko", cz_m: "Maročan", cz_f: "Maročanka", flag: "🇲🇦", spz: "MA", fr_state: "le Maroc", pron_state: "lə marok", fr_m: "Marocain", pron_m: "marokẽ", fr_f: "Marocaine", pron_f: "maroken" },
+            { id: 17, cz: "Rakousko", cz_m: "Rakušan", cz_f: "Rakušanka", flag: "🇦🇹", spz: "A", fr_state: "l'Autriche", pron_state: "lotriš", fr_m: "Autrichien", pron_m: "otrišjẽ", fr_f: "Autrichienne", pron_f: "otrišjen" },
+            { id: 18, cz: "Chorvatsko", cz_m: "Chorvat", cz_f: "Chorvatka", flag: "🇭🇷", spz: "HR", fr_state: "la Croatie", pron_state: "la kruasi", fr_m: "Croate", pron_m: "kruat", fr_f: "Croate", pron_f: "kruat" },
+            { id: 19, cz: "Norsko", cz_m: "Nor", cz_f: "Norka", flag: "🇳🇴", spz: "N", fr_state: "la Norvège", pron_state: "la norvež", fr_m: "Norvégien", pron_m: "norvežjẽ", fr_f: "Norvégienne", pron_f: "norvežjen" },
+            { id: 20, cz: "Švédsko", cz_m: "Švéd", cz_f: "Švédka", flag: "🇸🇪", spz: "S", fr_state: "la Suède", pron_state: "la süed", fr_m: "Suédois", pron_m: "süedoa", fr_f: "Suédoise", pron_f: "süedoaz" },
+            { id: 21, cz: "Kanada", cz_m: "Kanadčan", cz_f: "Kanadčanka", flag: "🇨🇦", spz: "CDN", fr_state: "le Canada", pron_state: "lə kanada", fr_m: "Canadien", pron_m: "kanadijẽ", fr_f: "Canadienne", pron_f: "kanadijen" }
+        ];
+
+        let deck = [...countriesData];
+        let currentIndex = 0;
+        let isFlipped = false;
+        let learnedSet = new Set();
+        let speechRate = 1.0;
+        let showBothSides = false;
+
+        let quizList = [];
+        let quizCurrentIdx = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fr-FR';
+            utterance.rate = speechRate;
+
+            const voices = window.speechSynthesis.getVoices();
+            const frVoice = voices.find(v => v.lang.startsWith('fr'));
+            if (frVoice) {
+                utterance.voice = frVoice;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleSlowSpeech() {
+            if (speechRate === 1.0) {
+                speechRate = 0.7;
+                document.getElementById('slowSpeechLabel').textContent = "0.7x";
+                document.getElementById('btnSlowSpeech').classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+            } else {
+                speechRate = 1.0;
+                document.getElementById('slowSpeechLabel').textContent = "1.0x";
+                document.getElementById('btnSlowSpeech').classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+            }
+        }
+
+        function toggleAlwaysShowBoth() {
+            showBothSides = !showBothSides;
+            const btn = document.getElementById('btnToggleSideMode');
+            const label = document.getElementById('toggleSideModeLabel');
+            
+            if (showBothSides) {
+                label.textContent = "Obě strany";
+                btn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+                if (!isFlipped) flipCard();
+            } else {
+                label.textContent = "Pouze 1 strana";
+                btn.classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+                if (isFlipped) flipCard();
+            }
+        }
+
+        function updateCardDisplay() {
+            const current = deck[currentIndex];
+            if (!current) return;
+
+            if (!showBothSides) {
+                isFlipped = false;
+                document.getElementById('flashcard').classList.remove('flipped');
+            } else {
+                isFlipped = true;
+                document.getElementById('flashcard').classList.add('flipped');
+            }
+
+            // Front Card
+            document.getElementById('cardFlag').textContent = current.flag;
+            document.getElementById('cardSpz').textContent = current.spz;
+            document.getElementById('cardCzName').textContent = current.cz;
+
+            // Back Card
+            document.getElementById('cardSpzBack').textContent = `SPZ: ${current.spz}`;
+            document.getElementById('cardCzStateSub').textContent = current.cz;
+            document.getElementById('cardFrState').textContent = current.fr_state;
+            document.getElementById('cardPronState').textContent = `[${current.pron_state}]`;
+            
+            document.getElementById('cardCzM').textContent = current.cz_m;
+            document.getElementById('cardFrM').textContent = current.fr_m;
+            document.getElementById('cardPronM').textContent = `[${current.pron_m}]`;
+
+            document.getElementById('cardCzF').textContent = current.cz_f;
+            document.getElementById('cardFrF').textContent = current.fr_f;
+            document.getElementById('cardPronF').textContent = `[${current.pron_f}]`;
+
+            // Badges & Progress
+            document.getElementById('cardProgressText').textContent = `${currentIndex + 1} / ${deck.length}`;
+            const progressPct = ((currentIndex + 1) / deck.length) * 100;
+            document.getElementById('progressBar').style.width = `${progressPct}%`;
+
+            const isLearned = learnedSet.has(current.id);
+            const learnedBadge = document.getElementById('learnedBadge');
+            const learnedIcon = document.getElementById('learnedIcon');
+            const btnMark = document.getElementById('btnMarkLearned');
+
+            if (isLearned) {
+                learnedBadge.classList.remove('hidden');
+                learnedIcon.className = "fa-solid fa-circle-check text-emerald-600 text-lg";
+                btnMark.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-700');
+            } else {
+                learnedBadge.classList.add('hidden');
+                learnedIcon.className = "fa-regular fa-circle-check text-slate-400 text-lg";
+                btnMark.classList.remove('bg-emerald-50', 'border-emerald-300', 'text-emerald-700');
+            }
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            const cardEl = document.getElementById('flashcard');
+            if (isFlipped) {
+                cardEl.classList.add('flipped');
+            } else {
+                cardEl.classList.remove('flipped');
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < deck.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            updateCardDisplay();
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else {
+                currentIndex = deck.length - 1;
+            }
+            updateCardDisplay();
+        }
+
+        function shuffleCards() {
+            deck.sort(() => Math.random() - 0.5);
+            currentIndex = 0;
+            updateCardDisplay();
+        }
+
+        function resetProgress() {
+            learnedSet.clear();
+            currentIndex = 0;
+            updateCardDisplay();
+            renderTable();
+        }
+
+        function toggleLearnedCurrent() {
+            const current = deck[currentIndex];
+            if (learnedSet.has(current.id)) {
+                learnedSet.delete(current.id);
+            } else {
+                learnedSet.add(current.id);
+            }
+            updateCardDisplay();
+            renderTable();
+        }
+
+        function playAudio(type, customText = null) {
+            if (customText) {
+                speakText(customText);
+                return;
+            }
+            const current = deck[currentIndex];
+            if (!current) return;
+
+            if (type === 'state') speakText(current.fr_state);
+            else if (type === 'm') speakText(current.fr_m);
+            else if (type === 'f') speakText(current.fr_f);
+        }
+
+        function playAudioAll() {
+            const current = deck[currentIndex];
+            if (!current) return;
+            speakText(`${current.fr_state}. Národnost: ${current.fr_m}, ${current.fr_f}.`);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const searchVal = document.getElementById('tableSearch').value.toLowerCase().trim();
+            const filterVal = document.getElementById('tableFilter').value;
+
+            tbody.innerHTML = '';
+
+            const filtered = countriesData.filter(item => {
+                const matchesSearch = item.cz.toLowerCase().includes(searchVal) ||
+                                      item.fr_state.toLowerCase().includes(searchVal) ||
+                                      item.spz.toLowerCase().includes(searchVal) ||
+                                      item.fr_m.toLowerCase().includes(searchVal) ||
+                                      item.fr_f.toLowerCase().includes(searchVal);
+
+                const isLearned = learnedSet.has(item.id);
+                if (filterVal === 'learned') return matchesSearch && isLearned;
+                if (filterVal === 'unlearned') return matchesSearch && !isLearned;
+                return matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-slate-400">
+                            Žádné státy neodpovídají zadanému filtru.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const isLearned = learnedSet.has(item.id);
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 text-center">
+                        <span class="spz-plate px-2 py-0.5 rounded font-mono text-xs font-black inline-block">${item.spz}</span>
+                    </td>
+                    <td class="py-3 px-4 font-bold text-slate-800">
+                        <span class="mr-1.5">${item.flag}</span> ${item.cz}
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-bold text-blue-900">${item.fr_state}</div>
+                        <div class="text-xs text-blue-700 font-mono font-bold">[${item.pron_state}]</div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-800">${item.fr_m} <span class="text-xs font-normal text-slate-400">(${item.cz_m})</span></div>
+                        <div class="text-xs text-slate-500 font-mono">[${item.pron_m}]</div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-800">${item.fr_f} <span class="text-xs font-normal text-slate-400">(${item.cz_f})</span></div>
+                        <div class="text-xs text-slate-500 font-mono">[${item.pron_f}]</div>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="playAudio(null, '${item.fr_state}')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 flex items-center justify-center transition mx-auto" title="Přehrát zvuk">
+                            <i class="fa-solid fa-volume-high text-xs"></i>
+                        </button>
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <button onclick="toggleLearnedTable(${item.id})" class="text-lg transition">
+                            <i class="${isLearned ? 'fa-solid fa-circle-check text-emerald-600' : 'fa-regular fa-circle text-slate-300 hover:text-emerald-500'}"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleLearnedTable(id) {
+            if (learnedSet.has(id)) {
+                learnedSet.delete(id);
+            } else {
+                learnedSet.add(id);
+            }
+            renderTable();
+            updateCardDisplay();
+        }
+
+        function startQuiz() {
+            quizList = [...countriesData].sort(() => Math.random() - 0.5).slice(0, 10);
+            quizCurrentIdx = 0;
+            quizScore = 0;
+            
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('quizFinishScreen').classList.add('hidden');
+            
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            quizAnswered = false;
+            const current = quizList[quizCurrentIdx];
+            
+            document.getElementById('quizScoreText').textContent = `Skóre: ${quizScore} / ${quizCurrentIdx}`;
+            document.getElementById('quizProgressText').textContent = `Otázka ${quizCurrentIdx + 1} z ${quizList.length}`;
+
+            document.getElementById('quizFlag').textContent = current.flag;
+            document.getElementById('quizSpz').textContent = current.spz;
+            document.getElementById('quizQuestionCz').textContent = current.cz;
+
+            const feedbackEl = document.getElementById('quizFeedback');
+            feedbackEl.className = "hidden p-4 rounded-xl text-center font-bold text-sm mb-4";
+            document.getElementById('btnQuizNext').classList.add('hidden');
+
+            let distractors = countriesData.filter(c => c.id !== current.id);
+            distractors.sort(() => Math.random() - 0.5);
+            let options = [current, distractors[0], distractors[1], distractors[2]];
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50 rounded-2xl text-left font-bold text-slate-800 transition active:scale-98 shadow-sm flex items-center justify-between";
+                btn.innerHTML = `
+                    <span>${opt.fr_state}</span>
+                    <i class="fa-regular fa-circle text-slate-300"></i>
+                `;
+                btn.onclick = () => checkQuizAnswer(opt.id, current.id, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedId, correctId, clickedBtn) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const current = quizList[quizCurrentIdx];
+            const feedbackEl = document.getElementById('quizFeedback');
+            const optionsBtns = document.getElementById('quizOptions').children;
+
+            Array.from(optionsBtns).forEach(btn => {
+                if (btn.textContent.includes(current.fr_state)) {
+                    btn.classList.remove('border-slate-200', 'hover:bg-blue-50');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            if (selectedId === correctId) {
+                quizScore++;
+                feedbackEl.textContent = "Správně! 🎉 " + current.fr_state + " [" + current.pron_state + "]";
+                feedbackEl.classList.add('bg-emerald-100', 'text-emerald-800', 'border', 'border-emerald-300');
+                playAudio(null, current.fr_state);
+            } else {
+                clickedBtn.classList.remove('opacity-50', 'border-slate-200');
+                clickedBtn.classList.add('bg-red-50', 'border-red-400', 'text-red-800');
+                feedbackEl.textContent = `Špatně. Správná odpověď je: ${current.fr_state} [${current.pron_state}]`;
+                feedbackEl.classList.add('bg-red-100', 'text-red-800', 'border', 'border-red-300');
+            }
+
+            feedbackEl.classList.remove('hidden');
+            document.getElementById('quizScoreText').textContent = `Skóre: ${quizScore} / ${quizCurrentIdx + 1}`;
+            document.getElementById('btnQuizNext').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            quizCurrentIdx++;
+            if (quizCurrentIdx < quizList.length) {
+                renderQuizQuestion();
+            } else {
+                document.getElementById('quizContainer').classList.add('hidden');
+                document.getElementById('quizFinishScreen').classList.remove('hidden');
+                document.getElementById('quizFinalResult').textContent = `Dokončili jste kvíz se skóre ${quizScore} z ${quizList.length} správných odpovědí.`;
+            }
+        }
+
+        function switchMode(mode) {
+            document.getElementById('viewCards').classList.add('hidden');
+            document.getElementById('viewTable').classList.add('hidden');
+            document.getElementById('viewQuiz').classList.add('hidden');
+
+            document.getElementById('btnModeCards').className = "px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-600 hover:text-slate-900";
+            document.getElementById('btnModeTable').className = "px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-600 hover:text-slate-900";
+            document.getElementById('btnModeQuiz').className = "px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 text-slate-600 hover:text-slate-900";
+
+            if (mode === 'cards') {
+                document.getElementById('viewCards').classList.remove('hidden');
+                document.getElementById('btnModeCards').className = "px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 bg-white text-blue-700 shadow-sm font-bold";
+            } else if (mode === 'table') {
+                document.getElementById('viewTable').classList.remove('hidden');
+                document.getElementById('btnModeTable').className = "px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 bg-white text-blue-700 shadow-sm font-bold";
+                renderTable();
+            } else if (mode === 'quiz') {
+                document.getElementById('viewQuiz').classList.remove('hidden');
+                document.getElementById('btnModeQuiz').className = "px-3.5 py-1.5 rounded-lg transition flex items-center gap-2 bg-white text-blue-700 shadow-sm font-bold";
+                startQuiz();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('viewCards').classList.contains('hidden')) {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    flipCard();
+                } else if (e.code === 'ArrowRight') {
+                    nextCard();
+                } else if (e.code === 'ArrowLeft') {
+                    prevCard();
+                }
+            }
+        });
+
+        window.onload = function() {
+            updateCardDisplay();
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            }
+        };
+    </script>
+</body>
+</html>
