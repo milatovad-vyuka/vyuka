@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzská Slovíčka - Kartičky</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Font Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .perspective {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white shadow-md p-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+                <i class="fa-solid fa-language text-white"></i> Francouzská slovíčka pro začátečníky
+            </h1>
+            <span id="card-counter" class="text-sm bg-indigo-700 px-3 py-1 rounded-full font-medium">1 / 17</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            
+            <!-- Category Filter -->
+            <div class="mb-4 flex flex-wrap justify-center gap-2">
+                <button onclick="filterCards('all')" class="cat-btn px-3 py-1 text-sm rounded-full bg-indigo-600 text-white font-medium shadow-sm transition">Vše</button>
+                <button onclick="filterCards('greetings')" class="cat-btn px-3 py-1 text-sm rounded-full bg-white text-gray-600 hover:bg-gray-100 font-medium shadow-sm transition">Pozdravy</button>
+                <button onclick="filterCards('intro')" class="cat-btn px-3 py-1 text-sm rounded-full bg-white text-gray-600 hover:bg-gray-100 font-medium shadow-sm transition">Představení</button>
+                <button onclick="filterCards('hobbies')" class="cat-btn px-3 py-1 text-sm rounded-full bg-white text-gray-600 hover:bg-gray-100 font-medium shadow-sm transition">Záliby</button>
+            </div>
+
+            <!-- Flashcard Container -->
+            <div class="perspective w-full h-80 cursor-pointer" onclick="flipCard()">
+                <div id="flashcard" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-2xl">
+                    
+                    <!-- Front Side (French) -->
+                    <div class="absolute w-full h-full bg-white rounded-2xl p-6 flex flex-col justify-between items-center border-2 border-indigo-100 backface-hidden">
+                        <div class="w-full flex justify-between items-center text-gray-400 text-sm">
+                            <span id="card-category" class="uppercase tracking-wider text-xs font-semibold text-indigo-500">Pozdrav</span>
+                            <i class="fa-solid fa-rotate text-gray-300"></i>
+                        </div>
+                        
+                        <div class="text-center my-auto">
+                            <h2 id="card-french" class="text-3xl font-bold text-gray-800 mb-2">Bonjour!</h2>
+                            <p id="card-phonetic" class="text-indigo-600 font-medium text-lg">[bōžúr]</p>
+                        </div>
+
+                        <div class="w-full flex justify-between items-center">
+                            <button onclick="event.stopPropagation(); speakFrench()" class="text-indigo-600 hover:text-indigo-800 p-2 rounded-full hover:bg-indigo-50 transition" title="Přehrát výslovnost">
+                                <i class="fa-solid fa-volume-high text-xl"></i>
+                            </button>
+                            <span class="text-xs text-gray-400">Klikni pro otočení</span>
+                        </div>
+                    </div>
+
+                    <!-- Back Side (Czech) -->
+                    <div class="absolute w-full h-full bg-indigo-600 text-white rounded-2xl p-6 flex flex-col justify-between items-center rotate-y-180 backface-hidden">
+                        <div class="w-full flex justify-between items-center text-indigo-200 text-sm">
+                            <span class="uppercase tracking-wider text-xs font-semibold">Překlad</span>
+                            <i class="fa-solid fa-rotate text-indigo-300"></i>
+                        </div>
+                        
+                        <div class="text-center my-auto">
+                            <h2 id="card-czech" class="text-3xl font-bold mb-3">Dobrý den!</h2>
+                            <p id="card-example" class="text-indigo-100 italic text-sm border-t border-indigo-400/40 pt-3 max-w-xs">Příklad: Bonjour, comment ça va?</p>
+                        </div>
+
+                        <div class="w-full text-right">
+                            <span class="text-xs text-indigo-200">Klikni pro otočení</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex justify-between items-center mt-6">
+                <button onclick="prevCard()" class="flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium shadow-md transition border border-gray-200">
+                    <i class="fa-solid fa-chevron-left"></i> Předchozí
+                </button>
+                <button onclick="shuffleCards()" class="bg-white hover:bg-gray-50 text-gray-700 p-3 rounded-lg shadow-md transition border border-gray-200" title="Zamíchat">
+                    <i class="fa-solid fa-shuffle"></i>
+                </button>
+                <button onclick="nextCard()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium shadow-md transition">
+                    Další <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-gray-500 border-t border-gray-200">
+        Výuka francouzštiny pro začátečníky
+    </footer>
+
+    <!-- JavaScript logic -->
+    <script>
+        const allCards = [
+            // Pozdravy & Základní fráze
+            { french: "Bonjour!", phonetic: "[bōžúr]", czech: "Dobrý den!", category: "greetings", catName: "Pozdrav", example: "Bonjour! Comment ça va?" },
+            { french: "Salut!", phonetic: "[salü]", czech: "Ahoj!", category: "greetings", catName: "Pozdrav", example: "Salut! Ça va?" },
+            { french: "Au revoir!", phonetic: "[o r'voár]", czech: "Na shledanou!", category: "greetings", catName: "Pozdrav", example: "Au revoir et bonne journée!" },
+            { french: "Bonsoir!", phonetic: "[bōsuár]", czech: "Dobrý večer!", category: "greetings", catName: "Pozdrav", example: "Bonsoir tout le monde!" },
+            { french: "Ça va?", phonetic: "[sa va?]", czech: "Jak to jde? / Jak se máš?", category: "greetings", catName: "Otázka", example: "Salut, ça va?" },
+            { french: "Comment ça va?", phonetic: "[komā sa va?]", czech: "Jak se máš?", category: "otázka", catName: "Otázka", example: "Bonjour Marie, comment ça va?" },
+            { french: "Ça va très bien!", phonetic: "[sa va tré bjē]", czech: "Mám se moc dobře!", category: "greetings", catName: "Odpověď", example: "Merci, ça va très bien!" },
+            
+            // Představení se
+            { french: "Je m'appelle...", phonetic: "[žə ma-pel...]", czech: "Jmenuji se...", category: "intro", catName: "Představení", example: "Je m'appelle Anna." },
+            { french: "J'ai douze ans.", phonetic: "[že du-zā]", czech: "Je mi 12 let.", category: "intro", catName: "Věk", example: "J'ai douze ans et je suis élève." },
+            { french: "J'ai treize ans.", phonetic: "[že tre-zā]", czech: "Je mi 13 let.", category: "intro", catName: "Věk", example: "J'ai treize ans." },
+            { french: "J'habite à...", phonetic: "[ža-bit a...]", czech: "Bydlím v...", category: "intro", catName: "Představení", example: "J'habite à Prague." },
+            { french: "Je suis Tchèque.", phonetic: "[žə süi ček]", czech: "Jsem Čech / Češka.", category: "intro", catName: "Představení", example: "Je suis Tchèque et j'habite ici." },
+            { french: "Je parle tchèque, anglais et français.", phonetic: "[žə parl ček, āgle e frāse]", czech: "Mluvím česky, anglicky a francouzsky.", category: "intro", catName: "Jazyky", example: "Je parle tchèque, anglais et français." },
+            
+            // Záliby (J'aime...)
+            { french: "J'aime...", phonetic: "[žem...]", czech: "Rád/a mám / Ráda děláte...", category: "hobbies", catName: "Záliby", example: "J'aime le chocolat." },
+            { french: "écouter de la musique", phonetic: "[ekute d'la müzik]", czech: "poslouchat hudbu", category: "hobbies", catName: "Záliby", example: "J'aime écouter de la musique." },
+            { french: "regarder des films", phonetic: "[rəgarde de film]", czech: "dívat se na filmy", category: "hobbies", catName: "Záliby", example: "J'aime regarder des films." },
+            { french: "voyager", phonetic: "[vuajaže]", czech: "cestovat", category: "hobbies", catName: "Záliby", example: "J'aime voyager en France." }
+        ];
+
+        let currentCards = [...allCards];
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        function updateCard() {
+            const card = currentCards[currentIndex];
+            
+            // Reset flip before changing content
+            if (isFlipped) {
+                document.getElementById('flashcard').classList.remove('rotate-y-180');
+                isFlipped = false;
+                setTimeout(() => setContent(card), 200);
+            } else {
+                setContent(card);
+            }
+
+            document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${currentCards.length}`;
+        }
+
+        function setContent(card) {
+            document.getElementById('card-french').innerText = card.french;
+            document.getElementById('card-phonetic').innerText = card.phonetic;
+            document.getElementById('card-czech').innerText = card.czech;
+            document.getElementById('card-category').innerText = card.catName;
+            document.getElementById('card-example').innerText = card.example ? `Příklad: ${card.example}` : '';
+        }
+
+        function flipCard() {
+            const cardElement = document.getElementById('flashcard');
+            isFlipped = !isFlipped;
+            cardElement.classList.toggle('rotate-y-180');
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % currentCards.length;
+            updateCard();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + currentCards.length) % currentCards.length;
+            updateCard();
+        }
+
+        function shuffleCards() {
+            for (let i = currentCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentCards[i], currentCards[j]] = [currentCards[i], currentCards[j]];
+            }
+            currentIndex = 0;
+            updateCard();
+        }
+
+        function filterCards(cat) {
+            if (cat === 'all') {
+                currentCards = [...allCards];
+            } else {
+                currentCards = allCards.filter(c => c.category === cat);
+            }
+            
+            // Update button styles
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = 'cat-btn px-3 py-1 text-sm rounded-full bg-white text-gray-600 hover:bg-gray-100 font-medium shadow-sm transition';
+            });
+            event.target.className = 'cat-btn px-3 py-1 text-sm rounded-full bg-indigo-600 text-white font-medium shadow-sm transition';
+
+            currentIndex = 0;
+            updateCard();
+        }
+
+        function speakFrench() {
+            if ('speechSynthesis' in window) {
+                const text = currentCards[currentIndex].french.replace('...', '');
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        window.onload = updateCard;
+    </script>
+</body>
+</html>
