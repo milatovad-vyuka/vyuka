@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Procvičování FJ: Názvy států a výslovnost (en, au, aux)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .correct-anim { animation: pulseGreen 0.4s ease-in-out; }
+    .wrong-anim { animation: shakeRed 0.4s ease-in-out; }
+    @keyframes pulseGreen {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    @keyframes shakeRed {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
+
+  <header class="bg-indigo-700 text-white py-6 shadow-md sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-2xl font-bold flex items-center gap-2">
+          <span>🇫🇷 Francouzština – Les États</span>
+        </h1>
+        <p class="text-indigo-200 text-sm">Předložky <span class="font-semibold underline">en</span>, <span class="font-semibold underline">au</span>, <span class="font-semibold underline">aux</span> a výslovnost s audiem</p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-2">
+        <button id="btn-tab-grammar" onclick="showTab('grammar')" class="px-3.5 py-2 rounded-lg bg-amber-500 font-medium text-slate-900 transition shadow text-xs md:text-sm">
+          📖 Gramatika
+        </button>
+        <button id="btn-tab-pronunciation" onclick="showTab('pronunciation')" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition shadow text-xs md:text-sm text-white">
+          🗣️ Výslovnost + Audio
+        </button>
+        <button id="btn-tab-practice" onclick="showTab('practice')" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition shadow text-xs md:text-sm text-white">
+          ✏️ Procvičování
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 mt-8">
+
+    <!-- TAB 1: GRAMMAR EXPLANATION -->
+    <section id="tab-grammar" class="space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+        <h2 class="text-xl font-bold text-indigo-900 mb-4 border-b pb-2">Jak vybrat správnou předložku pro státy?</h2>
+        <p class="mb-4 text-slate-700">
+          Ve francouzštině závisí předložka pro vyjádření <em>„v / do“</em> u názvů států na <strong>rodu</strong>, <strong>začátečním písmenu</strong> a <strong>čísle</strong> daného státu.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-4 mt-6">
+          <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg">
+            <div class="text-emerald-800 font-bold text-2xl mb-1">EN</div>
+            <p class="text-xs text-emerald-900 font-bold uppercase tracking-wider mb-2">Ženský rod / Samohláska</p>
+            <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+              <li>Státy ženského rodu (většina končí na <strong>-e</strong>).</li>
+              <li>Státy mužského rodu začínající na <strong>samohlásku</strong>.</li>
+            </ul>
+            <div class="mt-3 text-xs bg-white p-2.5 rounded border border-emerald-200 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span>• <em>en France</em> (Francie)</span>
+                <button onclick="speak('en France')" class="text-emerald-700 font-bold px-1.5 py-0.5 rounded bg-emerald-100">🔊 Play</button>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>• <em>en République Tchèque</em> (ČR)</span>
+                <button onclick="speak('en République Tchèque')" class="text-emerald-700 font-bold px-1.5 py-0.5 rounded bg-emerald-100">🔊 Play</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded-r-lg">
+            <div class="text-sky-800 font-bold text-2xl mb-1">AU</div>
+            <p class="text-xs text-sky-900 font-bold uppercase tracking-wider mb-2">Mužský rod</p>
+            <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+              <li>Státy mužského rodu (nekončí na <strong>-e</strong>).</li>
+              <li>Začínají na <strong>souhlásku</strong>.</li>
+            </ul>
+            <div class="mt-3 text-xs bg-white p-2.5 rounded border border-sky-200 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span>• <em>au Canada</em> (Kanada)</span>
+                <button onclick="speak('au Canada')" class="text-sky-700 font-bold px-1.5 py-0.5 rounded bg-sky-100">🔊 Play</button>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>• <em>au Japon</em> (Japonsko)</span>
+                <button onclick="speak('au Japon')" class="text-sky-700 font-bold px-1.5 py-0.5 rounded bg-sky-100">🔊 Play</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+            <div class="text-amber-800 font-bold text-2xl mb-1">AUX</div>
+            <p class="text-xs text-amber-900 font-bold uppercase tracking-wider mb-2">Množné číslo</p>
+            <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+              <li>Názvy států v <strong>množném čísle</strong> (končí zpravidla na <strong>-s</strong>).</li>
+            </ul>
+            <div class="mt-3 text-xs bg-white p-2.5 rounded border border-amber-200 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span>• <em>aux États-Unis</em> (USA)</span>
+                <button onclick="speak('aux États-Unis')" class="text-amber-800 font-bold px-1.5 py-0.5 rounded bg-amber-100">🔊 Play</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: PRONUNCIATION -->
+    <section id="tab-pronunciation" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+        <h2 class="text-xl font-bold text-indigo-900 mb-2 border-b pb-2">🗣️ Fonetická výslovnost & Audio ukázky</h2>
+        <div class="space-y-4 mt-4">
+          <div class="border rounded-lg p-4 bg-emerald-50/50 flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-emerald-900">EN [ã] (nosové „an“)</h3>
+              <p class="text-xs text-slate-600">Před samohláskami se váže: <em>en Italie</em> [ã.n‿i.ta.li]</p>
+            </div>
+            <button onclick="speak('en Italie')" class="px-3 py-1 bg-emerald-600 text-white rounded text-xs">🔊 Poslech</button>
+          </div>
+          <div class="border rounded-lg p-4 bg-sky-50/50 flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-sky-900">AU [o] (čisté „o“)</h3>
+              <p class="text-xs text-slate-600">Jednoduché o: <em>au Canada</em> [o ka.na.da]</p>
+            </div>
+            <button onclick="speak('au Canada')" class="px-3 py-1 bg-sky-600 text-white rounded text-xs">🔊 Poslech</button>
+          </div>
+          <div class="border rounded-lg p-4 bg-amber-50/50 flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-amber-900">AUX [o] / [oz]</h3>
+              <p class="text-xs text-slate-600">Vázání s Z před samohláskou: <em>aux États-Unis</em> [o.z‿e.ta.zü.ni]</p>
+            </div>
+            <button onclick="speak('aux États-Unis')" class="px-3 py-1 bg-amber-600 text-white rounded text-xs">🔊 Poslech</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: PRACTICE -->
+    <section id="tab-practice" class="hidden space-y-6">
+      <div class="bg-white p-4 rounded-xl shadow-md border flex justify-between items-center">
+        <div><span class="text-sm text-slate-500">Otázka:</span> <span id="progress-text" class="font-bold text-indigo-700">0 / 0</span></div>
+        <div class="flex gap-4 text-sm">
+          <div class="text-emerald-600 font-semibold">Správně: <span id="score-correct">0</span></div>
+          <div class="text-rose-600 font-semibold">Chyby: <span id="score-wrong">0</span></div>
+        </div>
+        <button onclick="resetQuiz()" class="text-xs bg-slate-200 px-3 py-1.5 rounded">🔄 Znova</button>
+      </div>
+
+      <div id="quiz-card" class="bg-white p-8 rounded-xl shadow-lg border text-center">
+        <div class="text-2xl md:text-3xl font-extrabold text-slate-800 my-6 flex justify-center items-center gap-2">
+          <span>Je vais</span>
+          <span class="border-b-4 border-indigo-500 px-3 py-1 text-indigo-600" id="answer-placeholder">___</span>
+          <span id="country-name" class="underline">France</span>.
+          <button onclick="speakCurrentSentence()" class="bg-indigo-100 text-indigo-700 p-2 rounded-full">🔊</button>
+        </div>
+        <p class="text-slate-500 text-sm mb-6" id="country-translation">(Francie)</p>
+
+        <div class="grid grid-cols-3 gap-4 max-w-md mx-auto mb-6">
+          <button onclick="checkAnswer('en')" class="opt-btn bg-slate-50 border-2 py-3 rounded-lg text-xl font-bold">en</button>
+          <button onclick="checkAnswer('au')" class="opt-btn bg-slate-50 border-2 py-3 rounded-lg text-xl font-bold">au</button>
+          <button onclick="checkAnswer('aux')" class="opt-btn bg-slate-50 border-2 py-3 rounded-lg text-xl font-bold">aux</button>
+        </div>
+
+        <div id="explanation-box" class="hidden p-4 rounded-lg mb-4 text-left text-sm"></div>
+        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 text-white font-semibold px-6 py-2.5 rounded-lg mx-auto">Další ➔</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const questions = [
+      { country: "France", trans: "Francie", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Belgique", trans: "Belgie", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "République Tchèque", trans: "Česká republika", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "États-Unis", trans: "USA", correct: "aux", rule: "Množné číslo (pluriel) – končí na -s." },
+      { country: "Pologne", trans: "Polsko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Allemagne", trans: "Německo", correct: "en", rule: "Ženský rod (féminin) + začíná na samohlásku." },
+      { country: "Suisse", trans: "Švýcarsko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Italie", trans: "Itálie", correct: "en", rule: "Ženský rod (féminin) + začíná na samohlásku." },
+      { country: "Slovaquie", trans: "Slovensko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Hongrie", trans: "Maďarsko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Ukraïne", trans: "Ukrajina", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Chine", trans: "Čína", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Pays-Bas", trans: "Nizozemsko", correct: "aux", rule: "Množné číslo (pluriel) – končí zpravidla na -s." },
+      { country: "Portugal", trans: "Portugalsko", correct: "au", rule: "Mužský rod (masculin) – nekončí na -e." },
+      { country: "Espagne", trans: "Španělsko", correct: "en", rule: "Ženský rod (féminin) + začíná na samohlásku." },
+      { country: "Maroc", trans: "Maroko", correct: "au", rule: "Mužský rod (masculin) – nekončí na -e." },
+      { country: "Autriche", trans: "Rakousko", correct: "en", rule: "Začíná na samohlásku (A)." },
+      { country: "Croatie", trans: "Chorvatsko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Norvège", trans: "Norsko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Suède", trans: "Švédsko", correct: "en", rule: "Ženský rod (féminin) – končí na -e." },
+      { country: "Canada", trans: "Kanada", correct: "au", rule: "Mužský rod (masculin) – nekončí na -e." }
+    ];
+
+    let currentIndex = 0, correctCount = 0, wrongCount = 0, currentQuestions = [];
+
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'fr-FR';
+        u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      }
+    }
+
+    function speakCurrentSentence() {
+      const q = currentQuestions[currentIndex];
+      speak(`Je vais ${q.correct} ${q.country}`);
+    }
+
+    function showTab(t) {
+      document.getElementById('tab-grammar').classList.add('hidden');
+      document.getElementById('tab-pronunciation').classList.add('hidden');
+      document.getElementById('tab-practice').classList.add('hidden');
+
+      document.getElementById('btn-tab-grammar').className = "px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition shadow text-xs md:text-sm text-white";
+      document.getElementById('btn-tab-pronunciation').className = "px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition shadow text-xs md:text-sm text-white";
+      document.getElementById('btn-tab-practice').className = "px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-medium transition shadow text-xs md:text-sm text-white";
+
+      document.getElementById(`tab-${t}`).classList.remove('hidden');
+      document.getElementById(`btn-tab-${t}`).className = "px-3.5 py-2 rounded-lg bg-amber-500 font-medium text-slate-900 transition shadow text-xs md:text-sm";
+
+      if (t === 'practice' && currentQuestions.length === 0) resetQuiz();
+    }
+
+    function resetQuiz() {
+      currentQuestions = [...questions].sort(() => Math.random() - 0.5);
+      currentIndex = 0; correctCount = 0; wrongCount = 0;
+      updateStats(); loadQuestion();
+    }
+
+    function loadQuestion() {
+      const q = currentQuestions[currentIndex];
+      document.getElementById('country-name').textContent = q.country;
+      document.getElementById('country-translation').textContent = `(${q.trans})`;
+      document.getElementById('answer-placeholder').textContent = "___";
+      document.getElementById('explanation-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+      document.querySelectorAll('.opt-btn').forEach(b => b.disabled = false);
+    }
+
+    function checkAnswer(selected) {
+      const q = currentQuestions[currentIndex];
+      document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+      document.getElementById('answer-placeholder').textContent = selected;
+
+      speak(`Je vais ${selected} ${q.country}`);
+
+      const expl = document.getElementById('explanation-box');
+      if (selected === q.correct) {
+        correctCount++;
+        expl.className = "p-4 rounded-lg mb-4 text-left text-sm bg-emerald-100 text-emerald-900 border border-emerald-300";
+        expl.innerHTML = `<strong>Très bien! 🎉</strong> ${q.rule}`;
+      } else {
+        wrongCount++;
+        expl.className = "p-4 rounded-lg mb-4 text-left text-sm bg-rose-100 text-rose-900 border border-rose-300";
+        expl.innerHTML = `<strong>Chyba! Správně je "${q.correct}".</strong> ${q.rule}`;
+      }
+      expl.classList.remove('hidden');
+      document.getElementById('next-btn').classList.remove('hidden');
+      updateStats();
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < currentQuestions.length) loadQuestion();
+      else alert(`Dokončeno! Výsledek: ${correctCount} z ${currentQuestions.length}`);
+    }
+
+    function updateStats() {
+      document.getElementById('progress-text').textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
+      document.getElementById('score-correct').textContent = correctCount;
+      document.getElementById('score-wrong').textContent = wrongCount;
+    }
+
+    showTab('grammar');
+  </script>
+</body>
+</html>
