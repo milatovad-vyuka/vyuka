@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'heure en français - Francouzština: Hodiny pro 9. ročník</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tab-active {
+            border-bottom: 3px solid #2563eb;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+        .card-hover {
+            transition: all 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.12);
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-audio {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col selection:bg-blue-200 selection:text-blue-900">
+
+    <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-red-500 flex items-center justify-center text-white font-black text-xl shadow-md">
+                    🇫🇷
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl text-slate-900 leading-tight">L'heure en français</h1>
+                    <p class="text-xs text-slate-500 font-medium">Interaktivní výuka a cvičení pro 9. ročník ZŠ</p>
+                </div>
+            </div>
+
+            <!-- Global Score -->
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-50 border border-amber-200 text-amber-800 px-3.5 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 shadow-sm">
+                    <i data-lucide="trophy" class="w-4 h-4 text-amber-500 fill-amber-500"></i>
+                    <span>Skóre: <span id="global-score">0</span> bodů</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="max-w-6xl mx-auto px-4 flex space-x-2 sm:space-x-6 border-t border-slate-100 text-xs sm:text-sm font-medium overflow-x-auto">
+            <button onclick="switchTab('theory')" id="tab-theory" class="py-3 px-2 tab-active flex items-center gap-2 shrink-0">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span>1. Výklad & Celé hodiny (1-12)</span>
+            </button>
+            <button onclick="switchTab('simulator')" id="tab-simulator" class="py-3 px-2 text-slate-600 hover:text-blue-600 flex items-center gap-2 shrink-0">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+                <span>2. Interaktivní simulátor</span>
+            </button>
+            <button onclick="switchTab('practice')" id="tab-practice" class="py-3 px-2 text-slate-600 hover:text-blue-600 flex items-center gap-2 shrink-0">
+                <i data-lucide="pen-tool" class="w-4 h-4"></i>
+                <span>3. Tréninkové úlohy</span>
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="py-3 px-2 text-slate-600 hover:text-blue-600 flex items-center gap-2 shrink-0">
+                <i data-lucide="award" class="w-4 h-4 text-amber-500"></i>
+                <span class="font-bold text-indigo-700">4. Rychlý test (10 otázek)</span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+
+        <section id="section-theory" class="space-y-8">
+            
+            <!-- Video & Rules Banner -->
+            <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl space-y-3">
+                    <span class="inline-block px-3 py-1 bg-blue-500/30 backdrop-blur-md rounded-full text-xs font-semibold text-blue-200 border border-blue-400/30">Lekce podle videa z YouTube</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold">Jak se ptáme a odpovídáme na čas?</h2>
+                    <p class="text-blue-100 text-sm leading-relaxed">
+                        Otázka: <strong class="text-amber-300 font-bold">Quelle heure est-il ?</strong> (Kolik je hodin?)<br>
+                        Odpověď začíná <strong>vždy</strong> neosobním tvarem: <strong class="text-amber-300 font-bold">Il est...</strong> (Je...)
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="speakFrench('Quelle heure est-il ?')" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 backdrop-blur-sm transition">
+                            <i data-lucide="volume-2" class="w-4 h-4 text-amber-300"></i>
+                            <span>Poslechnout otázku</span>
+                        </button>
+                        <a href="https://www.youtube.com/watch?v=5wH0W88MiT0" target="_blank" class="bg-red-600/90 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 transition">
+                            <i data-lucide="youtube" class="w-4 h-4"></i>
+                            <span>Otevřít videolekci na YouTube</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview of Hours -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="bg-blue-600 text-white w-7 h-7 rounded-lg flex items-center justify-center text-sm font-black">1</span>
+                        <span>Přehled celých hodin (Heures piles: 1:00 – 12:00 + Půlnoc)</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">
+                        ⚠️ <strong class="text-slate-800">Důležité pravidlo:</strong> U 1:00 se říká <code class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-bold">une heure</code> (jednotné číslo). Od 2:00 výše se píše <code class="bg-blue-100 text-blue-900 px-1.5 py-0.5 rounded font-bold">heures</code> s koncovým <strong>-s</strong>.
+                    </p>
+                </div>
+
+                <!-- Grid 1-12 Cards dynamically injected -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="all-hours-grid"></div>
+            </div>
+
+            <!-- Rules Summary Grid -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Part 2: Fractions -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-md font-bold text-slate-900 mb-3 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <span class="bg-indigo-600 text-white w-7 h-7 rounded-lg flex items-center justify-center text-sm font-black">2</span>
+                        <span>Čtvrt, Půl a Přičítání minut (+1 až +30 min)</span>
+                    </h3>
+                    <div class="space-y-3 text-xs sm:text-sm">
+                        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-100 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-950">a čtvrt (+15 min)</span> → <code class="bg-white px-2 py-0.5 rounded text-indigo-700 border font-bold">et quart</code>
+                                <p class="text-slate-500 text-xs mt-1">Příklad: 4:15 = Il est quatre heures <strong>et quart</strong>.</p>
+                            </div>
+                            <button onclick="speakFrench('Il est quatre heures et quart')" class="p-2 text-indigo-600 hover:bg-indigo-100 rounded-lg transition"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-100 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-950">a půl (+30 min)</span> → <code class="bg-white px-2 py-0.5 rounded text-indigo-700 border font-bold">et demie</code>
+                                <p class="text-slate-500 text-xs mt-1">Příklad: 8:30 = Il est huit heures <strong>et demie</strong>.</p>
+                            </div>
+                            <button onclick="speakFrench('Il est huit heures et demie')" class="p-2 text-indigo-600 hover:bg-indigo-100 rounded-lg transition"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-100 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-950">přičítání minut (+5, +10, +20)</span>
+                                <p class="text-slate-500 text-xs mt-1">Příklad: 2:10 = Il est deux heures <strong>dix</strong>.</p>
+                            </div>
+                            <button onclick="speakFrench('Il est deux heures dix')" class="p-2 text-indigo-600 hover:bg-indigo-100 rounded-lg transition"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 3: Subtraction -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <h3 class="text-md font-bold text-slate-900 mb-3 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <span class="bg-amber-600 text-white w-7 h-7 rounded-lg flex items-center justify-center text-sm font-black">3</span>
+                        <span>Za čtvrt a Odčítání minut (-35 až -55 min)</span>
+                    </h3>
+                    <div class="space-y-3 text-xs sm:text-sm">
+                        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-100 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-amber-950">za čtvrt (-15 min do...)</span> → <code class="bg-white px-2 py-0.5 rounded text-amber-800 border font-bold">moins le quart</code>
+                                <p class="text-slate-500 text-xs mt-1">Příklad: 4:45 (za čtvrt na 5) = Il est cinq heures <strong>moins le quart</strong>.</p>
+                            </div>
+                            <button onclick="speakFrench('Il est cinq heures moins le quart')" class="p-2 text-amber-700 hover:bg-amber-100 rounded-lg transition"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-100 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-amber-950">odčítání minut (méně 20, méně 10)</span> → <code class="bg-white px-2 py-0.5 rounded text-amber-800 border font-bold">moins...</code>
+                                <p class="text-slate-500 text-xs mt-1">Příklad: 6:50 (za 10 minut 7) = Il est sept heures <strong>moins dix</strong>.</p>
+                            </div>
+                            <button onclick="speakFrench('Il est sept heures moins dix')" class="p-2 text-amber-700 hover:bg-amber-100 rounded-lg transition"><i data-lucide="volume-2" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AM/PM Times -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-md font-bold text-slate-900 mb-3 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="bg-emerald-600 text-white w-7 h-7 rounded-lg flex items-center justify-center text-sm font-black">4</span>
+                    <span>Upřesnění denní doby (du matin / de l'après-midi / du soir)</span>
+                </h3>
+                <div class="grid sm:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 rounded-xl bg-amber-50 border border-amber-100">
+                        <div class="text-3xl mb-1">🌅</div>
+                        <div class="font-bold text-slate-800 text-sm">du matin</div>
+                        <div class="text-xs text-slate-500">ráno / dopoledne</div>
+                        <p class="text-xs font-semibold text-slate-600 mt-2">8:00 = 8h du matin</p>
+                        <button onclick="speakFrench('du matin')" class="mt-2 text-xs bg-white px-2.5 py-1 rounded-md shadow-sm border text-amber-700 inline-flex items-center gap-1 font-semibold"><i data-lucide="volume-2" class="w-3.5 h-3.5"></i> Přehrát</button>
+                    </div>
+                    <div class="p-4 rounded-xl bg-orange-50 border border-orange-100">
+                        <div class="text-3xl mb-1">☀️</div>
+                        <div class="font-bold text-slate-800 text-sm">de l'après-midi</div>
+                        <div class="text-xs text-slate-500">odpoledne</div>
+                        <p class="text-xs font-semibold text-slate-600 mt-2">15:00 = 3h de l'après-midi</p>
+                        <button onclick="speakFrench('de l\'après-midi')" class="mt-2 text-xs bg-white px-2.5 py-1 rounded-md shadow-sm border text-orange-700 inline-flex items-center gap-1 font-semibold"><i data-lucide="volume-2" class="w-3.5 h-3.5"></i> Přehrát</button>
+                    </div>
+                    <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-100">
+                        <div class="text-3xl mb-1">🌙</div>
+                        <div class="font-bold text-slate-800 text-sm">du soir</div>
+                        <div class="text-xs text-slate-500">večer / v noci</div>
+                        <p class="text-xs font-semibold text-slate-600 mt-2">20:00 = 8h du soir</p>
+                        <button onclick="speakFrench('du soir')" class="mt-2 text-xs bg-white px-2.5 py-1 rounded-md shadow-sm border text-indigo-700 inline-flex items-center gap-1 font-semibold"><i data-lucide="volume-2" class="w-3.5 h-3.5"></i> Přehrát</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-simulator" class="space-y-8 hidden">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                    <i data-lucide="clock" class="w-5 h-5 text-blue-600"></i>
+                    <span>Interaktivní simulátor – Vyzkoušej libovolný čas</span>
+                </h3>
+                <p class="text-xs text-slate-500 mb-6">Měň hodiny a minuty pomocí posuvníků. Ciferník i větou se okamžitě přizpůsobí.</p>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <!-- Analog SVG Clock Display -->
+                    <div class="flex flex-col items-center justify-center bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <svg id="interactive-clock-svg" class="w-60 h-60 drop-shadow-md select-none" viewBox="0 0 200 200">
+                            <circle cx="100" cy="100" r="90" fill="#ffffff" stroke="#cbd5e1" stroke-width="6"/>
+                            <circle cx="100" cy="100" r="84" fill="none" stroke="#f1f5f9" stroke-width="2"/>
+                            
+                            <!-- Numbers -->
+                            <g text-anchor="middle" dominant-baseline="central" class="font-bold text-xs fill-slate-700 select-none">
+                                <text x="100" y="28">12</text>
+                                <text x="136" y="38">1</text>
+                                <text x="162" y="64">2</text>
+                                <text x="172" y="100">3</text>
+                                <text x="162" y="136">4</text>
+                                <text x="136" y="162">5</text>
+                                <text x="100" y="172">6</text>
+                                <text x="64" y="162">7</text>
+                                <text x="38" y="136">8</text>
+                                <text x="28" y="100">9</text>
+                                <text x="38" y="64">10</text>
+                                <text x="64" y="38">11</text>
+                            </g>
+
+                            <!-- Clock Hands with explicit SVG transform -->
+                            <line id="hour-hand" x1="100" y1="100" x2="100" y2="55" stroke="#1e293b" stroke-width="6" stroke-linecap="round" transform="rotate(30 100 100)"/>
+                            <line id="minute-hand" x1="100" y1="100" x2="100" y2="30" stroke="#2563eb" stroke-width="4" stroke-linecap="round" transform="rotate(0 100 100)"/>
+                            <circle cx="100" cy="100" r="6" fill="#1e293b"/>
+                            <circle cx="100" cy="100" r="3" fill="#2563eb"/>
+                        </svg>
+
+                        <!-- Digital Display -->
+                        <div class="mt-4 bg-slate-900 text-emerald-400 font-mono text-2xl px-6 py-2 rounded-xl font-bold tracking-widest shadow-inner" id="digital-time-display">
+                            01:00
+                        </div>
+                    </div>
+
+                    <!-- Simulator Controls -->
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                                    <span>Hodin (Heures):</span>
+                                    <span id="hour-val-txt" class="font-bold text-blue-600">1 h</span>
+                                </div>
+                                <input type="range" id="hour-slider" min="0" max="23" value="1" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
+                                    <span>Minut (Minutes):</span>
+                                    <span id="minute-val-txt" class="font-bold text-blue-600">0 min</span>
+                                </div>
+                                <input type="range" id="minute-slider" min="0" max="55" step="5" value="0" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            </div>
+                        </div>
+
+                        <!-- Spoken Sentence Box -->
+                        <div class="bg-blue-50 border border-blue-200 p-5 rounded-2xl space-y-3">
+                            <p class="text-xs font-bold text-blue-600 uppercase tracking-wider">Francouzské vyjádření:</p>
+                            <p id="french-clock-phrase" class="text-xl font-extrabold text-blue-950">Il est une heure.</p>
+                            <button id="btn-play-interactive" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow transition transform active:scale-95">
+                                <i data-lucide="volume-2" class="w-5 h-5"></i>
+                                <span>Přehrát francouzskou výslovnost</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-practice" class="space-y-8 hidden">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap gap-2 justify-between items-center">
+                <div class="font-extrabold text-slate-900 text-md">Tréninkové úlohy:</div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="switchPracticeMode('choice')" id="prac-btn-choice" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-sm">1. Poznej čas z ciferníku</button>
+                    <button onclick="switchPracticeMode('match')" id="prac-btn-match" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">2. Spojování výrazů</button>
+                    <button onclick="switchPracticeMode('write')" id="prac-btn-write" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200">3. Napiš čas francouzsky</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Practice Area -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 min-h-[360px] flex flex-col justify-between">
+                <div id="practice-container"></div>
+                <div id="practice-feedback" class="mt-6 p-4 rounded-xl hidden font-semibold text-sm"></div>
+            </div>
+        </section>
+
+        <section id="section-quiz" class="space-y-8 hidden">
+            
+            <div id="quiz-start-card" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 text-center max-w-2xl mx-auto space-y-6">
+                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">
+                    <i data-lucide="award" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900">Rychlý test z francouzských hodin</h2>
+                    <p class="text-xs text-slate-500 mt-2">Test obsahuje **10 pestrých otázek**: ciferníky, odčítání minut, poslechové diktáty i gramatické chytáky.</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-2">
+                    <p class="font-bold text-slate-800">⏱️ Bez časového limitu | 🌟 100 bodů za plný počet</p>
+                    <p>Za každou správnou odpověď získáš +10 bodů do svého skóre!</p>
+                </div>
+                <button onclick="startFullQuiz()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold py-3.5 px-6 rounded-xl shadow-lg transition transform active:scale-95 text-base">
+                    Spustit test (10 otázek)
+                </button>
+            </div>
+
+            <!-- Active Quiz Box -->
+            <div id="quiz-active-card" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 max-w-2xl mx-auto space-y-6 hidden">
+                
+                <!-- Progress Header -->
+                <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-2">
+                        <span id="quiz-progress-pill" class="bg-indigo-100 text-indigo-900 font-extrabold px-3 py-1 rounded-full text-xs">Otázka 1 z 10</span>
+                        <span id="quiz-question-type" class="text-xs font-semibold text-slate-500">Výběr odpovědi</span>
+                    </div>
+                    <div class="w-32 bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                        <div id="quiz-progress-bar" class="bg-indigo-600 h-full w-10 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Question Render Container -->
+                <div id="quiz-question-body" class="space-y-6 min-h-[220px]"></div>
+
+                <!-- Answer Feedback Banner -->
+                <div id="quiz-answer-feedback" class="p-4 rounded-xl hidden font-semibold text-sm"></div>
+
+                <!-- Next Button -->
+                <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl shadow hidden flex items-center justify-center gap-2">
+                    <span>Další otázka</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Quiz Results Modal -->
+            <div id="quiz-results-card" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 max-w-xl mx-auto text-center space-y-6 hidden">
+                <div id="quiz-badge-icon" class="text-6xl mb-2">🏆</div>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900" id="quiz-final-title">Výborně!</h2>
+                    <p class="text-sm text-slate-500 mt-1" id="quiz-final-subtitle">Dokončil/a jsi kompletní test z francouzských hodin.</p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 grid grid-cols-2 gap-4">
+                    <div class="bg-white p-3 rounded-xl border shadow-sm">
+                        <span class="text-xs text-slate-500 font-semibold block">Správné odpovědi</span>
+                        <span class="text-2xl font-black text-emerald-600" id="quiz-correct-count">0 / 10</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border shadow-sm">
+                        <span class="text-xs text-slate-500 font-semibold block">Získané body</span>
+                        <span class="text-2xl font-black text-blue-600" id="quiz-pts-earned">+0 bodů</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="startFullQuiz()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow transition">
+                        Zkusit test znovu
+                    </button>
+                    <button onclick="switchTab('simulator')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-3 rounded-xl transition">
+                        Návrat k simulátoru
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+            <p class="font-semibold text-slate-700">L'heure en français • Interaktivní výuková aplikace pro 9. ročník</p>
+            <p>Vytvořeno pro výuku francouzštiny s využitím Web Speech API syntézy hlasu fr-FR.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global App State
+        let globalScore = 0;
+        let activePracticeTab = 'choice';
+
+        // Full 1-12 Hours Data
+        const fullHoursData = [
+            { h: 1, m: 0, fr: "Il est une heure.", cz: "Je jedna hodina.", note: "Pozor: 'une' (ne 'un')" },
+            { h: 2, m: 0, fr: "Il est deux heures.", cz: "Jsou dvě hodiny.", note: "Píše se konconcové -s" },
+            { h: 3, m: 0, fr: "Il est trois heures.", cz: "Jsou tři hodiny.", note: "" },
+            { h: 4, m: 0, fr: "Il est quatre heures.", cz: "Jsou čtyři hodiny.", note: "" },
+            { h: 5, m: 0, fr: "Il est cinq heures.", cz: "Je pět hodin.", note: "" },
+            { h: 6, m: 0, fr: "Il est six heures.", cz: "Je šest hodin.", note: "" },
+            { h: 7, m: 0, fr: "Il est sept heures.", cz: "Je sedm hodin.", note: "" },
+            { h: 8, m: 0, fr: "Il est huit heures.", cz: "Je osm hodin.", note: "" },
+            { h: 9, m: 0, fr: "Il est neuf heures.", cz: "Je devět hodin.", note: "" },
+            { h: 10, m: 0, fr: "Il est dix heures.", cz: "Je deset hodin.", note: "" },
+            { h: 11, m: 0, fr: "Il est onze heures.", cz: "Je jedenáct hodin.", note: "" },
+            { h: 12, m: 0, fr: "Il est midi.", cz: "Je poledne.", note: "Poledne = midi" },
+            { h: 0, m: 0, fr: "Il est minuit.", cz: "Je půlnoc.", note: "Půlnoc = minuit" }
+        ];
+
+        // Speech Synthesis Engine
+        function speakFrench(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Váš prohlížeč nepodporuje hlasovou syntézu Web Speech API.");
+            }
+        }
+
+        // SVG Clock Generator with 100% Stable SVG rotate(angle center_x center_y)
+        function generateClockSvg(h, m, id = '', sizeClass = 'w-16 h-16') {
+            const minuteAngle = (m / 60) * 360;
+            const hourAngle = ((h % 12) + m / 60) * 30;
+
+            return `
+                <svg ${id ? `id="${id}"` : ''} class="${sizeClass} shrink-0 drop-shadow-sm select-none" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="90" fill="#ffffff" stroke="#cbd5e1" stroke-width="7"/>
+                    <g text-anchor="middle" dominant-baseline="central" class="font-bold text-xs fill-slate-500">
+                        <text x="100" y="28">12</text>
+                        <text x="172" y="100">3</text>
+                        <text x="100" y="172">6</text>
+                        <text x="28" y="100">9</text>
+                    </g>
+                    <!-- Hour Hand anchored exactly at 100 100 -->
+                    <line x1="100" y1="100" x2="100" y2="55" stroke="#1e293b" stroke-width="8" stroke-linecap="round" transform="rotate(${hourAngle} 100 100)"/>
+                    <!-- Minute Hand anchored exactly at 100 100 -->
+                    <line x1="100" y1="100" x2="100" y2="30" stroke="#2563eb" stroke-width="6" stroke-linecap="round" transform="rotate(${minuteAngle} 100 100)"/>
+                    <!-- Center Cap -->
+                    <circle cx="100" cy="100" r="7" fill="#1e293b"/>
+                    <circle cx="100" cy="100" r="3.5" fill="#2563eb"/>
+                </svg>
+            `;
+        }
+
+        // Render Section 1: All Hours Cards
+        function renderAllHoursCards() {
+            const grid = document.getElementById('all-hours-grid');
+            if (!grid) return;
+
+            grid.innerHTML = fullHoursData.map((item, index) => {
+                const timeStr = `${String(item.h).padStart(2, '0')}:00`;
+                const clockSvg = generateClockSvg(item.h, item.m, `grid-clock-${index}`);
+                
+                return `
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/60 transition card-hover flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            ${clockSvg}
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-mono text-xs font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">${timeStr}</span>
+                                    ${item.note ? `<span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-1.5 py-0.5 rounded">${item.note}</span>` : ''}
+                                </div>
+                                <div class="font-bold text-slate-900 text-sm mt-1">${item.fr}</div>
+                                <div class="text-xs text-slate-500">${item.cz}</div>
+                            </div>
+                        </div>
+                        <button onclick="speakFrench('${item.fr.replace("'", "\\'")}')" class="p-2.5 bg-white hover:bg-blue-600 hover:text-white text-blue-600 border border-slate-200 rounded-xl shadow-sm transition shrink-0" title="Přehrát výslovnost">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        // Interactive Simulator Engine
+        function updateInteractiveClock() {
+            const hourSlider = document.getElementById('hour-slider');
+            const minuteSlider = document.getElementById('minute-slider');
+            if (!hourSlider || !minuteSlider) return;
+
+            const h = parseInt(hourSlider.value);
+            const m = parseInt(minuteSlider.value);
+
+            document.getElementById('hour-val-txt').textContent = `${h} h`;
+            document.getElementById('minute-val-txt').textContent = `${m} min`;
+
+            const digitalStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+            document.getElementById('digital-time-display').textContent = digitalStr;
+
+            const svgContainer = document.getElementById('interactive-clock-svg');
+            if (svgContainer) {
+                const hourHand = svgContainer.querySelector('#hour-hand');
+                const minuteHand = svgContainer.querySelector('#minute-hand');
+                const minuteAngle = (m / 60) * 360;
+                const hourAngle = ((h % 12) + m / 60) * 30;
+
+                if (hourHand) hourHand.setAttribute('transform', `rotate(${hourAngle} 100 100)`);
+                if (minuteHand) minuteHand.setAttribute('transform', `rotate(${minuteAngle} 100 100)`);
+            }
+
+            const frPhrase = formatFrenchTime(h, m);
+            document.getElementById('french-clock-phrase').textContent = frPhrase;
+        }
+
+        function formatFrenchTime(h, m) {
+            const numWords = ["minuit", "une", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "midi"];
+
+            if (h === 12 && m === 0) return "Il est midi.";
+            if ((h === 0 || h === 24) && m === 0) return "Il est minuit.";
+
+            if (m > 30) {
+                let nextHour = (h + 1) % 24;
+                let displayNextHourWord = "";
+
+                if (nextHour === 12) displayNextHourWord = "midi";
+                else if (nextHour === 0) displayNextHourWord = "minuit";
+                else {
+                    let nh12 = nextHour % 12;
+                    if (nh12 === 0) nh12 = 12;
+                    displayNextHourWord = numWords[nh12] + (nh12 === 1 ? " heure" : " heures");
+                }
+
+                if (m === 35) return `Il est ${displayNextHourWord} moins vingt-cinq.`;
+                if (m === 40) return `Il est ${displayNextHourWord} moins vingt.`;
+                if (m === 45) return `Il est ${displayNextHourWord} moins le quart.`;
+                if (m === 50) return `Il est ${displayNextHourWord} moins dix.`;
+                if (m === 55) return `Il est ${displayNextHourWord} moins cinq.`;
+            }
+
+            let baseHour = h % 12;
+            if (baseHour === 0) baseHour = 12;
+
+            let hourWord = "";
+            if (h === 12) hourWord = "midi";
+            else if (h === 0) hourWord = "minuit";
+            else hourWord = numWords[baseHour] + (baseHour === 1 ? " heure" : " heures");
+
+            if (m === 0) return `Il est ${hourWord}.`;
+            if (m === 5) return `Il est ${hourWord} cinq.`;
+            if (m === 10) return `Il est ${hourWord} dix.`;
+            if (m === 15) return `Il est ${hourWord} et quart.`;
+            if (m === 20) return `Il est ${hourWord} vingt.`;
+            if (m === 25) return `Il est ${hourWord} vingt-cinq.`;
+            if (m === 30) return `Il est ${hourWord} et demie.`;
+
+            return `Il est ${hourWord} ${m}.`;
+        }
+
+        // Tab Switcher
+        function switchTab(tabName) {
+            ['theory', 'simulator', 'practice', 'quiz'].forEach(t => {
+                document.getElementById(`section-${t}`).classList.add('hidden');
+                const tabBtn = document.getElementById(`tab-${t}`);
+                if (tabBtn) tabBtn.className = "py-3 px-2 text-slate-600 hover:text-blue-600 flex items-center gap-2 shrink-0";
+            });
+
+            document.getElementById(`section-${tabName}`).classList.remove('hidden');
+            const activeTabBtn = document.getElementById(`tab-${tabName}`);
+            if (activeTabBtn) activeTabBtn.className = "py-3 px-2 tab-active flex items-center gap-2 shrink-0";
+
+            if (tabName === 'practice') {
+                switchPracticeMode('choice');
+            }
+        }
+
+        // Section 3: Practice Tasks Logic
+        function switchPracticeMode(mode) {
+            activePracticeTab = mode;
+            ['choice', 'match', 'write'].forEach(m => {
+                const btn = document.getElementById(`prac-btn-${m}`);
+                if (btn) btn.className = m === mode ? "px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-sm" : "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200";
+            });
+
+            const container = document.getElementById('practice-container');
+            document.getElementById('practice-feedback').classList.add('hidden');
+
+            if (mode === 'choice') {
+                container.innerHTML = `
+                    <div class="text-center space-y-4">
+                        <h3 class="text-base font-bold text-slate-800">Urči správný čas zobrazený na ciferníku:</h3>
+                        <div class="flex justify-center my-3">${generateClockSvg(7, 45, '', 'w-44 h-44')}</div>
+                        <div class="grid sm:grid-cols-3 gap-3 max-w-xl mx-auto">
+                            <button onclick="checkPracticeChoice(0)" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl font-bold text-sm text-slate-800">Il est sept heures et quart.</button>
+                            <button onclick="checkPracticeChoice(1)" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl font-bold text-sm text-slate-800">Il est huit heures moins le quart.</button>
+                            <button onclick="checkPracticeChoice(2)" class="p-3 bg-slate-50 hover:bg-blue-50 border border-slate-200 rounded-xl font-bold text-sm text-slate-800">Il est sept heures quarante-cinq.</button>
+                        </div>
+                    </div>
+                `;
+            } else if (mode === 'match') {
+                container.innerHTML = `
+                    <div class="space-y-4 max-w-xl mx-auto">
+                        <h3 class="text-base font-bold text-slate-800 text-center">Přiřaď české výrazy ke správnému francouzskému tvaru:</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border">
+                                <span class="font-bold">1. 12:00</span>
+                                <select id="pm-1" class="p-2 border rounded-lg bg-white font-semibold"><option value="">-- vyber --</option><option value="correct">Il est midi.</option><option>Il est minuit.</option></select>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border">
+                                <span class="font-bold">2. 03:30</span>
+                                <select id="pm-2" class="p-2 border rounded-lg bg-white font-semibold"><option value="">-- vyber --</option><option>Il est trois heures et quart.</option><option value="correct">Il est trois heures et demie.</option></select>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border">
+                                <span class="font-bold">3. 09:50</span>
+                                <select id="pm-3" class="p-2 border rounded-lg bg-white font-semibold"><option value="">-- vyber --</option><option value="correct">Il est dix heures moins dix.</option><option>Il est neuf heures dix.</option></select>
+                            </div>
+                        </div>
+                        <button onclick="checkPracticeMatch()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl">Zkontrolovat spojení</button>
+                    </div>
+                `;
+            } else if (mode === 'write') {
+                container.innerHTML = `
+                    <div class="space-y-5 max-w-md mx-auto text-center">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-800">Napiš francouzsky čas pro digitální údaj:</h3>
+                            <p class="text-xs text-slate-500 mt-1">Nezapomeň začít celou větou <code class="font-bold bg-slate-100 px-1 py-0.5 rounded">Il est...</code></p>
+                        </div>
+
+                        <div class="bg-slate-900 text-emerald-400 font-mono text-3xl font-bold py-3 rounded-xl tracking-widest shadow-inner">10:15</div>
+
+                        <div class="space-y-2">
+                            <input type="text" id="write-input" value="" placeholder="Napiš větu (např. Il est...)" class="w-full text-center p-3.5 border border-slate-300 rounded-xl font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder:text-slate-400 placeholder:font-normal">
+                            
+                            <!-- Character helper buttons for French accents -->
+                            <div class="flex justify-center items-center gap-1.5 pt-1">
+                                <span class="text-xs text-slate-400 font-semibold mr-1">Rychlé znaky:</span>
+                                <button onclick="insertChar('è')" class="bg-slate-100 hover:bg-blue-100 hover:text-blue-700 border border-slate-200 px-3 py-1 rounded-lg text-xs font-bold text-slate-700 transition">è</button>
+                                <button onclick="insertChar('à')" class="bg-slate-100 hover:bg-blue-100 hover:text-blue-700 border border-slate-200 px-3 py-1 rounded-lg text-xs font-bold text-slate-700 transition">à</button>
+                                <button onclick="insertChar('é')" class="bg-slate-100 hover:bg-blue-100 hover:text-blue-700 border border-slate-200 px-3 py-1 rounded-lg text-xs font-bold text-slate-700 transition">é</button>
+                                <button onclick="insertChar('ç')" class="bg-slate-100 hover:bg-blue-100 hover:text-blue-700 border border-slate-200 px-3 py-1 rounded-lg text-xs font-bold text-slate-700 transition">ç</button>
+                            </div>
+                        </div>
+
+                        <button onclick="checkPracticeWrite()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow transition">Zkontrolovat odpověď</button>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function insertChar(ch) {
+            const inp = document.getElementById('write-input');
+            if (inp) {
+                inp.value += ch;
+                inp.focus();
+            }
+        }
+
+        function showPracticeFeedback(isCorrect, msg) {
+            const fb = document.getElementById('practice-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+            if (isCorrect) {
+                fb.classList.add('bg-emerald-100', 'text-emerald-900');
+                fb.innerHTML = `<div class="font-bold">✓ ${msg}</div>`;
+                addGlobalScore(10);
+            } else {
+                fb.classList.add('bg-rose-100', 'text-rose-900');
+                fb.innerHTML = `<div class="font-bold">✗ ${msg}</div>`;
+            }
+        }
+
+        function checkPracticeChoice(idx) {
+            if (idx === 1) {
+                showPracticeFeedback(true, "Výborně! 7:45 se francouzsky vyjádří jako Il est huit heures moins le quart (+10 bodů).");
+            } else {
+                showPracticeFeedback(false, "Špatně. Nezapomeň, že po 30. minutě se čas odčítá od následující hodiny!");
+            }
+        }
+
+        function checkPracticeMatch() {
+            const v1 = document.getElementById('pm-1').value;
+            const v2 = document.getElementById('pm-2').value;
+            const v3 = document.getElementById('pm-3').value;
+
+            if (v1 === 'correct' && v2 === 'correct' && v3 === 'correct') {
+                showPracticeFeedback(true, "Skvělé! Všechny možnosti jsi přiřadil/a správně (+10 bodů).");
+            } else {
+                showPracticeFeedback(false, "Některá odpověď není správně. Zkontroluj hlavně poledne a odčítání minut.");
+            }
+        }
+
+        function checkPracticeWrite() {
+            const inputElem = document.getElementById('write-input');
+            if (!inputElem) return;
+
+            const rawVal = inputElem.value.trim().toLowerCase();
+            const val = rawVal.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+
+            if (val === "il est dix heures et quart") {
+                showPracticeFeedback(true, "Perfektní zápis! 'Il est dix heures et quart.' (+10 bodů)");
+            } else if (val === "dix heures et quart") {
+                showPracticeFeedback(false, "Skoro! Nezapomeň na povinný začátek věty 'Il est...'");
+            } else {
+                showPracticeFeedback(false, "Správná odpověď je: 'Il est dix heures et quart.' Pozor na 'et quart' a 'heures' s -s.");
+            }
+        }
+
+        function addGlobalScore(pts) {
+            globalScore += pts;
+            document.getElementById('global-score').textContent = globalScore;
+        }
+
+        const fullQuizQuestions = [
+            {
+                type: 'choice',
+                title: 'Jak se řekne francouzsky "Je jedna hodina"?',
+                clock: { h: 1, m: 0 },
+                options: ['Il est un heure.', 'Il est une heure.', 'Il est une heures.'],
+                correct: 1,
+                explanation: 'Správně! U 1 hodiny se používá femininum "une heure" bez -s.'
+            },
+            {
+                type: 'choice',
+                title: 'Co znamená výraz "Il est midi"?',
+                clock: { h: 12, m: 0 },
+                options: ['Je půlnoc.', 'Je poledne.', 'Je dvanáct minut.'],
+                correct: 1,
+                explanation: 'Přesně tak! Midi = poledne, minuit = půlnoc.'
+            },
+            {
+                type: 'choice',
+                title: 'Vyber správný výraz pro čas 04:15:',
+                clock: { h: 4, m: 15 },
+                options: ['Il est quatre heures et quart.', 'Il est quatre heures et demie.', 'Il est cinq heures moins le quart.'],
+                correct: 0,
+                explanation: 'A čtvrt se vyjádří jako "et quart".'
+            },
+            {
+                type: 'choice',
+                title: 'Urči správný výraz pro čas 08:45:',
+                clock: { h: 8, m: 45 },
+                options: ['Il est huit heures et quart.', 'Il est huit heures moins le quart.', 'Il est neuf heures moins le quart.'],
+                correct: 2,
+                explanation: 'Při odčítání se přičítá 1 hodina (08:45 = do 9 hodin chybí čtvrt) -> neuf heures moins le quart.'
+            },
+            {
+                type: 'choice',
+                title: 'Poznej čas zobrazený na ciferníku:',
+                clock: { h: 6, m: 30 },
+                options: ['Il est six heures a demi.', 'Il est six heures et demie.', 'Il est sept heures moins le quart.'],
+                correct: 1,
+                explanation: 'A půl se překládá jako "et demie".'
+            },
+            {
+                type: 'listening',
+                title: 'Poslechový diktát: Poslechni nahrávku a vyber správný čas:',
+                audioText: 'Il est trois heures dix.',
+                options: ['03:10', '03:50', '10:03'],
+                correct: 0,
+                explanation: 'Výborný poslech! "Trois heures dix" je 03:10.'
+            },
+            {
+                type: 'true_false',
+                title: 'Je tento zápis správný pro čas 06:50? "Il est sept heures moins dix."',
+                clock: { h: 6, m: 50 },
+                options: ['ANO (Je to správně)', 'NE (Je to chyba)'],
+                correct: 0,
+                explanation: 'Správně! 6:50 znamená odčítání minut od následující hodiny -> sept heures moins dix.'
+            },
+            {
+                type: 'choice',
+                title: 'Jak vyjádříš čas 08:00 (dopoledne / ráno)?',
+                clock: { h: 8, m: 0 },
+                options: ['Il est huit heures du soir.', 'Il est huit heures du matin.', 'Il est huit heures de l\'après-midi.'],
+                correct: 1,
+                explanation: 'Ráno/dopoledne se vyjadřuje pomocí "du matin".'
+            },
+            {
+                type: 'listening',
+                title: 'Poslechový diktát: Poslechni nahrávku a vyber odpovídající čas:',
+                audioText: 'Il est minuit.',
+                options: ['12:00', '00:00', '01:00'],
+                correct: 1,
+                explanation: 'Přesně tak, minuit = půlnoc (00:00).'
+            },
+            {
+                type: 'choice',
+                title: 'Poslední otázka: Vyber správný francouzský zápis pro čas 11:55:',
+                clock: { h: 11, m: 55 },
+                options: ['Il est midi moins cinq.', 'Il est onze heures cinq.', 'Il est onze heures moins cinq.'],
+                correct: 0,
+                explanation: 'Bravo! Do poledne (midi) chybí 5 minut = Il est midi moins cinq.'
+            }
+        ];
+
+        let quizCurrentIndex = 0;
+        let quizScoreCount = 0;
+        let quizAnswered = false;
+
+        function startFullQuiz() {
+            quizCurrentIndex = 0;
+            quizScoreCount = 0;
+            quizAnswered = false;
+
+            document.getElementById('quiz-start-card').classList.add('hidden');
+            document.getElementById('quiz-results-card').classList.add('hidden');
+            document.getElementById('quiz-active-card').classList.remove('hidden');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            quizAnswered = false;
+            const q = fullQuizQuestions[quizCurrentIndex];
+            
+            document.getElementById('quiz-progress-pill').textContent = `Otázka ${quizCurrentIndex + 1} z ${fullQuizQuestions.length}`;
+            const pct = ((quizCurrentIndex + 1) / fullQuizQuestions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+            document.getElementById('quiz-question-type').textContent = q.type === 'listening' ? 'Poslechová úloha 🎧' : 'Výběrová otázka';
+
+            const feedbackBox = document.getElementById('quiz-answer-feedback');
+            feedbackBox.classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            const body = document.getElementById('quiz-question-body');
+            body.innerHTML = '';
+
+            let clockHtml = q.clock ? `<div class="flex justify-center my-2">${generateClockSvg(q.clock.h, q.clock.m, '', 'w-36 h-36')}</div>` : '';
+            let audioHtml = q.type === 'listening' ? `
+                <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl text-center space-y-2 my-3">
+                    <button onclick="speakFrench('${q.audioText.replace("'", "\\'")}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl inline-flex items-center gap-2 pulse-audio shadow">
+                        <i data-lucide="volume-2" class="w-5 h-5"></i>
+                        <span>Přehrát nahrávku znovu</span>
+                    </button>
+                </div>
+            ` : '';
+
+            body.innerHTML = `
+                <div class="space-y-3 text-center">
+                    <h3 class="text-lg font-bold text-slate-900">${q.title}</h3>
+                    ${clockHtml}
+                    ${audioHtml}
+                    <div class="grid gap-3 pt-2 max-w-md mx-auto" id="quiz-options-grid">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="submitQuizAnswer(${i})" class="quiz-opt-btn p-3.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 rounded-xl font-bold text-slate-800 transition text-sm text-left flex items-center justify-between">
+                                <span>${opt}</span>
+                                <span class="text-xs text-slate-400 font-normal">Volba ${i + 1}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            lucide.createIcons();
+
+            if (q.type === 'listening') {
+                setTimeout(() => speakFrench(q.audioText), 300);
+            }
+        }
+
+        function submitQuizAnswer(optIdx) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const q = fullQuizQuestions[quizCurrentIndex];
+            const isCorrect = optIdx === q.correct;
+            const fb = document.getElementById('quiz-answer-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-rose-100', 'text-rose-900');
+
+            const optionBtns = document.querySelectorAll('.quiz-opt-btn');
+            optionBtns.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                } else if (idx === optIdx && !isCorrect) {
+                    btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                }
+            });
+
+            if (isCorrect) {
+                quizScoreCount++;
+                addGlobalScore(10);
+                fb.classList.add('bg-emerald-100', 'text-emerald-900');
+                fb.innerHTML = `✓ Správně! ${q.explanation} (+10 bodů)`;
+            } else {
+                fb.classList.add('bg-rose-100', 'text-rose-900');
+                fb.innerHTML = `✗ Bohužel. ${q.explanation}`;
+            }
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.classList.remove('hidden');
+            if (quizCurrentIndex === fullQuizQuestions.length - 1) {
+                nextBtn.querySelector('span').textContent = "Zobrazit vyhodnocení testu";
+            } else {
+                nextBtn.querySelector('span').textContent = "Další otázka";
+            }
+        }
+
+        function nextQuizQuestion() {
+            if (quizCurrentIndex < fullQuizQuestions.length - 1) {
+                quizCurrentIndex++;
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-active-card').classList.add('hidden');
+            document.getElementById('quiz-results-card').classList.remove('hidden');
+
+            const scoreText = `${quizScoreCount} / ${fullQuizQuestions.length}`;
+            const ptsEarned = quizScoreCount * 10;
+            document.getElementById('quiz-correct-count').textContent = scoreText;
+            document.getElementById('quiz-pts-earned').textContent = `+${ptsEarned} bodů`;
+
+            const icon = document.getElementById('quiz-badge-icon');
+            const title = document.getElementById('quiz-final-title');
+            const sub = document.getElementById('quiz-final-subtitle');
+
+            if (quizScoreCount === 10) {
+                icon.textContent = "🥇";
+                title.textContent = "Dokonalý výsledek! (100 %)";
+                sub.textContent = "Jsi mistr francouzských hodin! Všechny odpovědi byly správně.";
+            } else if (quizScoreCount >= 7) {
+                icon.textContent = "🥈";
+                title.textContent = "Velmi dobrá práce!";
+                sub.textContent = "Hodiny už zvládáš velmi dobře. Zkus si ještě zopakovat odčítání minut.";
+            } else {
+                icon.textContent = "🥉";
+                title.textContent = "Dobrá snaha!";
+                sub.textContent = "Doporučujeme projít si sekci 1 a vyzkoušet si simulátor hodin znovu.";
+            }
+        }
+
+        window.onload = function() {
+            renderAllHoursCards();
+
+            const hourSlider = document.getElementById('hour-slider');
+            const minuteSlider = document.getElementById('minute-slider');
+            if (hourSlider && minuteSlider) {
+                hourSlider.addEventListener('input', updateInteractiveClock);
+                minuteSlider.addEventListener('input', updateInteractiveClock);
+            }
+
+            const btnPlaySim = document.getElementById('btn-play-interactive');
+            if (btnPlaySim) {
+                btnPlaySim.addEventListener('click', () => {
+                    speakFrench(document.getElementById('french-clock-phrase').textContent);
+                });
+            }
+
+            updateInteractiveClock();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
