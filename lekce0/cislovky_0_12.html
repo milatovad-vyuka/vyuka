@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Francouzská číslovka 0–12</title>
+  <style>
+    :root {
+      --primary: #0055a5;
+      --secondary: #ef4135;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --error: #dc2626;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    /* Tabulka číslovek */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: var(--primary);
+    }
+
+    .btn-audio {
+      background: #e0f2fe;
+      color: var(--primary);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-audio:hover {
+      background: #bae6fd;
+    }
+
+    /* Procvičování */
+    .quiz-box {
+      text-align: center;
+    }
+
+    .prompt-number {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 16px 0;
+    }
+
+    .input-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    input[type="text"] {
+      padding: 10px 16px;
+      font-size: 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      width: 200px;
+      text-align: center;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.9;
+    }
+
+    .feedback {
+      font-weight: bold;
+      font-size: 1.2rem;
+      min-height: 30px;
+      margin-top: 10px;
+    }
+
+    .feedback.correct {
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      color: var(--error);
+    }
+
+    .score {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Procvičování francouzských číslovek (0–12)</h1>
+
+  <!-- Přehled číslovek -->
+  <div class="card">
+    <h2>Seznam číslovek s výslovností</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Číslo</th>
+          <th>Francouzsky</th>
+          <th>Český přepis výslovnosti</th>
+          <th>Poslech</th>
+        </tr>
+      </thead>
+      <tbody id="numbersTable">
+        <!-- Generováno skriptem -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Procvičování -->
+  <div class="card quiz-box">
+    <h2>Procvičování</h2>
+    <p>Napište francouzsky správný výraz pro zobrazené číslo:</p>
+    
+    <div class="prompt-number" id="quizPrompt">0</div>
+
+    <form id="quizForm" onsubmit="checkAnswer(event)">
+      <div class="input-group">
+        <input type="text" id="userInput" autocomplete="off" placeholder="Napište francouzsky" required>
+        <button type="submit" class="btn-submit">Zkontrolovat</button>
+      </div>
+    </form>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="score" id="score">Správně: 0 | Celkem: 0</div>
+  </div>
+</div>
+
+<script>
+  const numbersData = [
+    { num: 0, fr: "zéro", pron: "[zero]" },
+    { num: 1, fr: "un", pron: "[eň]" },
+    { num: 2, fr: "deux", pron: "[dö]" },
+    { num: 3, fr: "trois", pron: "[trva]" },
+    { num: 4, fr: "quatre", pron: "[katr]" },
+    { num: 5, fr: "cinq", pron: "[seňk]" },
+    { num: 6, fr: "six", pron: "[sis]" },
+    { num: 7, fr: "sept", pron: "[set]" },
+    { num: 8, fr: "huit", pron: "[üit]" },
+    { num: 9, fr: "neuf", pron: "[nöf]" },
+    { num: 10, fr: "dix", pron: "[dis]" },
+    { num: 11, fr: "onze", pron: "[onz]" },
+    { num: 12, fr: "douze", pron: "[duz]" }
+  ];
+
+  // Přehrání zvuku pomocí Web Speech API
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Váš prohlížeč nepodporuje hlasový výstup.");
+    }
+  }
+
+  // Generování tabulky
+  const tableBody = document.getElementById("numbersTable");
+  numbersData.forEach(item => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><strong>${item.num}</strong></td>
+      <td><strong>${item.fr}</strong></td>
+      <td>${item.pron}</td>
+      <td>
+        <button class="btn-audio" onclick="speak('${item.fr}')">
+          🔊 Přehrát
+        </button>
+      </td>
+    `;
+    tableBody.appendChild(row);
+  });
+
+  // Logika procvičování
+  let currentItem = null;
+  let correctCount = 0;
+  let totalCount = 0;
+
+  function nextQuestion() {
+    const randomIndex = Math.floor(Math.random() * numbersData.length);
+    currentItem = numbersData[randomIndex];
+    document.getElementById("quizPrompt").textContent = currentItem.num;
+    document.getElementById("userInput").value = "";
+    document.getElementById("userInput").focus();
+  }
+
+  function checkAnswer(e) {
+    e.preventDefault();
+    const input = document.getElementById("userInput").value.trim().toLowerCase();
+    const feedback = document.getElementById("feedback");
+
+    totalCount++;
+
+    if (input === currentItem.fr.toLowerCase()) {
+      correctCount++;
+      feedback.textContent = "Správně! 🎉";
+      feedback.className = "feedback correct";
+      speak(currentItem.fr);
+    } else {
+      feedback.textContent = `Chyba! Správná odpověď je: ${currentItem.fr}`;
+      feedback.className = "feedback incorrect";
+    }
+
+    document.getElementById("score").textContent = `Správně: ${correctCount} | Celkem: ${totalCount}`;
+    
+    setTimeout(() => {
+      feedback.textContent = "";
+      nextQuestion();
+    }, 2000);
+  }
+
+  // Spuštění první otázky
+  nextQuestion();
+</script>
+
+</body>
+</html>
