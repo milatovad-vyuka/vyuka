@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Francouzská slovíčka - Unité 5</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 15px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    select, .action-btn {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+    }
+
+    select {
+      flex: 2;
+      min-width: 160px;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 100px;
+      cursor: pointer;
+      font-weight: 600;
+      background: #f1f5f9;
+      transition: background 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .flashcard-container {
+      width: 100%;
+      max-width: 500px;
+      height: 280px;
+      perspective: 1000px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background: #f0f9ff;
+      border-color: #bae6fd;
+    }
+
+    .category-tag {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--primary);
+      background: #eff6ff;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .word-main {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .pronunciation {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    .audio-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.2s ease;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+
+    .audio-btn:hover {
+      background: var(--primary-hover);
+      transform: scale(1.08);
+    }
+
+    .audio-btn:active {
+      transform: scale(0.95);
+    }
+
+    .audio-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .translation {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #0369a1;
+    }
+
+    .navigation {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 500px;
+      justify-content: space-between;
+    }
+
+    .nav-btn {
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    .nav-btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .counter {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .hint {
+      margin-top: 15px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    #status-msg {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #e11d48;
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Francouzská slovíčka - Unité 5</h1>
+  </header>
+
+  <div class="controls">
+    <select id="categoryFilter" onchange="filterCategory()">
+      <option value="all">Všechny kategorie</option>
+    </select>
+    <button class="action-btn" onclick="shuffleCards()">🎲 Zamíchat</button>
+  </div>
+
+  <div class="flashcard-container" onclick="flipCard(event)">
+    <div class="flashcard" id="card">
+      <div class="card-face card-front">
+        <span class="category-tag" id="catTag">Kategorie</span>
+        <div class="word-main" id="frWord">Slovíčko</div>
+        <div class="pronunciation" id="prWord">[výslovnost]</div>
+        <button class="audio-btn" onclick="playAudio(event)" title="Přehrát výslovnost">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="card-face card-back">
+        <div class="translation" id="czWord">Překlad</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation">
+    <button class="nav-btn" id="prevBtn" onclick="prevCard()">← Zpět</button>
+    <span class="counter" id="counter">1 / 1</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextCard()">Dále →</button>
+  </div>
+
+  <p class="hint">Kliknutím na kartu zobrazíte překlad • Mezerník = otočit • Šipky = posun</p>
+  <div id="status-msg"></div>
+
+  <script>
+    const data = [
+      // Slovesa
+      { fr: "je me lève", pr: "[žə mə lév]", cz: "vstávám", cat: "Slovesa" },
+      { fr: "je me douche", pr: "[žə mə duš]", cz: "sprchuji se", cat: "Slovesa" },
+      { fr: "je prends mon petit-déjeuner", pr: "[žə prã mõ pəti-dežené]", cz: "snídám", cat: "Slovesa" },
+      { fr: "je vais au collège", pr: "[žə ve o koléž]", cz: "jdu/jede do školy", cat: "Slovesa" },
+      { fr: "j'arrive", pr: "[žariv]", cz: "přicházím", cat: "Slovesa" },
+      { fr: "je mange à la cantine", pr: "[žə mãž a la kãtin]", cz: "jím v jídelně", cat: "Slovesa" },
+      { fr: "je rentre à la maison", pr: "[žə rãtr a la mezõ]", cz: "vracím se domů", cat: "Slovesa" },
+      { fr: "je goûte", pr: "[žə gut]", cz: "svačím", cat: "Slovesa" },
+      { fr: "je fais mes devoirs", pr: "[žə fe me dəvuár]", cz: "dělám úkoly", cat: "Slovesa" },
+      { fr: "je dîne", pr: "[žə din]", cz: "večeřím", cat: "Slovesa" },
+      { fr: "je regarde la télé", pr: "[žə rəgard la tele]", cz: "dívám se na televizi", cat: "Slovesa" },
+      { fr: "je me couche", pr: "[žə mə kuš]", cz: "jdu spát / lehám si", cat: "Slovesa" },
+      { fr: "je joue au foot", pr: "[žə žu o fut]", cz: "hraji fotbal", cat: "Slovesa" },
+      { fr: "je me repose", pr: "[žə mə rəpóz]", cz: "odpočívám", cat: "Slovesa" },
+      // Čas
+      { fr: "le matin", pr: "[lə matẽ]", cz: "ráno / dopoledne", cat: "Časové údaje" },
+      { fr: "à midi", pr: "[a midi]", cz: "v poledne", cat: "Časové údaje" },
+      { fr: "l'après-midi", pr: "[lapre-midi]", cz: "odpoledne", cat: "Časové údaje" },
+      { fr: "le soir", pr: "[lə suár]", cz: "večer", cat: "Časové údaje" },
+      { fr: "le week-end", pr: "[lə wíkend]", cz: "o víkendu", cat: "Časové údaje" },
+      { fr: "le mercredi", pr: "[lə merkrədi]", cz: "středa / ve středu", cat: "Časové údaje" },
+      { fr: "le samedi", pr: "[lə samdi]", cz: "sobota / v sobotu", cat: "Časové údaje" },
+      { fr: "le dimanche", pr: "[lə dimánš]", cz: "neděle / v neděli", cat: "Časové údaje" },
+      // Ostatní
+      { fr: "ensuite", pr: "[ãsüit]", cz: "potom / následně", cat: "Užitečná slova" },
+      { fr: "parfois", pr: "[parfua]", cz: "někdy / občas", cat: "Užitečná slova" },
+      { fr: "souvent", pr: "[suvã]", cz: "často", cat: "Užitečná slova" }
+    ];
+
+    let currentCards = [];
+    let currentIndex = 0;
+    let frenchVoice = null;
+
+    function initSpeech() {
+      if ('speechSynthesis' in window) {
+        function loadVoices() {
+          const voices = window.speechSynthesis.getVoices();
+          frenchVoice = voices.find(v => v.lang.startsWith('fr'));
+        }
+        loadVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+          speechSynthesis.onvoiceschanged = loadVoices;
+        }
+      }
+    }
+
+    function populateCategories() {
+      const select = document.getElementById('categoryFilter');
+      select.innerHTML = '<option value="all">Všechny kategorie</option>';
+      
+      const categories = [...new Set(data.map(item => item.cat))];
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        select.appendChild(option);
+      });
+    }
+
+    function filterCategory() {
+      const selectedCat = document.getElementById('categoryFilter').value;
+      if (selectedCat === 'all') {
+        currentCards = [...data];
+      } else {
+        currentCards = data.filter(item => item.cat === selectedCat);
+      }
+      currentIndex = 0;
+      updateCard();
+    }
+
+    function shuffleCards() {
+      for (let i = currentCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [currentCards[i], currentCards[j]] = [currentCards[j], currentCards[i]];
+      }
+      currentIndex = 0;
+      updateCard();
+    }
+
+    function updateCard() {
+      const card = document.getElementById('card');
+      card.classList.remove('flipped');
+
+      if (currentCards.length === 0) {
+        document.getElementById('frWord').textContent = "Žádná slovíčka";
+        document.getElementById('prWord').textContent = "";
+        document.getElementById('czWord').textContent = "";
+        document.getElementById('catTag').textContent = "-";
+        document.getElementById('counter').textContent = "0 / 0";
+        return;
+      }
+
+      const item = currentCards[currentIndex];
+      setTimeout(() => {
+        document.getElementById('frWord').textContent = item.fr;
+        document.getElementById('prWord').textContent = item.pr;
+        document.getElementById('czWord').textContent = item.cz;
+        document.getElementById('catTag').textContent = item.cat;
+        document.getElementById('counter').textContent = `${currentIndex + 1} / ${currentCards.length}`;
+      }, 150);
+
+      document.getElementById('prevBtn').disabled = currentIndex === 0;
+      document.getElementById('nextBtn').disabled = currentIndex === currentCards.length - 1;
+    }
+
+    function flipCard(event) {
+      if (event.target.closest('.audio-btn')) return;
+      document.getElementById('card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+      if (currentIndex < currentCards.length - 1) {
+        currentIndex++;
+        updateCard();
+      }
+    }
+
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCard();
+      }
+    }
+
+    function playAudio(event) {
+      if (event) event.stopPropagation();
+      
+      const statusMsg = document.getElementById('status-msg');
+      statusMsg.textContent = "";
+
+      if (!('speechSynthesis' in window)) {
+        statusMsg.textContent = "Hlasová syntéza není v tomto prohlížeči podporována.";
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const text = currentCards[currentIndex].fr;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      utterance.rate = 0.85;
+
+      if (frenchVoice) {
+        utterance.voice = frenchVoice;
+      }
+
+      utterance.onerror = function() {
+        statusMsg.textContent = "Chyba při přehrávání zvuku.";
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        document.getElementById('card').classList.toggle('flipped');
+      } else if (e.code === 'ArrowRight') {
+        nextCard();
+      } else if (e.code === 'ArrowLeft') {
+        prevCard();
+      }
+    });
+
+    initSpeech();
+    populateCategories();
+    currentCards = [...data];
+    updateCard();
+  </script>
+</body>
+</html>
