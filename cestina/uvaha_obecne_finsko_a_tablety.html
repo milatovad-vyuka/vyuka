@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování: Slohový útvar ÚVAHA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .select-correct {
+            border-color: #10B981 !important;
+            background-color: #ECFDF5 !important;
+            color: #065F46 !important;
+        }
+        .select-incorrect {
+            border-color: #EF4444 !important;
+            background-color: #FEF2F2 !important;
+            color: #991B1B !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-3xl mx-auto space-y-8">
+        
+        <!-- HEADER -->
+        <header class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 text-center">
+            <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 font-semibold text-xs rounded-full uppercase tracking-wider mb-2">Český jazyk &bull; 9. třída</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Slohový útvar: ÚVAHA</h1>
+            <p class="mt-2 text-slate-600 text-base sm:text-lg">Interaktivní procvičování frází, teorie a práce s názorovým textem</p>
+        </header>
+
+        <!-- AKTIVITA 1 -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">1</span>
+                <h2 class="text-xl font-bold text-slate-900">Doplň správné obraty do textu o Finsku</h2>
+            </div>
+            <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed">
+                Přečti si názorový text o finském školství a doplň na vynechaná místa nejvhodnější hodnotící a argumentační fráze.
+            </p>
+
+            <div class="bg-slate-50 p-5 sm:p-7 rounded-xl border border-slate-200 leading-loose text-base sm:text-lg text-slate-800 space-y-4 mb-6">
+                <p>
+                    Dlouhé roky bylo Finsko vzorem digitální výuky. 
+                    <select id="a1_q1" class="inline-block mx-1 my-1 px-3 py-1.5 bg-white border-2 border-indigo-300 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber frázi --</option>
+                        <option value="bad1">Na druhou stranu</option>
+                        <option value="ok">Nabízí se však otázka, zda</option>
+                        <option value="bad2">Závěrem lze tedy říci, že</option>
+                    </select>
+                    byl tento krok správný, když dnes finští učitelé vracejí do škol papírové sešity.
+                </p>
+                <p>
+                    <select id="a1_q2" class="inline-block mx-1 my-1 px-3 py-1.5 bg-white border-2 border-indigo-300 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber frázi --</option>
+                        <option value="bad1">Z mého pohledu</option>
+                        <option value="bad2">Navíc je nutné dodat, že</option>
+                        <option value="ok">Na jednu stranu je nepopiratelné, že</option>
+                    </select>
+                    tablety přinášejí rychlý přístup k informacím. 
+                    <select id="a1_q3" class="inline-block mx-1 my-1 px-3 py-1.5 bg-white border-2 border-indigo-300 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber frázi --</option>
+                        <option value="ok">Na druhou stranu je však nutné si uvědomit, že</option>
+                        <option value="bad1">Jak ukazuje praxe</option>
+                        <option value="bad2">Závěrem lze říci, že</option>
+                    </select>
+                    příliš mnoho času u displejů zhoršuje soustředění žáků.
+                </p>
+                <p>
+                    <select id="a1_q4" class="inline-block mx-1 my-1 px-3 py-1.5 bg-white border-2 border-indigo-300 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber frázi --</option>
+                        <option value="bad1">Na jednu stranu</option>
+                        <option value="ok">Osobně se přikláním k názoru, že</option>
+                        <option value="bad2">Ačkoliv se může zdát, že</option>
+                    </select>
+                    cesta nevede přes extrémy, ale přes rozumnou rovnováhu.
+                </p>
+            </div>
+
+            <button onclick="checkActivity1()" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer">
+                Zkontrolovat Aktivitu 1
+            </button>
+            <div id="res1" class="mt-4 p-4 rounded-xl font-medium hidden"></div>
+        </section>
+
+        <!-- AKTIVITA 2 -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">2</span>
+                <h2 class="text-xl font-bold text-slate-900">Zásobník frází podle jejich funkcí</h2>
+            </div>
+
+            <!-- TIP BOX PRO VÝPIS DO SEŠITU -->
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-xl mb-6">
+                <div class="flex items-start gap-2">
+                    <span class="text-amber-600 font-bold text-lg">📌</span>
+                    <div>
+                        <h3 class="font-semibold text-amber-900 text-sm sm:text-base">Úkol pro žáky do sešitu:</h3>
+                        <p class="text-amber-800 text-xs sm:text-sm mt-0.5">
+                            Prohlédni si níže uvedené kategorie. Nadpisy si zapiš do sešitu a ke každému připiš správné fráze z nabídky + tipy z nápovědy!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Q1 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a2_t1" class="block font-semibold text-slate-800 mb-2">1. ❓ Položení řečnické otázky / Vtáhnutí čtenáře do zamyšlení:</label>
+                    <select id="a2_t1" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber správný balíček frází --</option>
+                        <option value="bad1">Byl jednou jeden... / Žil byl za sedmero horami...</option>
+                        <option value="bad2">Včera o půlnoci se stala nehoda... / Svědci uvádějí, že...</option>
+                        <option value="ok">Nabízí se otázka, zda... / Lze vůbec říci, že...? / Skutečně potřebujeme...?</option>
+                    </select>
+                    <div class="mt-2 text-xs sm:text-sm text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100">
+                        💡 <strong>Další fráze k zápisu do sešitu:</strong> „Není pravda spíše taková, že...?“, „Kam až tento trend může vést?“
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a2_t2" class="block font-semibold text-slate-800 mb-2">2. ⚖️ Vyvažování dvou protikladných pohledů (Pro vs. Proti):</label>
+                    <select id="a2_t2" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber správný balíček frází --</option>
+                        <option value="ok">Na jednu stranu... na druhou stranu však... / Ačkoliv se může zdát, že... opak je pravdou.</option>
+                        <option value="bad1">Nejprve smícháme mouku s mlékem... / Poté pečeme 30 minut...</option>
+                        <option value="bad2">Podle odstavce 3 zákona o provozu... / Zúčastněné strany se dohodly...</option>
+                    </select>
+                    <div class="mt-2 text-xs sm:text-sm text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100">
+                        💡 <strong>Další fráze k zápisu do sešitu:</strong> „Nicméně je třeba dodat...“, „Přestože má toto řešení výhody...“, „Naopak...“
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a2_t3" class="block font-semibold text-slate-800 mb-2">3. 👤 Vyjádření vlastního stanoviska a hodnotící postoj:</label>
+                    <select id="a2_t3" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber správný balíček frází --</option>
+                        <option value="bad1">Předmětem prodeje je byt 3+1... / Cena dohodou...</option>
+                        <option value="ok">Domnívám se, že... / Z mého pohledu... / Osobně se přikláním k názoru, že...</option>
+                        <option value="bad2">A v tom se z lesa ozval hrozivý řev!</option>
+                    </select>
+                    <div class="mt-2 text-xs sm:text-sm text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100">
+                        💡 <strong>Další fráze k zápisu do sešitu:</strong> „Jsem přesvědčen/a, že...“, „Považuji za důležité zmínit...“, „Mám za to, že...“
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a2_t4" class="block font-semibold text-slate-800 mb-2">4. ➕ Doplňování dalších argumentů a souvislostí:</label>
+                    <select id="a2_t4" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber správný balíček frází --</option>
+                        <option value="bad1">A pak šel dál a dál... / Potom potkal babičku...</option>
+                        <option value="bad2">Pozor, hlídací pes! / Vstup na vlastní nebezpečí.</option>
+                        <option value="ok">Navíc je nutné dodat... / Neměli bychom zapomínat ani na... / Vždyť i praxe ukazuje...</option>
+                    </select>
+                    <div class="mt-2 text-xs sm:text-sm text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100">
+                        💡 <strong>Další fráze k zápisu do sešitu:</strong> „Mimo jiné...“, „Důvodem je především...“, „Vedle toho je třeba zmínit...“
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a2_t5" class="block font-semibold text-slate-800 mb-2">5. 🏁 Zahájení závěrečného odstavce a shrnutí myšlenek:</label>
+                    <select id="a2_t5" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber správný balíček frází --</option>
+                        <option value="bad1">A pokud neumřeli, žijí tam dodnes.</option>
+                        <option value="ok">Závěrem lze tedy říci, že... / Z výše uvedeného vyplývá... / Sečteno a podtrženo...</option>
+                        <option value="bad2">Děkuji za pozornost, to je vše.</option>
+                    </select>
+                    <div class="mt-2 text-xs sm:text-sm text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100">
+                        💡 <strong>Další fráze k zápisu do sešitu:</strong> „Jaké z toho plyne ponaučení?“, „Cesta asi nevede přes extrémy, ale...“
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="checkActivity2()" class="mt-6 w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer">
+                Zkontrolovat Aktivitu 2
+            </button>
+            <div id="res2" class="mt-4 p-4 rounded-xl font-medium hidden"></div>
+        </section>
+
+        <!-- AKTIVITA 3 -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white font-bold text-sm">3</span>
+                <h2 class="text-xl font-bold text-slate-900">Teorie a pravidla úvahy</h2>
+            </div>
+            <p class="text-slate-600 mb-6 text-sm sm:text-base">
+                Ověř si své znalosti o vlastnostech, struktuře a pravidlech slohového útvaru úvaha.
+            </p>
+
+            <div class="space-y-6">
+                <!-- Q1 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a3_p1" class="block font-semibold text-slate-800 mb-2">1. Jaký je hlavním cílem autora při psaní úvahy?</label>
+                    <select id="a3_p1" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber odpověď --</option>
+                        <option value="bad1">Vyprávět napínavý příběh s nečekanou zápletkou.</option>
+                        <option value="ok">Zamyslet se nad problémem, rozebrat argumenty a vyjádřit vlastní názor.</option>
+                        <option value="bad2">Přesně popsat návod na obsluhu digitálního zařízení.</option>
+                    </select>
+                </div>
+
+                <!-- Q2 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a3_p2" class="block font-semibold text-slate-800 mb-2">2. Který větný druh autor v úvaze často využívá k zapojení čtenáře?</label>
+                    <select id="a3_p2" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber odpověď --</option>
+                        <option value="bad1">Věty rozkazovací (příkazy a rozkazy)</option>
+                        <option value="bad2">Citoslovce a jednoduché výkřiky</option>
+                        <option value="ok">Řečnické otázky (otázky, na které si sám odpovídá)</option>
+                    </select>
+                </div>
+
+                <!-- Q3 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a3_p3" class="block font-semibold text-slate-800 mb-2">3. Jaká je obvyklá kompozice (struktura) úvahy?</label>
+                    <select id="a3_p3" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber odpověď --</option>
+                        <option value="ok">Úvod (otázka/téma) ➔ Stať (argumenty pro i proti) ➔ Závěr (resumé/názor)</option>
+                        <option value="bad1">Úvod ➔ Zápletka ➔ Vyvrcholení ➔ Rozuzlení</option>
+                        <option value="bad2">Název ➔ Seznam surovin ➔ Postup práce</option>
+                    </select>
+                </div>
+
+                <!-- Q4 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <label for="a3_p4" class="block font-semibold text-slate-800 mb-2">4. Musí autor v úvaze vyřešit problém se 100% jistotou?</label>
+                    <select id="a3_p4" class="w-full p-2.5 bg-white border-2 border-indigo-200 rounded-lg text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="">-- Vyber odpověď --</option>
+                        <option value="bad1">Ano, bez konečného vědeckého důkazu je úvaha neplatná.</option>
+                        <option value="ok">Ne, úvaha může zůstat otevřená a přimět k přemýšlení i čtenáře.</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="checkActivity3()" class="mt-6 w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer">
+                Zkontrolovat Aktivitu 3
+            </button>
+            <div id="res3" class="mt-4 p-4 rounded-xl font-medium hidden"></div>
+        </section>
+
+    </div>
+
+    <!-- JAVASCRIPT VALIDATION LOGIC -->
+    <script>
+        function checkGeneric(selectIds, resultId, successMsg, failMsg) {
+            let allFilled = true;
+            let correctCount = 0;
+            const total = selectIds.length;
+
+            selectIds.forEach(id => {
+                const selectElem = document.getElementById(id);
+                const val = selectElem.value;
+
+                // Reset visual styling
+                selectElem.classList.remove('select-correct', 'select-incorrect');
+
+                if (!val) {
+                    allFilled = false;
+                } else if (val === 'ok') {
+                    selectElem.classList.add('select-correct');
+                    correctCount++;
+                } else {
+                    selectElem.classList.add('select-incorrect');
+                }
+            });
+
+            const resDiv = document.getElementById(resultId);
+            resDiv.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-rose-100', 'text-rose-800', 'bg-amber-100', 'text-amber-800');
+
+            if (!allFilled) {
+                resDiv.classList.add('bg-amber-100', 'text-amber-800');
+                resDiv.innerHTML = '⚠️ Prosím vyplň všechny možnosti před kontrolou!';
+            } else if (correctCount === total) {
+                resDiv.classList.add('bg-emerald-100', 'text-emerald-800');
+                resDiv.innerHTML = `🎉 ${successMsg} (${correctCount}/${total} správně)`;
+            } else {
+                resDiv.classList.add('bg-rose-100', 'text-rose-800');
+                resDiv.innerHTML = `❌ ${failMsg} Máš správně ${correctCount} z ${total}. Zkontroluj červeně označená pole.`;
+            }
+        }
+
+        function checkActivity1() {
+            const ids = ['a1_q1', 'a1_q2', 'a1_q3', 'a1_q4'];
+            checkGeneric(
+                ids, 
+                'res1', 
+                'Skvělá práce! Všechny fráze do textu o Finsku jsi doplnil/a správně.', 
+                'Některé fráze v textu o Finsku nejsou správně zařazeny.'
+            );
+        }
+
+        function checkActivity2() {
+            const ids = ['a2_t1', 'a2_t2', 'a2_t3', 'a2_t4', 'a2_t5'];
+            checkGeneric(
+                ids, 
+                'res2', 
+                'Výborně! Všechny kategorie frází máš určené bez chyby.', 
+                'Některé fráze nepatří do vybrané kategorie.'
+            );
+        }
+
+        function checkActivity3() {
+            const ids = ['a3_p1', 'a3_p2', 'a3_p3', 'a3_p4'];
+            checkGeneric(
+                ids, 
+                'res3', 
+                'Excelentní! Teoretické znalosti o úvaze máš v malíčku.', 
+                'Některé odpovedi v teorii nejsou správné.'
+            );
+        }
+    </script>
+</body>
+</html>
