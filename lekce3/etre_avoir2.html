@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <!-- STREAMING_CHUNK: Setting up HTML head, viewport, fonts, and styling rules -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování sloves Être a Avoir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
+
+    <!-- STREAMING_CHUNK: Rendering navigation bar and top tabs -->
+    <header class="bg-indigo-600 text-white shadow-lg">
+        <div class="max-w-4xl mx-auto px-4 py-6 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div>
+                    <h1 class="text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap"></i> Francouzská slovesa
+                    </h1>
+                    <p class="text-indigo-200 text-sm mt-1">Časování & Výslovnost: Être a Avoir (Présent)</p>
+                </div>
+                <!-- Open Button to open app in new tab -->
+                <button onclick="window.open(window.location.href, '_blank')" class="bg-indigo-500 hover:bg-indigo-400 text-white p-2.5 rounded-lg transition shadow flex items-center gap-2 text-sm font-medium" title="Otevřít v nové kartě">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span class="hidden sm:inline">Open</span>
+                </button>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn bg-indigo-700 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-lg transition">Přehled</button>
+                <button onclick="switchTab('cards')" id="tab-cards" class="tab-btn bg-indigo-500 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-lg transition">Kartičky</button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn bg-indigo-500 hover:bg-indigo-800 text-white font-medium px-4 py-2 rounded-lg transition">Testík</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- STREAMING_CHUNK: Rendering conjugation overview tab with updated phonetic notation [ü] -->
+        <section id="sec-overview" class="space-y-8">
+            <div class="text-center max-w-xl mx-auto">
+                <h2 class="text-xl font-bold text-slate-700">Přehled časování v přítomném čase</h2>
+                <p class="text-slate-500 text-sm mt-1">Kliknutím na ikonu reproduktoru <i class="fa-solid fa-volume-high text-indigo-500"></i> přehrajete francouzskou výslovnost.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- ÊTRE -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
+                    <div class="bg-indigo-500 text-white p-4 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold">Être</h3>
+                            <span class="text-indigo-100 text-sm italic">být</span>
+                        </div>
+                        <button onclick="speak('Être')" class="bg-indigo-600 hover:bg-indigo-700 p-3 rounded-full transition" title="Přehrát sloveso">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                    <div class="divide-y divide-slate-100 p-2">
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-indigo-900">je suis</span>
+                                <span class="text-xs text-slate-400 block">[žə süi]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">já jsem</span>
+                                <button onclick="speak('je suis')" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-indigo-900">tu es</span>
+                                <span class="text-xs text-slate-400 block">[tü e]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">ty jsi</span>
+                                <button onclick="speak('tu es')" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-indigo-900">il / elle / on est</span>
+                                <span class="text-xs text-slate-400 block">[il / el / õ e]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">on / ona / my je</span>
+                                <button onclick="speak('il est')" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-indigo-900">nous sommes</span>
+                                <span class="text-xs text-slate-400 block">[nu som]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">my jsme</span>
+                                <button onclick="speak('nous sommes')" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-indigo-900">vous êtes</span>
+                                <span class="text-xs text-slate-400 block">[vuz et]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">vy jste</span>
+                                <button onclick="speak('vous êtes')" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-indigo-900">ils / elles sont</span>
+                                <span class="text-xs text-slate-400 block">[il sõ / el sõ]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">oni / ony jsou</span>
+                                <button onclick="speak('ils sont')" class="text-indigo-500 hover:text-indigo-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AVOIR -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
+                    <div class="bg-emerald-500 text-white p-4 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-2xl font-bold">Avoir</h3>
+                            <span class="text-emerald-100 text-sm italic">mít</span>
+                        </div>
+                        <button onclick="speak('Avoir')" class="bg-emerald-600 hover:bg-emerald-700 p-3 rounded-full transition" title="Přehrát sloveso">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                    <div class="divide-y divide-slate-100 p-2">
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-emerald-900">j'ai</span>
+                                <span class="text-xs text-slate-400 block">[že]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">já mám</span>
+                                <button onclick="speak('j\'ai')" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-emerald-900">tu as</span>
+                                <span class="text-xs text-slate-400 block">[tü a]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">ty máš</span>
+                                <button onclick="speak('tu as')" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-emerald-900">il / elle / on a</span>
+                                <span class="text-xs text-slate-400 block">[il / el / õ a]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">on / ona má</span>
+                                <button onclick="speak('il a')" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-emerald-900">nous avons</span>
+                                <span class="text-xs text-slate-400 block">[nuz avõ]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">my máme</span>
+                                <button onclick="speak('nous avons')" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-emerald-900">vous avez</span>
+                                <span class="text-xs text-slate-400 block">[vuz ave]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">vy máte</span>
+                                <button onclick="speak('vous avez')" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                        <div class="p-3 flex justify-between items-center hover:bg-slate-50 rounded">
+                            <div>
+                                <span class="font-semibold text-emerald-900">ils / elles ont</span>
+                                <span class="text-xs text-slate-400 block">[ilz õ / elz õ]</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm text-slate-500">oni / ony mají</span>
+                                <button onclick="speak('ils ont')" class="text-emerald-500 hover:text-emerald-700"><i class="fa-solid fa-volume-high"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STREAMING_CHUNK: Rendering Interactive Flashcard section -->
+        <section id="sec-cards" class="hidden space-y-6">
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-slate-700">Procvičování pomocí kartiček</h2>
+                <p class="text-slate-500 text-sm mt-1">Klikněte na kartičku pro otočení a zjistěte francouzský tvar a výslovnost.</p>
+            </div>
+
+            <div class="max-w-md mx-auto card-flip h-64 cursor-pointer" onclick="flipCard()">
+                <div id="card-inner" class="card-inner relative w-full h-full rounded-2xl shadow-xl bg-white border border-slate-200">
+                    <!-- Přední strana -->
+                    <div class="card-front absolute inset-0 flex flex-col justify-center items-center p-6 text-center">
+                        <span id="card-verb" class="text-xs font-bold uppercase tracking-wider text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full mb-3">Être</span>
+                        <h3 id="card-czech" class="text-3xl font-extrabold text-slate-800">já jsem</h3>
+                        <p class="text-xs text-slate-400 mt-6">(Klikněte pro otočení)</p>
+                    </div>
+                    <!-- Zadní strana -->
+                    <div class="card-back absolute inset-0 flex flex-col justify-center items-center p-6 text-center bg-indigo-600 text-white rounded-2xl">
+                        <h3 id="card-french" class="text-3xl font-extrabold">je suis</h3>
+                        <p id="card-pron" class="text-indigo-200 mt-2 font-mono">[žə süi]</p>
+                        <button onclick="event.stopPropagation(); speakCurrentCard();" class="mt-4 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition">
+                            <i class="fa-solid fa-volume-high"></i> Poslechnout výslovnost
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 mt-6">
+                <button onclick="prevCard()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-5 py-2.5 rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Předchozí
+                </button>
+                <button onclick="nextCard()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-lg transition flex items-center gap-2">
+                    Další <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- STREAMING_CHUNK: Rendering Quiz section -->
+        <section id="sec-quiz" class="hidden space-y-6">
+            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                <div class="flex justify-between items-center mb-6">
+                    <span id="quiz-progress" class="text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Otázka 1 / 10</span>
+                    <span id="quiz-score" class="text-sm font-semibold text-slate-600">Skóre: 0</span>
+                </div>
+
+                <div id="quiz-question-container">
+                    <h3 id="quiz-question" class="text-xl font-bold text-slate-800 mb-2">Doplňte správný tvar: "Nous _____ (être) à Paris."</h3>
+                    <p id="quiz-hint" class="text-slate-500 text-sm mb-6">Vyberte správný tvar slovesa.</p>
+
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                        <!-- Možnosti se vygenerují skriptem -->
+                    </div>
+
+                    <div id="quiz-feedback" class="hidden p-4 rounded-lg mb-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span id="feedback-icon" class="text-xl"></span>
+                            <span id="feedback-text" class="font-medium"></span>
+                        </div>
+                        <button id="feedback-audio-btn" class="bg-white/80 hover:bg-white text-slate-700 px-3 py-1 rounded-md text-sm font-semibold flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-volume-high"></i> Přehrát
+                        </button>
+                    </div>
+
+                    <button id="next-q-btn" onclick="nextQuestion()" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition">
+                        Další otázka <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+
+                <!-- Quiz Complete State -->
+                <div id="quiz-complete" class="hidden text-center py-8">
+                    <i class="fa-solid fa-trophy text-5xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-slate-800">Skvělá práce!</h3>
+                    <p class="text-slate-600 mt-2">Dokončili jste procvičování sloves Être a Avoir.</p>
+                    <p id="final-score" class="text-xl font-bold text-indigo-600 mt-4"></p>
+                    <button onclick="restartQuiz()" class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg transition">
+                        Zkusit znovu
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- STREAMING_CHUNK: Defining application logic, flashcards data with updated [tü] phonetic notation -->
+    <script>
+        // Data pro Flashcards zaktualizována na výslovnost [tü]
+        const cardsData = [
+            { verb: 'Être', czech: 'já jsem', french: 'je suis', pron: 'žə süi' },
+            { verb: 'Être', czech: 'ty jsi', french: 'tu es', pron: 'tü e' },
+            { verb: 'Être', czech: 'on / ona je', french: 'il / elle est', pron: 'il / el / õ e' },
+            { verb: 'Être', czech: 'my jsme', french: 'nous sommes', pron: 'nu som' },
+            { verb: 'Être', czech: 'vy jste', french: 'vous êtes', pron: 'vuz et' },
+            { verb: 'Être', czech: 'oni / ony jsou', french: 'ils / elles sont', pron: 'il sõ / el sõ' },
+            { verb: 'Avoir', czech: 'já mám', french: 'j\'ai', pron: 'že' },
+            { verb: 'Avoir', czech: 'ty máš', french: 'tu as', pron: 'tü a' },
+            { verb: 'Avoir', czech: 'on / ona má', french: 'il / elle a', pron: 'il / el / õ a' },
+            { verb: 'Avoir', czech: 'my máme', french: 'nous avons', pron: 'nuz avõ' },
+            { verb: 'Avoir', czech: 'vy máte', french: 'vous avez', pron: 'vuz ave' },
+            { verb: 'Avoir', czech: 'oni / ony mají', french: 'ils / elles ont', pron: 'ilz õ / elz õ' }
+        ];
+
+        // Data pro Test
+        const quizData = [
+            { sentence: "Nous _____ fatigués.", verb: "être", answer: "sommes", options: ["sommes", "avez", "sont", "avons"], fullPhrase: "Nous sommes fatigués." },
+            { sentence: "J' _____ un grand chien.", verb: "avoir", answer: "ai", options: ["suis", "ai", "as", "est"], fullPhrase: "J'ai un grand chien." },
+            { sentence: "Tu _____ étudiant?", verb: "être", answer: "es", options: ["as", "est", "es", "êtes"], fullPhrase: "Tu es étudiant?" },
+            { sentence: "Ils _____ deux voitures.", verb: "avoir", answer: "ont", options: ["sont", "avons", "ont", "avez"], fullPhrase: "Ils ont deux voitures." },
+            { sentence: "Vous _____ très gentils.", verb: "être", answer: "êtes", options: ["avez", "êtes", "sommes", "sont"], fullPhrase: "Vous êtes très gentils." },
+            { sentence: "Elle _____ 20 ans.", verb: "avoir", answer: "a", options: ["est", "a", "as", "ai"], fullPhrase: "Elle a 20 ans." },
+            { sentence: "Il _____ français.", verb: "être", answer: "est", options: ["a", "es", "est", "suis"], fullPhrase: "Il est français." },
+            { sentence: "Vous _____ une question?", verb: "avoir", answer: "avez", options: ["êtes", "avez", "avons", "sont"], fullPhrase: "Vous avez une question?" },
+            { sentence: "Elles _____ à l'école.", verb: "être", answer: "sont", options: ["ont", "sont", "sommes", "êtes"], fullPhrase: "Elles sont à l'école." },
+            { sentence: "Nous _____ beaucoup d'amis.", verb: "avoir", answer: "avons", options: ["sommes", "avez", "avons", "ont"], fullPhrase: "Nous avons beaucoup d'amis." }
+        ];
+
+        let currentCardIdx = 0;
+        let currentQuizIdx = 0;
+        let score = 0;
+        let isCardFlipped = false;
+
+        // Web Speech API pro francouzštinu
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.getElementById('sec-overview').classList.add('hidden');
+            document.getElementById('sec-cards').classList.add('hidden');
+            document.getElementById('sec-quiz').classList.add('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-700');
+                btn.classList.add('bg-indigo-500');
+            });
+
+            document.getElementById(`sec-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.remove('bg-indigo-500');
+            document.getElementById(`tab-${tab}`).classList.add('bg-indigo-700');
+
+            if (tab === 'cards') renderCard();
+            if (tab === 'quiz' && currentQuizIdx === 0) renderQuestion();
+        }
+
+        // Flashcard Logic
+        function renderCard() {
+            const card = cardsData[currentCardIdx];
+            document.getElementById('card-verb').innerText = card.verb;
+            document.getElementById('card-czech').innerText = card.czech;
+            document.getElementById('card-french').innerText = card.french;
+            document.getElementById('card-pron').innerText = `[${card.pron}]`;
+            
+            isCardFlipped = false;
+            document.getElementById('card-inner').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            isCardFlipped = !isCardFlipped;
+            const cardInner = document.getElementById('card-inner');
+            if (isCardFlipped) {
+                cardInner.classList.add('flipped');
+            } else {
+                cardInner.classList.remove('flipped');
+            }
+        }
+
+        function speakCurrentCard() {
+            speak(cardsData[currentCardIdx].french);
+        }
+
+        function nextCard() {
+            currentCardIdx = (currentCardIdx + 1) % cardsData.length;
+            renderCard();
+        }
+
+        function prevCard() {
+            currentCardIdx = (currentCardIdx - 1 + cardsData.length) % cardsData.length;
+            renderCard();
+        }
+
+        // Quiz Logic
+        function renderQuestion() {
+            const q = quizData[currentQuizIdx];
+            document.getElementById('quiz-progress').innerText = `Otázka ${currentQuizIdx + 1} / ${quizData.length}`;
+            document.getElementById('quiz-question').innerText = q.sentence;
+            document.getElementById('quiz-hint').innerText = `Doplňte správný tvar slovesa (${q.verb}).`;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('next-q-btn').classList.add('hidden');
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left bg-slate-50 border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 font-semibold p-4 rounded-xl transition text-slate-700 flex justify-between items-center';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedOpt, btnElement) {
+            const q = quizData[currentQuizIdx];
+            const feedback = document.getElementById('quiz-feedback');
+            const feedbackText = document.getElementById('feedback-text');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const audioBtn = document.getElementById('feedback-audio-btn');
+
+            const allBtns = document.getElementById('quiz-options').children;
+            for (let btn of allBtns) {
+                btn.disabled = true;
+                btn.classList.add('cursor-not-allowed', 'opacity-60');
+            }
+
+            if (selectedOpt === q.answer) {
+                score++;
+                document.getElementById('quiz-score').innerText = `Skóre: ${score}`;
+                feedback.className = "p-4 rounded-lg mb-4 flex items-center justify-between bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedbackIcon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+                feedbackText.innerText = "Správně! Vynikající.";
+            } else {
+                feedback.className = "p-4 rounded-lg mb-4 flex items-center justify-between bg-rose-50 text-rose-800 border border-rose-200";
+                feedbackIcon.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-500"></i>';
+                feedbackText.innerText = `Špatně. Správná odpověď je: "${q.answer}"`;
+            }
+
+            audioBtn.onclick = () => speak(q.fullPhrase);
+            speak(q.fullPhrase);
+
+            feedback.classList.remove('hidden');
+            document.getElementById('next-q-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuizIdx++;
+            if (currentQuizIdx < quizData.length) {
+                renderQuestion();
+            } else {
+                showQuizComplete();
+            }
+        }
+
+        function showQuizComplete() {
+            document.getElementById('quiz-question-container').classList.add('hidden');
+            document.getElementById('quiz-complete').classList.remove('hidden');
+            document.getElementById('final-score').innerText = `Vaše skóre: ${score} z ${quizData.length} bodů`;
+        }
+
+        function restartQuiz() {
+            currentQuizIdx = 0;
+            score = 0;
+            document.getElementById('quiz-score').innerText = `Skóre: 0`;
+            document.getElementById('quiz-complete').classList.add('hidden');
+            document.getElementById('quiz-question-container').classList.remove('hidden');
+            renderQuestion();
+        }
+    </script>
+</body>
+</html>
+```eof
