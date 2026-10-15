@@ -2,107 +2,376 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <title>Francouzská básnička s výslovností</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un, deux, trois - Francouzská říkanka s výslovností</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Pro ikony -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tone.js jako záložní audio engine pro 100% funkčnost zvuku -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            frenchBlue: '#0055A5',
+            frenchRed: '#EF4135'
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f7f6;
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
     }
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      width: 100%;
-    }
-    h2 {
-      color: #2c3e50;
-      text-align: center;
-      margin-bottom: 25px;
-    }
-    .verse-group {
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #eee;
-    }
-    .verse-group:last-child {
-      border-bottom: none;
-    }
-    .fr {
-      font-weight: bold;
-      color: #0055a5; /* Francouzská modrá */
-      font-size: 1.1em;
-    }
-    .pron {
-      color: #e74c3c; /* Červená pro výslovnost */
-      font-style: italic;
-      font-size: 0.95em;
-      margin-top: 2px;
-    }
-    .cz {
-      color: #7f8c8d;
-      font-size: 0.85em;
-      margin-top: 2px;
+    .active-line {
+      border-left-color: #EF4135 !important;
+      background-color: #FEF2F2 !important;
+      transform: translateX(4px);
     }
   </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-100 via-blue-50 to-red-50 min-h-screen font-sans text-slate-800 pb-12">
 
-  <div class="card">
-    <h2>Un, deux, trois</h2>
-
-    <div class="verse-group">
-      <div class="fr">Un, deux, trois,</div>
-      <div class="pron">[ eŋ, dë, trua ]</div>
-      <div class="cz">Ráz, dva, tři,</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Nous irons au bois.</div>
-      <div class="pron">[ nu z-iroŋ o bua ]</div>
-      <div class="cz">Půjdeme do lesa.</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Quatre, cinq, six,</div>
-      <div class="pron">[ katr, seŋk, sis ]</div>
-      <div class="cz">Čtyři, pět, šest,</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Cueillir des cerises.</div>
-      <div class="pron">[ köjir de sríz ]</div>
-      <div class="cz">Trhat třešně.</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Sept, huit, neuf,</div>
-      <div class="pron">[ set, ɥit, nef ]</div>
-      <div class="cz">Sedm, osm, devět,</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Dans mon panier neuf.</div>
-      <div class="pron">[ daŋ moŋ panje nef ]</div>
-      <div class="cz">Do mého nového košíku.</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Dix, onze, douze,</div>
-      <div class="pron">[ dis, oŋz, dúz ]</div>
-      <div class="cz">Deset, jedenáct, dvanáct,</div>
-    </div>
-
-    <div class="verse-group">
-      <div class="fr">Elles seront toutes rouges.</div>
-      <div class="pron">[ el sroŋ tut rúž ]</div>
-      <div class="cz">Všechny budou červené.</div>
-    </div>
+  <!-- Horní lišta v barvách francouzské vlajky -->
+  <div class="h-2 w-full flex">
+    <div class="w-1/3 bg-[#0055A5]"></div>
+    <div class="w-1/3 bg-white"></div>
+    <div class="w-1/3 bg-[#EF4135]"></div>
   </div>
 
+  <div class="max-w-3xl mx-auto px-4 pt-8">
+    
+    <!-- Hlavička -->
+    <header class="text-center mb-8">
+      <div class="inline-flex items-center justify-center p-3 bg-white rounded-full shadow-md mb-4 text-frenchBlue text-2xl border border-slate-100">
+        🇫🇷 🪵 🍒
+      </div>
+      <h1 class="font-display font-extrabold text-3xl md:text-5xl text-slate-900 tracking-tight mb-2">
+        Un, deux, trois, <br class="sm:hidden"><span class="text-frenchBlue">nous irons au bois</span>
+      </h1>
+      <p class="text-slate-600 font-medium max-w-md mx-auto text-sm md:text-base">
+        Tradiční francouzská dětská říkanka s audio výslovností (obsahuje nosovky s vlnovkou <span class="font-bold text-frenchRed">[õ]</span>, <span class="font-bold text-frenchRed">[ã]</span>, <span class="font-bold text-frenchRed">[ẽ]</span>).
+      </p>
+    </header>
+
+    <!-- Upozornění pro mobilní Safari / Chrome -->
+    <div id="audioInitBanner" class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl mb-6 text-xs md:text-sm flex items-center justify-between shadow-sm">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-volume-xmark text-amber-600 text-base"></i>
+        <span>Pro aktivaci zvuku v prohlížeči klikněte kamkoliv nebo na tlačítko <strong>Přehrát</strong>.</span>
+      </div>
+      <button onclick="unlockAudio()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1 rounded-lg text-xs transition-all">Aktivovat zvuk</button>
+    </div>
+
+    <!-- Ovládací panel -->
+    <div class="glass-card rounded-2xl p-4 md:p-6 shadow-xl border border-slate-200/80 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      
+      <!-- Tlačítka přehrávače -->
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <button id="playAllBtn" onclick="playAll()" class="flex-1 sm:flex-initial bg-frenchBlue hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-blue-500/20 active:scale-95 transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-play text-sm"></i> Přehrát celé
+        </button>
+        <button id="stopBtn" onclick="stopAudio()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-3 rounded-xl active:scale-95 transition-all flex items-center justify-center" title="Zastavit">
+          <i class="fa-solid fa-stop"></i>
+        </button>
+      </div>
+
+      <!-- Volba rychlosti -->
+      <div class="flex items-center gap-2 bg-slate-100 px-3 py-2 rounded-xl w-full sm:w-auto justify-center">
+        <i class="fa-solid fa-gauge-high text-frenchBlue text-xs"></i>
+        <span class="text-xs font-semibold text-slate-600">Rychlost:</span>
+        <button onclick="setSpeed(0.65)" id="speed-07" class="speed-btn text-xs font-bold px-2 py-1 rounded-lg transition-all text-slate-600">Pomalá</button>
+        <button onclick="setSpeed(0.85)" id="speed-09" class="speed-btn text-xs font-bold px-2 py-1 rounded-lg transition-all bg-white shadow text-frenchBlue">Normální</button>
+      </div>
+    </div>
+
+    <!-- Seznam veršů -->
+    <main id="versesContainer" class="space-y-3">
+      <!-- Verše budou generovány JavaScriptem -->
+    </main>
+
+    <!-- Vysvětlivky -->
+    <footer class="mt-8 text-center text-xs text-slate-500 space-y-2">
+      <p><i class="fa-solid fa-circle-info mr-1"></i> Správné nosovky: <strong class="text-frenchRed">[õ]</strong> (irons, mon, seront), <strong class="text-frenchRed">[ã]</strong> (dans), <strong class="text-frenchRed">[ẽ]</strong> (un, cinq).</p>
+      <p class="text-slate-400">Přepis výslovnosti v hranatých závorkách je přizpůsoben pro české čtenáře.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Básnička s opraveným přepisováním nosovek [õ], [ã], [ẽ]
+    const poemData = [
+      { fr: "Un, deux, trois,", pron: "[ ẽ, dë, trua ]", cz: "Ráz, dva, tři," },
+      { fr: "Nous irons au bois.", pron: "[ nu z-irõ o bua ]", cz: "Půjdeme do lesa." },
+      { fr: "Quatre, cinq, six,", pron: "[ katr, sẽk, sis ]", cz: "Čtyři, pět, šest," },
+      { fr: "Cueillir des cerises.", pron: "[ köjir de sríz ]", cz: "Trhat třešně." },
+      { fr: "Sept, huit, neuf,", pron: "[ set, ɥit, nef ]", cz: "Sedm, osm, devět," },
+      { fr: "Dans mon panier neuf.", pron: "[ dã mõ panje nef ]", cz: "Do mého nového košíku." },
+      { fr: "Dix, onze, douze,", pron: "[ dis, õz, dúz ]", cz: "Deset, jedenáct, dvanáct," },
+      { fr: "Elles seront toutes rouges.", pron: "[ el srõ tut rúž ]", cz: "Všechny budou červené." }
+    ];
+
+    let synth = window.speechSynthesis;
+    let speechRate = 0.85;
+    let isPlayingAll = false;
+    let currentLineIndex = -1;
+    let currentUtterance = null;
+    let frenchVoice = null;
+    let audioUnlocked = false;
+
+    // Inicializace aplikace a hlasů
+    document.addEventListener("DOMContentLoaded", () => {
+      renderVerses();
+      initVoices();
+      
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = initVoices;
+      }
+
+      // Odblokování zvuku po prvním dotyku/kliknutí
+      document.body.addEventListener('click', unlockAudio, { once: true });
+      document.body.addEventListener('touchstart', unlockAudio, { once: true });
+    });
+
+    function unlockAudio() {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      
+      // Propojení s Tone.js pro případný audio fallback
+      if (typeof Tone !== 'undefined') {
+        Tone.start();
+      }
+
+      // Testovací ztišený tón pro probuzení Web Speech Synth v iOS/Safari
+      if (synth) {
+        let dummy = new SpeechSynthesisUtterance("");
+        dummy.volume = 0;
+        synth.speak(dummy);
+      }
+
+      const banner = document.getElementById('audioInitBanner');
+      if (banner) {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function initVoices() {
+      if (!synth) return;
+      const voices = synth.getVoices();
+      // Najde nejlepší francouzský hlas dostupný v daném systému
+      frenchVoice = voices.find(v => v.lang.startsWith('fr') || v.lang.includes('FR')) || null;
+    }
+
+    function renderVerses() {
+      const container = document.getElementById("versesContainer");
+      container.innerHTML = "";
+
+      poemData.forEach((item, index) => {
+        const verseEl = document.createElement("div");
+        verseEl.id = `verse-${index}`;
+        verseEl.className = "glass-card rounded-2xl p-4 md:p-5 border-l-4 border-l-transparent border-t border-r border-b border-slate-200/80 hover:border-l-frenchBlue transition-all flex items-center justify-between gap-4 shadow-sm hover:shadow-md cursor-pointer";
+        
+        verseEl.onclick = (e) => {
+          if (!e.target.closest('button')) {
+            playSingleLine(index);
+          }
+        };
+
+        verseEl.innerHTML = `
+          <div class="flex-1 space-y-1">
+            <div class="text-slate-900 font-display font-bold text-lg md:text-xl flex items-center gap-2">
+              <span>${item.fr}</span>
+            </div>
+            <div class="text-frenchRed font-semibold text-sm md:text-base">
+              ${item.pron}
+            </div>
+            <div class="text-slate-500 text-xs md:text-sm">
+              ${item.cz}
+            </div>
+          </div>
+          <button onclick="playSingleLine(${index})" class="line-play-btn bg-slate-100 hover:bg-frenchBlue hover:text-white text-slate-600 w-11 h-11 rounded-xl flex items-center justify-center transition-all flex-shrink-0 active:scale-90" title="Přehrát tento řádek">
+            <i class="fa-solid fa-volume-high text-base"></i>
+          </button>
+        `;
+
+        container.appendChild(verseEl);
+      });
+    }
+
+    function playSingleLine(index) {
+      unlockAudio();
+      stopAudio();
+      playSequenceStep(index, false);
+    }
+
+    function playAll() {
+      unlockAudio();
+      if (isPlayingAll) {
+        stopAudio();
+        return;
+      }
+
+      isPlayingAll = true;
+      updatePlayAllBtn(true);
+      
+      const startFrom = (currentLineIndex >= 0 && currentLineIndex < poemData.length) ? currentLineIndex : 0;
+      playSequenceStep(startFrom, true);
+    }
+
+    function playSequenceStep(index, isLooping) {
+      if (index < 0 || index >= poemData.length) {
+        stopAudio();
+        return;
+      }
+
+      if (synth) synth.cancel();
+
+      highlightLine(index);
+
+      // Pokud prohlížeč plně podporuje SpeechSynthesis
+      if ('speechSynthesis' in window && synth) {
+        currentUtterance = new SpeechSynthesisUtterance(poemData[index].fr);
+        currentUtterance.lang = 'fr-FR';
+        currentUtterance.rate = speechRate;
+        if (frenchVoice) currentUtterance.voice = frenchVoice;
+
+        let hasEnded = false;
+
+        currentUtterance.onend = () => {
+          if (hasEnded) return;
+          hasEnded = true;
+          handleLineEnd(index, isLooping);
+        };
+
+        currentUtterance.onerror = (e) => {
+          console.warn("SpeechSynthesis error fallback:", e);
+          if (!hasEnded) {
+            hasEnded = true;
+            fallbackBeep(() => handleLineEnd(index, isLooping));
+          }
+        };
+
+        // Bezpečnostní časovač pro případ, že onend event v Safari/Chrome nenastane
+        setTimeout(() => {
+          if (!hasEnded && isPlayingAll && currentLineIndex === index) {
+            hasEnded = true;
+            handleLineEnd(index, isLooping);
+          }
+        }, 3500);
+
+        synth.speak(currentUtterance);
+      } else {
+        // Fallback pro prohlížeče bez hlasového syntetizéru
+        fallbackBeep(() => handleLineEnd(index, isLooping));
+      }
+    }
+
+    function handleLineEnd(index, isLooping) {
+      if (isLooping && isPlayingAll && index + 1 < poemData.length) {
+        setTimeout(() => {
+          if (isPlayingAll) {
+            playSequenceStep(index + 1, true);
+          }
+        }, 350);
+      } else {
+        stopAudio();
+      }
+    }
+
+    // Náhradní zvukový tón, pokud prohlížeč zcela blokuje syntézu hlasu
+    function fallbackBeep(callback) {
+      try {
+        const synthSound = new Tone.Synth().toDestination();
+        synthSound.triggerAttackRelease("C5", "8n");
+        setTimeout(callback, 800);
+      } catch (e) {
+        setTimeout(callback, 1000);
+      }
+    }
+
+    function stopAudio() {
+      if (synth) synth.cancel();
+      isPlayingAll = false;
+      currentUtterance = null;
+      updatePlayAllBtn(false);
+      if (currentLineIndex !== -1) {
+        unhighlightLine(currentLineIndex);
+      }
+    }
+
+    function highlightLine(index) {
+      if (currentLineIndex !== -1 && currentLineIndex !== index) {
+        unhighlightLine(currentLineIndex);
+      }
+      currentLineIndex = index;
+      const el = document.getElementById(`verse-${index}`);
+      if (el) {
+        el.classList.add("active-line");
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function unhighlightLine(index) {
+      const el = document.getElementById(`verse-${index}`);
+      if (el) {
+        el.classList.remove("active-line");
+      }
+      if (currentLineIndex === index) {
+        currentLineIndex = -1;
+      }
+    }
+
+    function setSpeed(rate) {
+      speechRate = rate;
+      document.querySelectorAll(".speed-btn").forEach(btn => {
+        btn.classList.remove("bg-white", "shadow", "text-frenchBlue");
+        btn.classList.add("text-slate-600");
+      });
+
+      const activeBtn = rate < 0.75 ? document.getElementById("speed-07") : document.getElementById("speed-09");
+      if (activeBtn) {
+        activeBtn.classList.add("bg-white", "shadow", "text-frenchBlue");
+        activeBtn.classList.remove("text-slate-600");
+      }
+
+      if (currentLineIndex >= 0) {
+        const wasLooping = isPlayingAll;
+        playSequenceStep(currentLineIndex, wasLooping);
+      }
+    }
+
+    function updatePlayAllBtn(playing) {
+      const btn = document.getElementById("playAllBtn");
+      if (!btn) return;
+
+      if (playing) {
+        btn.innerHTML = `<i class="fa-solid fa-pause text-sm"></i> Pozastavit`;
+        btn.classList.remove("bg-frenchBlue", "hover:bg-blue-700");
+        btn.classList.add("bg-amber-600", "hover:bg-amber-700");
+      } else {
+        btn.innerHTML = `<i class="fa-solid fa-play text-sm"></i> Přehrát celé`;
+        btn.classList.remove("bg-amber-600", "hover:bg-amber-700");
+        btn.classList.add("bg-frenchBlue", "hover:bg-blue-700");
+      }
+    }
+  </script>
 </body>
 </html>
