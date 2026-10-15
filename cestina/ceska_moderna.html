@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování: Česká moderna (9. třída)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .instructions {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        .question-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+        .quote {
+            font-style: italic;
+            background: #f9f9f9;
+            border-left: 3px solid #ccc;
+            padding: 8px 12px;
+            margin: 8px 0;
+            color: #555;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        label {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        label:hover {
+            background: #e9ecef;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2em;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #219150;
+        }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: none;
+        }
+        .card-correct {
+            border-color: #27ae60 !important;
+            background-color: #f0fff4 !important;
+        }
+        .card-incorrect {
+            border-color: #e74c3c !important;
+            background-color: #fdf2f2 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Česká moderna – Detektivní kvíz</h1>
+    
+    <div class="instructions">
+        <strong>Pravidla:</strong> Přečti si následující ukázky a otázky. Vyber u každé otázky právě jednu správnou odpověď. Na konci klikni na tlačítko <em>Vyhodnotit kvíz</em>.
+    </div>
+
+    <form id="quizForm">
+
+        <!-- Otázka 1 -->
+        <div class="question-card" id="card-q1">
+            <div class="question-title">1. Který umělecký směr přirovnáváme k „Instagramové fotce s filtrem“, protože se snaží zachytit náladu jediného okamžiku, barvy, světlo a vůně přírody?</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> Dekadence</label>
+                <label><input type="radio" name="q1" value="B"> Impresionismus</label>
+                <label><input type="radio" name="q1" value="C"> Symbolismus</label>
+            </div>
+        </div>
+
+        <!-- Otázka 2 -->
+        <div class="question-card" id="card-q2">
+            <div class="question-title">2. Přečti si ukázku z básně Rybníky (Antonín Sova):</div>
+            <div class="quote">„Rybníky hukotem dělí se o noční šer, / mlhy se zvedají, stříbrem se třpytí a vanou...“</div>
+            <div class="question-title" style="margin-top:10px;">Jaký směr je z ukázky nejvíce patrný díky zapojení smyslů (zrak, sluch) a přírodní atmosféry?</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A"> Impresionismus</label>
+                <label><input type="radio" name="q2" value="B"> Dekadence</label>
+                <label><input type="radio" name="q2" value="C"> Realismus</label>
+            </div>
+        </div>
+
+        <!-- Otázka 3 -->
+        <div class="question-card" id="card-q3">
+            <div class="question-title">3. Básník Karel Hlaváček napsal známý verš: <em>„Hrál kdosi na hoboj, tak ticho, tak sladce, tak žalně...“</em> Vyžívá se v melancholii, noci, samotě a smutku. Ke kterému směru ho zařadíme?</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A"> Impresionismus</label>
+                <label><input type="radio" name="q3" value="B"> Symbolismus</label>
+                <label><input type="radio" name="q3" value="C"> Dekadence</label>
+            </div>
+        </div>
+
+        <!-- Otázka 4 -->
+        <div class="question-card" id="card-q4">
+            <div class="question-title">4. Co je to SYMBOL v poezii symbolismu?</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A"> Přesný vědecký popis zvířat a rostlin v přírodě.</label>
+                <label><input type="radio" name="q4" value="B"> Předmět, slovo nebo obraz, který má skrytý význam (představuje složitý pocit nebo myšlenku).</label>
+                <label><input type="radio" name="q4" value="C"> Pravidelný rým na konci každého verše.</label>
+            </div>
+        </div>
+
+        <!-- Otázka 5 -->
+        <div class="question-card" id="card-q5">
+            <div class="question-title">5. V Březinově básni <em>Moje matka</em> se objevují motivy „chudého chleba“, „mozolů“ a „černých stínů“. Co tyto obrazy v duchu symbolismu představují?</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A"> Pouze reálný návod na pečení chleba.</label>
+                <label><input type="radio" name="q5" value="B"> Symbol těžkého životního osudu, oběti a čisté lásky.</label>
+                <label><input type="radio" name="q5" value="C"> Symbol hněvu a revoluce proti společnosti.</label>
+            </div>
+        </div>
+
+        <!-- Otázka 6 -->
+        <div class="question-card" id="card-q6">
+            <div class="question-title">6. Ze které země k nám na konci 19. století dorazila vlna moderních směrů, u jejíž zrodu stáli tzv. „prokletí básníci“?</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A"> Z Německa</label>
+                <label><input type="radio" name="q6" value="B"> Z Anglie</label>
+                <label><input type="radio" name="q6" value="C"> Z Francie</label>
+            </div>
+        </div>
+
+        <button type="button" id="submitBtn">Vyhodnotit kvíz</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const correctAnswers = {
+                q1: "B",
+                q2: "A",
+                q3: "C",
+                q4: "B",
+                q5: "B",
+                q6: "C"
+            };
+
+            let score = 0;
+            let total = 6;
+
+            for (let q in correctAnswers) {
+                let card = document.getElementById('card-' + q);
+                let selectedInput = document.querySelector('input[name="' + q + '"]:checked');
+                
+                // Reset stylů z předchozího vyhodnocení
+                card.classList.remove('card-correct', 'card-incorrect');
+
+                if (selectedInput && selectedInput.value === correctAnswers[q]) {
+                    score++;
+                    card.classList.add('card-correct');
+                } else {
+                    card.classList.add('card-incorrect');
+                }
+            }
+
+            let resultDiv = document.getElementById('result');
+            resultDiv.style.display = "block";
+            
+            let percentage = Math.round((score / total) * 100);
+            let message = "";
+
+            if (score === total) {
+                resultDiv.style.backgroundColor = "#d4edda";
+                resultDiv.style.color = "#155724";
+                message = `Skvěle! Získal/a jsi ${score} z ${total} bodů (${percentage} %). Jsi znalec České moderny! 🎉`;
+            } else if (score >= 4) {
+                resultDiv.style.backgroundColor = "#fff3cd";
+                resultDiv.style.color = "#856404";
+                message = `Dobrá práce! Získal/a jsi ${score} z ${total} bodů (${percentage} %). Červeně zvýrazněné otázky si ještě skus opravit! 👍`;
+            } else {
+                resultDiv.style.backgroundColor = "#f8d7da";
+                resultDiv.style.color = "#721c24";
+                message = `Získal/a jsi ${score} z ${total} bodů (${percentage} %). Zkuste si projít červeně označené otázky ještě jednou. 💡`;
+            }
+
+            resultDiv.innerHTML = message;
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
