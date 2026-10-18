@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procvičování Českého Jazyka - 7. Ročník</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 sticky top-0 z-10 shadow-lg">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                    <i class="fas fa-book-open text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Český jazyk – 7. ročník</h1>
+                    <p class="text-xs text-slate-400">Pojmenování přenesená a významy slov</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="score-display" class="bg-slate-700 px-3 py-1 rounded-full text-sm font-semibold text-indigo-300">
+                    Skóre: <span id="score">0</span> / <span id="total-questions">0</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto w-full p-4 md:p-6 flex-grow flex flex-col justify-center">
+
+        <!-- Topic Overview Card -->
+        <div id="overview-card" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-6 shadow-xl">
+            <h2 class="text-xl font-bold mb-3 text-indigo-400 flex items-center gap-2">
+                <i class="fas fa-lightbulb"></i> Rychlé zopakování teorie
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-300">
+                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/50">
+                    <strong class="text-amber-400">Metafora:</strong> Přenesení na základě vnější podoby (př. <i>zub pily, hlava rodiny</i>).
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/50">
+                    <strong class="text-amber-400">Metonymie:</strong> Přenesení na základě vnitřní souvislosti (př. <i>číst Čapka, vypil celou sklenici</i>).
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/50">
+                    <strong class="text-amber-400">Synekdocha:</strong> Zaměnění části za celek nebo naopak (př. <i>přišlo tam celé město, nebyla tam ani noha</i>).
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/50">
+                    <strong class="text-amber-400">Jednoznačná vs. Mnohoznačná:</strong>
+                    Slova s 1 významem (<i>vodovod, obdélník</i>) vs. více významy (<i>koruna, oko</i>).
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div id="quiz-card" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col relative overflow-hidden">
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-700 h-2 rounded-full mb-6 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- Question Number & Tag -->
+            <div class="flex justify-between items-center mb-4">
+                <span id="question-number" class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Otázka 1 z 10</span>
+                <span id="topic-tag" class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-md">Metafora vs Metonymie</span>
+            </div>
+
+            <!-- Question Text -->
+            <h3 id="question-text" class="text-lg md:text-xl font-medium mb-6 text-slate-100">
+                Načítání otázky...
+            </h3>
+
+            <!-- Options -->
+            <div id="options-container" class="space-y-3 mb-6">
+                <!-- Buttons generated dynamically -->
+            </div>
+
+            <!-- Feedback / Explanation Box -->
+            <div id="feedback-box" class="hidden p-4 rounded-xl border mb-6 transition-all duration-200">
+                <div class="flex items-start gap-3">
+                    <i id="feedback-icon" class="fas text-xl mt-0.5"></i>
+                    <div>
+                        <h4 id="feedback-title" class="font-bold mb-1"></h4>
+                        <p id="feedback-text" class="text-sm text-slate-200"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex justify-between items-center pt-2 border-t border-slate-700/60">
+                <button id="hint-btn" class="text-xs text-slate-400 hover:text-indigo-300 transition-colors flex items-center gap-1.5">
+                    <i class="far fa-question-circle"></i> Nápověda
+                </button>
+                <button id="next-btn" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2">
+                    Další otázka <i class="fas fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+            
+            <!-- Hint popup container -->
+            <div id="hint-box" class="hidden mt-3 p-3 bg-amber-950/40 border border-amber-800/50 text-amber-200 rounded-lg text-xs">
+                <i class="fas fa-info-circle mr-1"></i> <span id="hint-text"></span>
+            </div>
+        </div>
+
+        <!-- Result Card -->
+        <div id="result-card" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-8 text-center shadow-xl">
+            <div class="w-20 h-20 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Skvělá práce!</h2>
+            <p class="text-slate-300 mb-6">Dokončil/a jsi procvičování obrazných pojmenování a významů slov.</p>
+            
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-700 mb-6 max-w-sm mx-auto">
+                <div class="text-3xl font-extrabold text-indigo-400 mb-1" id="final-score">0 / 0</div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider">Celková úspěšnost</div>
+            </div>
+
+            <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-semibold transition-colors inline-flex items-center gap-2">
+                <i class="fas fa-redo"></i> Spustit znova
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        Český jazyk pro 7. ročník • Interaktivní procvičování
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                question: "Ve věte: 'Na obloze vyšlo zlaté přadeno a hřálo celý den' je výraz 'zlaté přadeno' (slunce) příkladem jakého pojmenování?",
+                topic: "Metafora vs Metonymie",
+                options: [
+                    { text: "Metafora", correct: true },
+                    { text: "Metonymie", correct: false },
+                    { text: "Synekdocha", correct: false },
+                    { text: "Slovo jednoznačné", correct: false }
+                ],
+                explanation: "Jde o metaforu. Výraz vznikl přenesením významu na základě vnější podobnosti (žluté, zářící slunce připomíná klubko/přadeno).",
+                hint: "Zamysli se, zda přenesení vychází z vnější podoby (jak slunce vypadá), nebo z vnitřní souvislosti."
+            },
+            {
+                question: "Které z následujících slov je slovo JEDNOZNAČNÉ?",
+                topic: "Jednoznačná a mnohoznačná slova",
+                options: [
+                    { text: "Koruna", correct: false },
+                    { text: "Pramen", correct: false },
+                    { text: "Fotbal", correct: true },
+                    { text: "List", correct: false }
+                ],
+                explanation: "'Fotbal' má pouze jeden základní význam (sportovní hra). Ostatní slova mají více významů (koruna stromu/královská/měna, pramen vlasů/vody, list stromu/papíru).",
+                hint: "Hledej slovo, které označuje pouze jednu konkrétní věc či jev a nemá žádné jiné významy."
+            },
+            {
+                question: "Vyber větu, ve které je použitá METONYMIE:",
+                topic: "Metonymie",
+                options: [
+                    { text: "Zub času hlodal na starém hradě.", correct: false },
+                    { text: "Poslouchal jsem celý večer Mozarta.", correct: true },
+                    { text: "Hlava rodiny rozhodla o výletu.", correct: false },
+                    { text: "Na střeše seděla černá kočka.", correct: false }
+                ],
+                explanation: "'Poslouchal jsem Mozarta' znamená poslouchat Mozartovu hudbu/skladby. Význam se přenesl na základě vnitřní souvislosti (autor -> dílo).",
+                hint: "Hledej případ, kdy se jméno autora používá místo jeho díla."
+            },
+            {
+                question: "Slovní spojení 'srdce zvonu' je příkladem:",
+                topic: "Metafora",
+                options: [
+                    { text: "Metonymie", correct: false },
+                    { text: "Metafory", correct: true },
+                    { text: "Synekdochy", correct: false },
+                    { text: "Slova jednoznačného", correct: false }
+                ],
+                explanation: "Jde o metaforu. Vnitřní část zvonu připomíná lidské srdce svým tvarem i tím, že dává zvonu 'život' (zvuk).",
+                hint: "Přenesení vychází z tvarové nebo funkční podobnosti s lidským orgánem."
+            },
+            {
+                question: "Ve věte 'Celá Praha vyšla do ulic oslavit vítězství' představuje slovo 'Praha':",
+                topic: "Synekdocha",
+                options: [
+                    { text: "Synekdochu", correct: true },
+                    { text: "Metaforu", correct: false },
+                    { text: "Slovo jednoznačné", correct: false },
+                    { text: "Přímé pojmenování", correct: false }
+                ],
+                explanation: "Jde o synekdochu (zaměnění celku za část). Nevyšlo celé město včetně domů a ulic, ale jeho obyvatelé (lidé).",
+                hint: "Používá se zde název celku (město Praha) k označení jeho části (obyvatelé Prahy)."
+            },
+            {
+                question: "Které z těchto slov je MNOHOZNAČNÉ?",
+                topic: "Jednoznačná a mnohoznačná slova",
+                options: [
+                    { text: "Vodovod", correct: false },
+                    { text: "Myš", correct: true },
+                    { text: "Dusík", correct: false },
+                    { text: "Pravítko", correct: false }
+                ],
+                explanation: "Slovo 'myš' je mnohoznačné – označuje drobného hlodavce a také počítačové vstupní zařízení (na základě vnější podoby).",
+                hint: "Které slovo můžeš použít jak v přírodě/přírodopisu, tak u počítače?"
+            },
+            {
+                question: "Co z následujících možností představuje SYNEKDOCHU typu 'část za celek'?",
+                topic: "Synekdocha",
+                options: [
+                    { text: "Vypil celou sklenici vody.", correct: false },
+                    { text: "Nezůstala tam ani jedna živá duše.", correct: true },
+                    { text: "Perly rosy se třpytily v trávě.", correct: false },
+                    { text: "Koupil si kompletního Čapka.", correct: false }
+                ],
+                explanation: "'Živá duše' označuje celého člověka. Použili jsme část (duše) pro pojmenování celku (člověk).",
+                hint: "Hledej výraz, kde jedna vlastnost nebo část těla představuje celého člověka."
+            },
+            {
+                question: "Pojmenování 'hlava státu' je z hlediska přenesení významu:",
+                topic: "Metafora",
+                options: [
+                    { text: "Metafora", correct: true },
+                    { text: "Metonymie", correct: false },
+                    { text: "Slovo jednoznačné", correct: false },
+                    { text: "Synekdocha", correct: false }
+                ],
+                explanation: "Jde o metaforu. Hlava je vnímaná jako nejvyšší/řídící část těla, proto řídící osoba státu (prezident) je přeneseně 'hlava'.",
+                hint: "Lidské tělo má hlavu nahoře a řídí ho. Podobně řídící osoba stojí v čele státu."
+            },
+            {
+                question: "Spojení 'snědl celý talíř' je příkladem:",
+                topic: "Metonymie",
+                options: [
+                    { text: "Metafory", correct: false },
+                    { text: "Metonymie", correct: true },
+                    { text: "Slova jednoznačného", correct: false },
+                    { text: "Synekdochy", correct: false }
+                ],
+                explanation: "Jde o metonymii. Nesnědl samotný porcelánový talíř, ale jídlo, které na něm bylo (přenesení na základě nádoba -> obsah).",
+                hint: "Pojmenovává se zde obal/nádoba místo samotného obsahu, který byl uvnitř."
+            },
+            {
+                question: "Mezi slova jednoznačná patří převážně:",
+                topic: "Jednoznačná a mnohoznačná slova",
+                options: [
+                    { text: "Odborné termíny a vlastní jména", correct: true },
+                    { text: "Běžné každodenní předměty", correct: false },
+                    { text: "Slovesa pohybu", correct: false },
+                    { text: "Přídavná jména vlastností", correct: false }
+                ],
+                explanation: "Jednoznačná slova jsou nejčastěji odborné názvy (př. kyselina sírová, obdélník) nebo vlastní jména (př. Jan, Praha), které mají přesný a jediný význam.",
+                hint: "Která skupina slov potřebuje přesné vymezení, aby nedošlo k omylu ve vědě nebo geografii?"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionNumber = document.getElementById('question-number');
+        const topicTag = document.getElementById('topic-tag');
+        const scoreDisplay = document.getElementById('score');
+        const totalQuestionsDisplay = document.getElementById('total-questions');
+        const progressBar = document.getElementById('progress-bar');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const feedbackIcon = document.getElementById('feedback-icon');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const hintBox = document.getElementById('hint-box');
+        const hintText = document.getElementById('hint-text');
+
+        const quizCard = document.getElementById('quiz-card');
+        const resultCard = document.getElementById('result-card');
+        const overviewCard = document.getElementById('overview-card');
+
+        totalQuestionsDisplay.textContent = quizData.length;
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            selectedOption = null;
+
+            feedbackBox.classList.add('hidden');
+            hintBox.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            
+            questionNumber.textContent = `Otázka ${currentQuestion + 1} z ${quizData.length}`;
+            topicTag.textContent = q.topic;
+            questionText.textContent = q.question;
+            hintText.textContent = q.hint;
+
+            const progress = ((currentQuestion) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-900/50 hover:bg-slate-700/50 transition-all duration-150 flex items-center justify-between group`;
+                btn.innerHTML = `
+                    <span class="text-sm md:text-base font-normal text-slate-200">${opt.text}</span>
+                    <span class="w-5 h-5 rounded-full border border-slate-600 group-hover:border-indigo-400 flex items-center justify-center text-xs text-transparent">✓</span>
+                `;
+                btn.onclick = () => selectOption(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(index, btnElement) {
+            if (selectedOption !== null) return;
+            selectedOption = index;
+
+            const q = quizData[currentQuestion];
+            const isCorrect = q.options[index].correct;
+            const buttons = optionsContainer.children;
+
+            if (isCorrect) {
+                score++;
+                scoreDisplay.textContent = score;
+                btnElement.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-950/30 text-slate-100 flex items-center justify-between";
+                btnElement.querySelector('span:last-child').className = "w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs";
+                
+                showFeedback(true, "Správně!", q.explanation);
+            } else {
+                btnElement.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-950/30 text-slate-100 flex items-center justify-between";
+                btnElement.querySelector('span:last-child').className = "w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs";
+
+                q.options.forEach((opt, idx) => {
+                    if (opt.correct) {
+                        buttons[idx].className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500/60 bg-emerald-950/20 text-slate-200 flex items-center justify-between";
+                    }
+                });
+
+                showFeedback(false, "Není to správně", q.explanation);
+            }
+
+            nextBtn.classList.remove('hidden');
+        }
+
+        function showFeedback(isCorrect, title, text) {
+            feedbackBox.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackBox.className = "p-4 rounded-xl border border-emerald-500/40 bg-emerald-950/30 text-emerald-200 mb-6";
+                feedbackIcon.className = "fas fa-check-circle text-emerald-400 text-xl mt-0.5";
+            } else {
+                feedbackBox.className = "p-4 rounded-xl border border-rose-500/40 bg-rose-950/30 text-rose-200 mb-6";
+                feedbackIcon.className = "fas fa-times-circle text-rose-400 text-xl mt-0.5";
+            }
+            feedbackTitle.textContent = title;
+            feedbackText.textContent = text;
+        }
+
+        hintBtn.onclick = () => {
+            hintBox.classList.toggle('hidden');
+        };
+
+        nextBtn.onclick = () => {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        function showResults() {
+            quizCard.classList.add('hidden');
+            overviewCard.classList.add('hidden');
+            resultCard.classList.remove('hidden');
+            
+            document.getElementById('final-score').textContent = `${score} / ${quizData.length}`;
+            progressBar.style.width = '100%';
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            scoreDisplay.textContent = '0';
+            resultCard.classList.add('hidden');
+            quizCard.classList.remove('hidden');
+            overviewCard.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
+```eof
+

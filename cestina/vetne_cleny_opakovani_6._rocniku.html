@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opakování syntaxe – 6. ročník</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-hover: #3b5984;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --accent: #e74c3c;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .subtitle {
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 550px;
+            height: 320px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: var(--card-bg);
+            text-align: center;
+        }
+
+        .card-front {
+            border-top: 6px solid var(--primary);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            border-top: 6px solid #2ecc71;
+            background-color: #f9fff9;
+        }
+
+        .category {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #95a5a6;
+            font-weight: bold;
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 12px;
+            color: #bdc3c7;
+        }
+
+        .question {
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .answer {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .detail {
+            margin-top: 15px;
+            font-size: 15px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        .progress {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Opakování syntaxe</h1>
+    <p class="subtitle">Český jazyk – 6. ročník</p>
+
+    <div class="card-container" onclick="flipCard()">
+        <div class="card" id="card">
+            <div class="card-face card-front">
+                <span class="category" id="category">Kategorie</span>
+                <div class="question" id="question">Načítání...</div>
+                <span class="hint">Klikni pro otočení kartičky</span>
+            </div>
+            <div class="card-face card-back">
+                <span class="category">Odpověď</span>
+                <div class="answer" id="answer">Odpověď</div>
+                <div class="detail" id="detail"></div>
+                <span class="hint">Klikni pro otočení zpět</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress" id="progress">Kartička 1 z X</div>
+
+    <div class="controls">
+        <button onclick="prevCard(event)">◄ Předchozí</button>
+        <button onclick="nextCard(event)">Další ►</button>
+    </div>
+
+    <script>
+        const cards = [
+            // Základní skladební dvojice & Otázky
+            { cat: "Základní větné členy", q: "Z čeho se skládá základní skladební dvojice?", a: "Z podmětu a přísudku.", d: "Tvoří gramatické jádro dvojčlenné věty." },
+            { cat: "Otázky", q: "Jak se ptáme na PODMĚT (Po)?", a: "Kdo, co? + přísudek", d: "Příklad: *Pes* štěká. (Kdo, co štěká? Pes)" },
+            { cat: "Otázky", q: "Jak se ptáme na PŘÍSUDEK (Př)?", a: "Co dělá podmět? / Co se s ním děje?", d: "Příklad: Dítě *spí*. (Co dělá dítě? Spí)" },
+            { cat: "Otázky", q: "Jak se ptáme na PŘÍVLASTEK (Pk)?", a: "Jaký? Který? Čí? + řídící podstatné jméno", d: "Přívlastek VŽDY rozvíjí podstatné jméno. Příklad: *mladý* strom." },
+            { cat: "Otázky", q: "Jak se ptáme na PŘEDMĚT (Pt)?", a: "Pádovými otázkami kromě 1. a 5. pádu", d: "Předmět VŽDY rozvíjí sloveso (případně přídavné jméno). Ptáme se: Koho/čeho? Komu/čemu? Koho/co? O kom/čem? Kým/čím?" },
+            
+            // Přívlastek – Teorie (Pks vs Pkn)
+            { cat: "Přívlastek", q: "Co rozvíjí PŘÍVLASTEK (Pk) a jaký je rozdíl mezi Pks a Pkn?", a: "Přívlastek ROZVÍJÍ PODSTATNÉ JMÉNO.<br><br>Pks stojí před ním a shoduje se.<br>Pkn stojí za ním a neshoduje se.", d: "Pks: *nový* dům | Pkn: dům *z dřeva*" },
+            { cat: "Přívlastek", q: "V čem se přívlastek shodný (Pks) SHODUJE s podstatným jménem?", a: "V rodě, čísle a pádě.", d: "Změní-li se tvar podstatného jména, změní se i přívlastek (velký pes -> bez velkého psa)." },
+            { cat: "Přívlastek", q: "Čím bývá nejčastěji vyjádřen přívlastek neshodný (Pkn)?", a: "Podstatným jménem (často s předložkou).", d: "Rozvíjí podstatné jméno: cesta *do lesa*, taška *bratra*." },
+
+            // Předmět – Teorie
+            { cat: "Předmět", q: "Co rozvíjí PŘEDMĚT (Pt)?", a: "Předmět rozvíjí SLOVESO (nebo přídavné jméno).", d: "Doplňuje význam slovesa, odpovídá na 2.–7. pád. Příklad: čte *knihu*." },
+
+            // Poznávačka ve větách
+            { cat: "Určování členů", q: "Urči větný člen: 'Babička upekla **sladký** koláč.'", a: "Přívlastek shodný (Pks)", d: "Rozvíjí podstatné jméno koláč. Otázka: Jaký koláč? Sladký." },
+            { cat: "Určování členů", q: "Urči větný člen: 'Babička upekla **koláč**.'", a: "Předmět (Pt)", d: "Rozvíjí sloveso upekla. Otázka: Upekla koho/co? Koláč. (4. pád)" },
+            { cat: "Určování členů", q: "Urči větný člen: 'Dostal jsem košík **jahod**.'", a: "Přívlastek neshodný (Pkn)", d: "Rozvíjí podstatné jméno košík. Otázka: Košík čeho? Jahod." },
+            { cat: "Určování členů", q: "Urči větný člen: '**Rychlý** běžec získal medaili.'", a: "Přívlastek shodný (Pks)", d: "Rozvíjí podstatné jméno běžec. Otázka: Jaký běžec? Rychlý." },
+            { cat: "Určování členů", q: "Urči větné členy: 'Petr psal **dopis** **kamarádovi**.'", a: "Dva Předměty (Pt)", d: "Oba rozvíjí sloveso psal. Psal koho/co? Dopis (4. pád). Komu/čemu? Kamarádovi (3. pád)." },
+            { cat: "Určování členů", q: "Urči větný člen: 'Vůně **kávy** se šířila bytem.'", a: "Přívlastek neshodný (Pkn)", d: "Rozvíjí podstatné jméno vůně. Otázka: Vůně čeho? Kávy." },
+            { cat: "Určování členů", q: "Urči větný člen: 'Myslím **na tebe**.'", a: "Předmět (Pt)", d: "Rozvíjí sloveso myslím. Otázka: Myslím na koho/co? Na tebe. (4. pád s předložkou)" },
+            { cat: "Určování členů", q: "Urči základní skladební dvojici ve větě: 'Petr psal dopis.'", a: "Po: Petr | Př: psal", d: "Kdo/co psal? Petr. Co dělal Petr? Psal." },
+
+            // Transformace
+            { cat: "Transformace", q: "Změň Pks na Pkn: '**dřevěný** stůl'", a: "Stůl **z dřeva**", d: "Z přídavného jména před podstatným jménem se stane podstatné jméno za ním." },
+            { cat: "Transformace", q: "Změň Pkn na Pks: 'čepice **z vlny**'", a: "**Vlněná** čepice", d: "Pkn vyjádřený podstatným jménem se změní na přídavné jméno." }
+        ];
+
+        let currentIndex = 0;
+
+        function updateCard() {
+            const cardElement = document.getElementById('card');
+            cardElement.classList.remove('flipped');
+
+            setTimeout(() => {
+                const item = cards[currentIndex];
+                document.getElementById('category').innerText = item.cat;
+                document.getElementById('question').innerHTML = item.q;
+                document.getElementById('answer').innerHTML = item.a;
+                document.getElementById('detail').innerText = item.d || '';
+                document.getElementById('progress').innerText = `Kartička ${currentIndex + 1} z ${cards.length}`;
+            }, 150);
+        }
+
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+
+        function nextCard(event) {
+            event.stopPropagation();
+            currentIndex = (currentIndex + 1) % cards.length;
+            updateCard();
+        }
+
+        function prevCard(event) {
+            event.stopPropagation();
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            updateCard();
+        }
+
+        // Ovládání klávesnicí
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                flipCard();
+            } else if (e.key === 'ArrowRight') {
+                nextCard(e);
+            } else if (e.key === 'ArrowLeft') {
+                prevCard(e);
+            }
+        });
+
+        // Inicializace
+        updateCard();
+    </script>
+</body>
+</html>
