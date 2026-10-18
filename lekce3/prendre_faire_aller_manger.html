@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzská slovesa s výslovností: Faire, Prendre, Aller, Manger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-btn.active {
+            border-bottom-color: #3b82f6;
+            color: #2563eb;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white py-6 shadow-md">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-2xl md:text-3xl font-bold">Francouzština – 9. ročník (A1/A2)</h1>
+            <p class="text-indigo-100 mt-1">Výuka, výslovnost a procvičování sloves: <span class="font-semibold underline">faire</span>, <span class="font-semibold underline">prendre</span>, <span class="font-semibold underline">aller</span>, <span class="font-semibold underline">manger</span></p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-8 bg-white rounded-t-lg shadow-sm">
+            <button id="tab-lesson-btn" onclick="switchTab('lesson')" class="tab-btn active px-6 py-4 text-slate-600 border-b-4 border-transparent hover:text-indigo-600 transition duration-150">
+                📚 Výuka & Výslovnost
+            </button>
+            <button id="tab-practice-btn" onclick="switchTab('practice')" class="tab-btn px-6 py-4 text-slate-600 border-b-4 border-transparent hover:text-indigo-600 transition duration-150">
+                ✏️ Procvičování
+            </button>
+        </div>
+
+        <!-- LESSON SECTION -->
+        <section id="lesson-section" class="space-y-8">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded shadow-sm">
+                <p class="text-blue-800 font-medium">
+                    🔊 <b>Tipy pro výslovnost:</b> Klikni na ikonku repráčku 🔊 u kteréhokoliv tvaru a prohlížeč ti ho přečte s francouzskou výslovností!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Verb: ALLER -->
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-100">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold text-indigo-700">1. ALLER (jít, jet)</h2>
+                            <button onclick="speak('aller')" class="text-slate-400 hover:text-indigo-600 text-lg" title="Přečíst">🔊</button>
+                        </div>
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded">Nepravidelné</span>
+                    </div>
+                    <ul class="space-y-2 font-mono text-sm">
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>je <b>vais</b> <span class="text-xs text-indigo-500 font-sans">[žə ve]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">já idu/jedu</span>
+                                <button onclick="speak('je vais')" class="text-slate-400 hover:text-indigo-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>tu <b>vas</b> <span class="text-xs text-indigo-500 font-sans">[tü va]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">ty jdeš/jedeš</span>
+                                <button onclick="speak('tu vas')" class="text-slate-400 hover:text-indigo-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>il / elle <b>va</b> <span class="text-xs text-indigo-500 font-sans">[il/el va]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">on/ona jde</span>
+                                <button onclick="speak('il va')" class="text-slate-400 hover:text-indigo-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>nous <b>allons</b> <span class="text-xs text-indigo-500 font-sans">[nuz alõ]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">my jdeme</span>
+                                <button onclick="speak('nous allons')" class="text-slate-400 hover:text-indigo-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>vous <b>allez</b> <span class="text-xs text-indigo-500 font-sans">[vuz ale]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">vy jdete</span>
+                                <button onclick="speak('vous allez')" class="text-slate-400 hover:text-indigo-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center py-1">
+                            <span>ils / elles <b>vont</b> <span class="text-xs text-indigo-500 font-sans">[il/el võ]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">oni jdou</span>
+                                <button onclick="speak('ils vont')" class="text-slate-400 hover:text-indigo-600">🔊</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Verb: FAIRE -->
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-100">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold text-emerald-700">2. FAIRE (dělat)</h2>
+                            <button onclick="speak('faire')" class="text-slate-400 hover:text-emerald-600 text-lg" title="Přečíst">🔊</button>
+                        </div>
+                        <span class="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded">Nepravidelné</span>
+                    </div>
+                    <ul class="space-y-2 font-mono text-sm">
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>je <b>fais</b> <span class="text-xs text-emerald-600 font-sans">[žə fe]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">já dělám</span>
+                                <button onclick="speak('je fais')" class="text-slate-400 hover:text-emerald-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>tu <b>fais</b> <span class="text-xs text-emerald-600 font-sans">[tü fe]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">ty děláš</span>
+                                <button onclick="speak('tu fais')" class="text-slate-400 hover:text-emerald-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>il / elle <b>fait</b> <span class="text-xs text-emerald-600 font-sans">[il/el fe]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">on/ona dělá</span>
+                                <button onclick="speak('il fait')" class="text-slate-400 hover:text-emerald-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>nous <b>faisons</b> <span class="text-xs text-emerald-600 font-sans">[nu fəzõ]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">my děláme</span>
+                                <button onclick="speak('nous faisons')" class="text-slate-400 hover:text-emerald-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span class="text-amber-600 font-bold">vous faites <span class="text-xs font-normal font-sans">[vu fet]</span> ⚠️</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">vy děláte</span>
+                                <button onclick="speak('vous faites')" class="text-slate-400 hover:text-emerald-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center py-1">
+                            <span>ils / elles <b>font</b> <span class="text-xs text-emerald-600 font-sans">[il/el fõ]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">oni dělají</span>
+                                <button onclick="speak('ils font')" class="text-slate-400 hover:text-emerald-600">🔊</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Verb: PRENDRE -->
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-100">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold text-amber-700">3. PRENDRE (brát, dát si)</h2>
+                            <button onclick="speak('prendre')" class="text-slate-400 hover:text-amber-600 text-lg" title="Přečíst">🔊</button>
+                        </div>
+                        <span class="text-xs font-semibold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded">Nepravidelné</span>
+                    </div>
+                    <ul class="space-y-2 font-mono text-sm">
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>je <b>prends</b> <span class="text-xs text-amber-600 font-sans">[žə prã]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">já beru</span>
+                                <button onclick="speak('je prends')" class="text-slate-400 hover:text-amber-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>tu <b>prends</b> <span class="text-xs text-amber-600 font-sans">[tü prã]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">ty bereš</span>
+                                <button onclick="speak('tu prends')" class="text-slate-400 hover:text-amber-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>il / elle <b>prend</b> <span class="text-xs text-amber-600 font-sans">[il/el prã]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">on/ona bere</span>
+                                <button onclick="speak('il prend')" class="text-slate-400 hover:text-amber-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>nous <b>prenons</b> <span class="text-xs text-amber-600 font-sans">[nu prənõ]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">my bereme</span>
+                                <button onclick="speak('nous prenons')" class="text-slate-400 hover:text-amber-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>vous <b>prenez</b> <span class="text-xs text-amber-600 font-sans">[vu prəne]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">vy berete</span>
+                                <button onclick="speak('vous prenez')" class="text-slate-400 hover:text-amber-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center py-1">
+                            <span class="text-amber-700 font-bold">ils prennent <span class="text-xs font-normal font-sans">[il pren]</span> ⚠️</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">oni berou</span>
+                                <button onclick="speak('ils prennent')" class="text-slate-400 hover:text-amber-600">🔊</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Verb: MANGER -->
+                <div class="bg-white rounded-xl shadow-md p-6 border border-slate-100">
+                    <div class="flex justify-between items-center border-b pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold text-rose-700">4. MANGER (jíst)</h2>
+                            <button onclick="speak('manger')" class="text-slate-400 hover:text-rose-600 text-lg" title="Přečíst">🔊</button>
+                        </div>
+                        <span class="text-xs font-semibold bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded">Pravidelné -ER</span>
+                    </div>
+                    <ul class="space-y-2 font-mono text-sm">
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>je <b>mange</b> <span class="text-xs text-rose-600 font-sans">[žə mãž]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">já jím</span>
+                                <button onclick="speak('je mange')" class="text-slate-400 hover:text-rose-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>tu <b>manges</b> <span class="text-xs text-rose-600 font-sans">[tü mãž]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">ty jíš</span>
+                                <button onclick="speak('tu manges')" class="text-slate-400 hover:text-rose-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>il / elle <b>mange</b> <span class="text-xs text-rose-600 font-sans">[il/el mãž]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">on/ona jí</span>
+                                <button onclick="speak('il mange')" class="text-slate-400 hover:text-rose-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span class="text-rose-600 font-bold">nous mangeons <span class="text-xs font-normal font-sans">[nu mãžõ]</span> ⚠️</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">my jíme</span>
+                                <button onclick="speak('nous mangeons')" class="text-slate-400 hover:text-rose-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 py-1">
+                            <span>vous <b>mangez</b> <span class="text-xs text-rose-600 font-sans">[vu mãže]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">vy jíte</span>
+                                <button onclick="speak('vous mangez')" class="text-slate-400 hover:text-rose-600">🔊</button>
+                            </div>
+                        </li>
+                        <li class="flex justify-between items-center py-1">
+                            <span>ils / elles <b>mangent</b> <span class="text-xs text-rose-600 font-sans">[il/el mãž]</span></span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-sans text-xs">oni jedí</span>
+                                <button onclick="speak('ils mangent')" class="text-slate-400 hover:text-rose-600">🔊</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PRACTICE SECTION -->
+        <section id="practice-section" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100">
+                <h2 class="text-xl font-bold text-slate-800 mb-2">Doplň správný tvar slovesa do věty:</h2>
+                <p class="text-sm text-slate-500 mb-6">Napiš správný tvar do textového pole a klikni na "Zkontrolovat". Pro poslechnutí celé věty klikni na tlačítko repráčku u věty.</p>
+
+                <form id="quiz-form" onsubmit="checkAnswers(event)" class="space-y-6">
+                    
+                    <!-- Q1 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                1. Nous <input type="text" id="q1" data-answer="faisons" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> de l'escalade ce weekend. (faire)
+                            </label>
+                            <button type="button" onclick="speakSentence(1, 'Nous faisons de l\'escalade ce weekend.')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q1" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                2. Qu'est-ce que tu <input type="text" id="q2" data-answer="prends" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> au petit-déjeuner? (prendre)
+                            </label>
+                            <button type="button" onclick="speakSentence(2, 'Qu\'est-ce que tu prends au petit-déjeuner?')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q2" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                3. Elles <input type="text" id="q3" data-answer="vont" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> au cinéma avec leurs amis. (aller)
+                            </label>
+                            <button type="button" onclick="speakSentence(3, 'Elles vont au cinéma avec leurs amis.')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q3" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                4. Nous <input type="text" id="q4" data-answer="mangeons" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> des croissants délicieux. (manger)
+                            </label>
+                            <button type="button" onclick="speakSentence(4, 'Nous mangeons des croissants délicieux.')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q4" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                5. Vous <input type="text" id="q5" data-answer="faites" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> les devoirs d'anglais? (faire)
+                            </label>
+                            <button type="button" onclick="speakSentence(5, 'Vous faites les devoirs d\'anglais?')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q5" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                6. Les étudiants <input type="text" id="q6" data-answer="prennent" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> le bus à 8 heures. (prendre)
+                            </label>
+                            <button type="button" onclick="speakSentence(6, 'Les étudiants prennent le bus à 8 heures.')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q6" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                7. Je <input type="text" id="q7" data-answer="vais" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> à l'école à pied. (aller)
+                            </label>
+                            <button type="button" onclick="speakSentence(7, 'Je vais à l\'école à pied.')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q7" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-slate-700 font-medium">
+                                8. Il <input type="text" id="q8" data-answer="mange" class="border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center" autocomplete="off"> une pomme tous les jours. (manger)
+                            </label>
+                            <button type="button" onclick="speakSentence(8, 'Il mange une pomme tous les jours.')" class="text-slate-400 hover:text-indigo-600 text-lg ml-2" title="Přečíst celou větu">🔊</button>
+                        </div>
+                        <p id="feedback-q8" class="text-sm mt-1 hidden"></p>
+                    </div>
+
+                    <div class="pt-4 flex gap-4">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-lg shadow transition duration-150">
+                            Zkontrolovat odpovědi
+                        </button>
+                        <button type="button" onclick="resetForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 px-6 rounded-lg transition duration-150">
+                            Vynulovat
+                        </button>
+                    </div>
+
+                </form>
+
+                <div id="results-summary" class="mt-6 p-4 rounded-lg hidden"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS Logic -->
+    <script>
+        function switchTab(tabName) {
+            const lessonSection = document.getElementById('lesson-section');
+            const practiceSection = document.getElementById('practice-section');
+            const lessonBtn = document.getElementById('tab-lesson-btn');
+            const practiceBtn = document.getElementById('tab-practice-btn');
+
+            if (tabName === 'lesson') {
+                lessonSection.classList.remove('hidden');
+                practiceSection.classList.add('hidden');
+                lessonBtn.classList.add('active');
+                practiceBtn.classList.remove('active');
+            } else {
+                lessonSection.classList.add('hidden');
+                practiceSection.classList.remove('hidden');
+                practiceBtn.classList.add('active');
+                lessonBtn.classList.remove('active');
+            }
+        }
+
+        /* Text-To-Speech function */
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Váš prohlížeč bohužel nepodporuje hlasovou syntézu.");
+            }
+        }
+
+        function speakSentence(qNum, fallbackText) {
+            const input = document.getElementById(`q${qNum}`);
+            const val = input.value.trim();
+            if (val.length > 0) {
+                const template = fallbackText.replace(/_|\.\.\./, val);
+                speak(template);
+            } else {
+                const correct = input.getAttribute('data-answer');
+                speak(fallbackText.replace(input.outerHTML, correct));
+            }
+        }
+
+        function checkAnswers(event) {
+            event.preventDefault();
+            let score = 0;
+            const total = 8;
+
+            for (let i = 1; i <= total; i++) {
+                const input = document.getElementById(`q${i}`);
+                const feedback = document.getElementById(`feedback-q${i}`);
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.getAttribute('data-answer');
+
+                feedback.classList.remove('hidden');
+
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    input.classList.remove('border-slate-300', 'border-red-500');
+                    input.classList.add('border-green-500', 'bg-green-50');
+                    feedback.textContent = '✓ Správně!';
+                    feedback.className = 'text-sm mt-1 text-green-600 font-medium';
+                } else {
+                    input.classList.remove('border-slate-300', 'border-green-500');
+                    input.classList.add('border-red-500', 'bg-red-50');
+                    feedback.textContent = `✗ Chyba! Správný tvar je: "${correctAnswer}"`;
+                    feedback.className = 'text-sm mt-1 text-red-600 font-medium';
+                }
+            }
+
+            const summary = document.getElementById('results-summary');
+            summary.classList.remove('hidden');
+            if (score === total) {
+                summary.className = 'mt-6 p-4 rounded-lg bg-green-100 text-green-800 font-bold border border-green-200';
+                summary.textContent = `Výborně! Výsledek: ${score} z ${total} (100%)`;
+            } else {
+                summary.className = 'mt-6 p-4 rounded-lg bg-amber-100 text-amber-800 font-bold border border-amber-200';
+                summary.textContent = `Skóre: ${score} z ${total}. Zkontroluj chyby a zkus to znovu!`;
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('quiz-form').reset();
+            const total = 8;
+            for (let i = 1; i <= total; i++) {
+                const input = document.getElementById(`q${i}`);
+                const feedback = document.getElementById(`feedback-q${i}`);
+                input.className = 'border-2 border-slate-300 rounded px-2 py-1 w-32 focus:outline-none focus:border-indigo-500 font-mono text-center';
+                feedback.classList.add('hidden');
+            }
+            const summary = document.getElementById('results-summary');
+            summary.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
