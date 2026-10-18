@@ -679,9 +679,11 @@
                 items: [
                     { fr: "blond / blonde", cz: "blondýn / blondýnka", audio: "blond, blonde" },
                     { fr: "brun / brune", cz: "tmavovlasý / tmavovlasá", audio: "brun, brune" },
+                    { fr: "châtain", cz: "kaštanový / hnědovlasý (nesklonné)", audio: "châtain" },
                     { fr: "roux / rousse", cz: "zrzavý / zrzavá", audio: "roux, rousse" },
                     { fr: "les cheveux blonds", cz: "blond vlasy", audio: "les cheveux blonds" },
                     { fr: "les cheveux bruns", cz: "hnědé vlasy", audio: "les cheveux bruns" },
+                    { fr: "les cheveux châtains", cz: "kaštanové vlasy", audio: "les cheveux châtains" },
                     { fr: "les cheveux noirs", cz: "černé vlasy", audio: "les cheveux noirs" },
                     { fr: "les cheveux roux", cz: "zrzavé vlasy", audio: "les cheveux roux" }
                 ]
@@ -711,6 +713,8 @@
                     { fr: "Il est mince.", cz: "On je štíhlý.", audio: "Il est mince." },
                     { fr: "Elle est grande.", cz: "Ona je vysoká.", audio: "Elle est grande." },
                     { fr: "Il est petit.", cz: "On je malý.", audio: "Il est petit." },
+                    { fr: "Il est châtain.", cz: "On má kaštanové vlasy / je hnědovlasý.", audio: "Il est châtain." },
+                    { fr: "Elle est châtain.", cz: "Ona má kaštanové vlasy / je hnědovlasá.", audio: "Elle est châtain." },
                     { fr: "Il a les cheveux longs.", cz: "On má dlouhé vlasy.", audio: "Il a les cheveux longs." },
                     { fr: "Elle a les yeux bleus.", cz: "Ona má modré oči.", audio: "Elle a les yeux bleus." },
                     { fr: "Elle a les cheveux bouclés.", cz: "Ona má kudrnaté vlasy.", audio: "Elle a les cheveux bouclés." }
@@ -722,7 +726,7 @@
         const validOptions = {
             height: ["grand", "grande", "petit", "petite"],
             build: ["mince", "gros", "grosse"],
-            hairColor: ["blonds", "bruns", "noirs", "roux"],
+            hairColor: ["blonds", "bruns", "châtains", "chatains", "châtain", "chatain", "noirs", "roux"],
             hairStyle: ["courts", "longs", "mi-longs", "raides", "bouclés"],
             eyes: ["bleus", "verts", "marron", "noirs"]
         };
@@ -743,7 +747,7 @@
             "Il est mince.", "Elle est grande.", "Il est petit.", "Elle est grosse.",
             "Il a les cheveux longs.", "Elle a les cheveux courts.", "Elle a les cheveux bouclés.",
             "Il a les cheveux raides.", "Elle a les yeux bleus.", "Il a les yeux verts.",
-            "Elle a les yeux marron.", "Il est blond.", "Elle est brune."
+            "Elle a les yeux marron.", "Il est blond.", "Elle est brune.", "Il est châtain.", "Elle est châtain."
         ];
 
         const antonymPairs = [
@@ -893,7 +897,7 @@
             let totalCorrect = 0;
             let totalItems = 0;
 
-            // 1. Rozbalovacích nabídky u sloves
+            // 1. Rozbalovací nabídky u sloves
             const selects = document.querySelectorAll('#text-fill .verb-select');
             selects.forEach(select => {
                 totalItems++;
