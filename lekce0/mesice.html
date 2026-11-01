@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzské měsíce - Výuka a procvičování</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome pro ikony -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* 3D efekt pro kartičky (Flashcards) */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header / Navigace -->
+    <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2.5 rounded-xl backdrop-blur-md">
+                    <i class="fa-solid font-bold text-2xl">🇫🇷</i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold leading-tight">Les Mois en Français</h1>
+                    <p class="text-xs text-blue-100">Francouzské měsíce snadno a hravě</p>
+                </div>
+            </div>
+            
+            <!-- Audio status notification indicator -->
+            <div id="tts-status" class="text-xs bg-white/10 px-3 py-1.5 rounded-full border border-white/20 flex items-center gap-2">
+                <i class="fa-solid fa-volume-high text-green-300"></i>
+                <span>Výslovnost připravena</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hlavní kontejner -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- Navigační záložky (Tabs) -->
+        <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-200 justify-center sm:justify-start overflow-x-auto">
+            <button onclick="switchTab('vocab')" id="tab-vocab" class="tab-btn active px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 bg-blue-600 text-white shadow-sm">
+                <i class="fa-solid fa-book-open"></i> Slovní zásoba
+            </button>
+            <button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-clone"></i> Kartičky
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-circle-question"></i> Kvíz
+            </button>
+            <button onclick="switchTab('order')" id="tab-order" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-arrow-down-1-9"></i> Řazení měsíců
+            </button>
+            <button onclick="switchTab('spelling')" id="tab-spelling" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-pen-to-square"></i> Doplňování
+            </button>
+            <button onclick="switchTab('matching')" id="tab-matching" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 flex items-center gap-2 text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-puzzle-piece"></i> Spojování
+            </button>
+        </div>
+
+        <!-- SECTION 1: SLOVNÍ ZÁSOBA -->
+        <section id="sec-vocab" class="tab-content block space-y-6">
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-blue-900">Přehled slovní zásoby</h2>
+                    <p class="text-sm text-blue-700">Prohlédněte si všech 12 měsíců, poslechněte si výslovnost a prostudujte fonetický přepis.</p>
+                </div>
+                <button onclick="playAllMonths()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium shadow transition flex items-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-play"></i> Přehrát vše za sebou
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="vocab-grid">
+                <!-- Generováno dynamicky z JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: KARTIČKY (FLASHCARDS) -->
+        <section id="sec-flashcards" class="tab-content hidden space-y-6">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <h2 class="text-2xl font-bold text-slate-800">Procvičování pomocí kartiček</h2>
+                <p class="text-sm text-slate-500">Kliknutím na kartičku ji otočíte. Pomocí šipek přecházejte mezi měsíci.</p>
+            </div>
+
+            <div class="max-w-md mx-auto">
+                <div id="flashcard" onclick="flipCard()" class="perspective-1000 h-64 w-full cursor-pointer group">
+                    <div id="flashcard-inner" class="transform-style-3d transition-transform duration-500 relative w-full h-full rounded-2xl shadow-md border border-slate-200 bg-white">
+                        <!-- Přední strana (Francouzsky) -->
+                        <div class="backface-hidden absolute inset-0 w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl">
+                            <span class="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full mb-4">Francouzsky</span>
+                            <h3 id="fc-french" class="text-4xl font-bold mb-2">janvier</h3>
+                            <button onclick="event.stopPropagation(); playSpeech(dataMonths[currentFcIndex].fr)" class="mt-2 p-3 bg-white/20 hover:bg-white/30 rounded-full transition" title="Přehrát výslovnost">
+                                <i class="fa-solid fa-volume-high text-xl"></i>
+                            </button>
+                            <p class="text-xs text-indigo-100 mt-6">(Klikněte pro otočení)</p>
+                        </div>
+                        <!-- Zadní strana (Česky & Výslovnost) -->
+                        <div class="rotate-y-180 backface-hidden absolute inset-0 w-full h-full flex flex-col items-center justify-center p-6 bg-white border-2 border-indigo-500 rounded-2xl">
+                            <span class="text-xs uppercase tracking-widest bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full mb-4 font-semibold">Česky</span>
+                            <h3 id="fc-czech" class="text-3xl font-bold text-slate-800 mb-1">Leden</h3>
+                            <p id="fc-phonetic" class="text-lg text-indigo-600 font-medium mb-4">[žánvjé]</p>
+                            <button onclick="event.stopPropagation(); playSpeech(dataMonths[currentFcIndex].fr)" class="p-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full transition" title="Přehrát výslovnost">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ovládací prvky kartiček -->
+                <div class="flex items-center justify-between mt-6">
+                    <button onclick="prevCard()" class="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl font-medium transition shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-chevron-left"></i> Předchozí
+                    </button>
+                    <span id="fc-counter" class="text-sm font-semibold text-slate-500">1 / 12</span>
+                    <button onclick="nextCard()" class="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl font-medium transition shadow-sm flex items-center gap-2">
+                        Další <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: KVÍZ -->
+        <section id="sec-quiz" class="tab-content hidden space-y-6">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <!-- Kvíz hlavička -->
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Kvízové otázky</h2>
+                        <p class="text-xs text-slate-500">Vyberte vždy jednu správnou odpověď.</p>
+                    </div>
+                    <div class="text-right">
+                        <span id="quiz-score" class="text-lg font-bold text-indigo-600">Skóre: 0</span>
+                        <div id="quiz-progress" class="text-xs text-slate-400">Otázka 1 z 10</div>
+                    </div>
+                </div>
+
+                <!-- Otázka -->
+                <div id="quiz-container" class="space-y-6">
+                    <div class="flex items-center gap-3">
+                        <h3 id="quiz-question" class="text-lg font-semibold text-slate-800">Otázka se načítá...</h3>
+                        <button id="quiz-audio-btn" onclick="playQuizAudio()" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-full transition hidden">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+
+                    <!-- Možnosti -->
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Generováno dynamicky -->
+                    </div>
+
+                    <!-- Zpětná vazba -->
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-sm font-medium flex items-center justify-between">
+                        <span id="quiz-feedback-text"></span>
+                        <button onclick="nextQuizQuestion()" class="px-4 py-1.5 bg-slate-800 text-white rounded-lg hover:bg-slate-900 transition text-xs font-semibold">
+                            Další otázka <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Výsledek kvízu -->
+                <div id="quiz-result" class="hidden text-center py-8 space-y-4">
+                    <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-2">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800">Kvíz dokončen!</h3>
+                    <p id="quiz-final-score" class="text-slate-600 text-lg">Vaše skóre: 8 / 10</p>
+                    <button onclick="startQuiz()" class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition font-medium shadow-md">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Spustit nový kvíz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: ŘAZENÍ MĚSÍCŮ -->
+        <section id="sec-order" class="tab-content hidden space-y-6">
+            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800">Seradit měsíce podle pořadí</h2>
+                    <p class="text-sm text-slate-500">Klikáním přidejte měsíce do správného pořadí od ledna (1) do prosince (12).</p>
+                </div>
+
+                <!-- Cílové sloty -->
+                <div class="mb-6">
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Vaše pořadí:</h3>
+                    <div id="order-slots" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 min-h-[160px] p-3 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+                        <!-- Zde se skládají měsíce -->
+                    </div>
+                </div>
+
+                <!-- Nabídka měsíců ke kliknutí -->
+                <div class="mb-6">
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Dostupné měsíce (kliknutím vyberte):</h3>
+                    <div id="order-pool" class="flex flex-wrap gap-2 p-3 bg-slate-100/50 rounded-xl">
+                        <!-- Nabídka zamíchaných měsíců -->
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <button onclick="resetOrderGame()" class="px-4 py-2 border border-slate-300 text-slate-600 hover:bg-slate-50 rounded-xl font-medium text-sm transition">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Resetovat
+                    </button>
+                    <button onclick="checkOrderGame()" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium text-sm shadow transition">
+                        <i class="fa-solid fa-check mr-1"></i> Zkontrolovat
+                    </button>
+                </div>
+
+                <div id="order-feedback" class="mt-4 hidden p-4 rounded-xl text-center font-medium text-sm"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: DOPLŇOVÁNÍ (DOPLŇOVÁNÍ / SPELLING) -->
+        <section id="sec-spelling" class="tab-content hidden space-y-6">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800">Doplňování a psaní měsíců</h2>
+                    <p class="text-sm text-slate-500">Napište správný francouzský název měsíce podle české nápovědy. Nezapomeňte na diakritiku (akcenty)!</p>
+                </div>
+
+                <!-- Panel speciálních znaků pro snadný vklad pro děti -->
+                <div class="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-xl">
+                    <span class="text-xs font-semibold text-indigo-900 block mb-2">
+                        <i class="fa-solid fa-keyboard mr-1"></i> Kliknutím vložíte speciální znak do aktivního políčka:
+                    </span>
+                    <div class="flex flex-wrap gap-1.5" id="accent-buttons">
+                        <button onclick="insertChar('é')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">é</button>
+                        <button onclick="insertChar('è')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">è</button>
+                        <button onclick="insertChar('ê')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">ê</button>
+                        <button onclick="insertChar('à')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">à</button>
+                        <button onclick="insertChar('â')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">â</button>
+                        <button onclick="insertChar('î')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">î</button>
+                        <button onclick="insertChar('ï')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">ï</button>
+                        <button onclick="insertChar('ô')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">ô</button>
+                        <button onclick="insertChar('û')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">û</button>
+                        <button onclick="insertChar('ù')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">ù</button>
+                        <button onclick="insertChar('ç')" type="button" class="w-9 h-9 bg-white hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg text-sm font-bold text-indigo-900 shadow-sm transition active:scale-95">ç</button>
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="spelling-list">
+                    <!-- Generováno dynamicky -->
+                </div>
+
+                <div class="mt-8 flex justify-between items-center pt-4 border-t border-slate-100">
+                    <button onclick="initSpellingGame()" class="px-4 py-2 border border-slate-300 text-slate-600 hover:bg-slate-50 rounded-xl font-medium text-sm transition">
+                        <i class="fa-solid fa-shuffle mr-1"></i> Nové příklady
+                    </button>
+                    <button onclick="checkSpellingGame()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium text-sm shadow transition">
+                        <i class="fa-solid fa-check mr-1"></i> Zkontrolovat odpovědi
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: SPOJOVÁNÍ (PEXESO / MATCHING) -->
+        <section id="sec-matching" class="tab-content hidden space-y-6">
+            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Spojování dvojic</h2>
+                        <p class="text-sm text-slate-500">Klikněte na český měsíc a poté na jeho francouzský ekvivalent.</p>
+                    </div>
+                    <button onclick="initMatchingGame()" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition" title="Zamíchat znova">
+                        <i class="fa-solid fa-rotate-right text-lg"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4" id="matching-container">
+                    <!-- Sloupec Česky -->
+                    <div id="matching-cz-list" class="space-y-2"></div>
+                    <!-- Sloupec Francouzsky -->
+                    <div id="matching-fr-list" class="space-y-2"></div>
+                </div>
+
+                <div id="matching-win-msg" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-xl text-center text-green-800 font-semibold">
+                    🎉 Skvělé! Úspěšně jste spojili všechny měsíce!
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <p>Aplikace pro výuku francouzských měsíců • Francouzština snadno a efektivně</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIKA -->
+    <script>
+        // Databáze měsíců
+        const dataMonths = [
+            { id: 1, fr: 'janvier', cz: 'Leden', phonetic: 'žãvjé' },
+            { id: 2, fr: 'février', cz: 'Únor', phonetic: 'fevrijé' },
+            { id: 3, fr: 'mars', cz: 'Březen', phonetic: 'mars' },
+            { id: 4, fr: 'avril', cz: 'Duben', phonetic: 'avril' },
+            { id: 5, fr: 'mai', cz: 'Květen', phonetic: 'me' },
+            { id: 6, fr: 'juin', cz: 'Červen', phonetic: 'žuẽ' },
+            { id: 7, fr: 'juillet', cz: 'Červenec', phonetic: 'žwije' },
+            { id: 8, fr: 'août', cz: 'Srpen', phonetic: 'ut' },
+            { id: 9, fr: 'septembre', cz: 'Září', phonetic: 'septãbr' },
+            { id: 10, fr: 'octobre', cz: 'Říjen', phonetic: 'oktobr' },
+            { id: 11, fr: 'novembre', cz: 'Listopad', phonetic: 'novãbr' },
+            { id: 12, fr: 'décembre', cz: 'Prosinec', phonetic: 'desãbr' }
+        ];
+
+        // SpeechSynthesis setup (Web Speech API)
+        let synth = window.speechSynthesis;
+        let frenchVoice = null;
+
+        function loadVoices() {
+            if (!synth) return;
+            const voices = synth.getVoices();
+            // Najít francouzský hlas
+            frenchVoice = voices.find(v => v.lang.includes('fr') || v.lang.includes('FR')) || null;
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        function playSpeech(text) {
+            if (!synth) {
+                alert('Váš prohlížeč nepodporuje hlasový výstup.');
+                return;
+            }
+            // Zrušit předchozí řeč
+            synth.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'fr-FR';
+            utterance.rate = 0.85; // Mírně pomalejší pro lepší výslovnost
+            if (frenchVoice) {
+                utterance.voice = frenchVoice;
+            }
+            synth.speak(utterance);
+        }
+
+        // Přepínání záložek
+        function switchTab(tabName) {
+            // Skrýt všechny sekce
+            document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('block'));
+
+            // Deaktivovat tlačítka
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+
+            // Aktivovat vybranou záložku
+            const targetSec = document.getElementById('sec-' + tabName);
+            const targetBtn = document.getElementById('tab-' + tabName);
+
+            if (targetSec && targetBtn) {
+                targetSec.classList.remove('hidden');
+                targetSec.classList.add('block');
+
+                targetBtn.classList.add('bg-blue-600', 'text-white', 'shadow-sm');
+                targetBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+            }
+        }
+
+        /* --- 1. SLOVNÍ ZÁSOBA --- */
+        function renderVocabulary() {
+            const container = document.getElementById('vocab-grid');
+            container.innerHTML = '';
+
+            dataMonths.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition flex items-center justify-between";
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold flex items-center justify-center">
+                            ${item.id}
+                        </span>
+                        <div>
+                            <div class="flex items-baseline gap-2">
+                                <h3 class="font-bold text-slate-800 text-base">${item.fr}</h3>
+                                <span class="text-xs text-indigo-600 font-medium">[${item.phonetic}]</span>
+                            </div>
+                            <p class="text-sm text-slate-500">${item.cz}</p>
+                        </div>
+                    </div>
+                    <button onclick="playSpeech('${item.fr}')" class="p-2.5 text-indigo-600 hover:bg-indigo-50 rounded-xl transition" title="Přehrát výslovnost">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function playAllMonths() {
+            for (let item of dataMonths) {
+                playSpeech(item.fr);
+                await new Promise(resolve => setTimeout(resolve, 1400));
+            }
+        }
+
+        /* --- 2. KARTIČKY (FLASHCARDS) --- */
+        let currentFcIndex = 0;
+        let isFlipped = false;
+
+        function updateFlashcard() {
+            const item = dataMonths[currentFcIndex];
+            document.getElementById('fc-french').innerText = item.fr;
+            document.getElementById('fc-czech').innerText = item.cz;
+            document.getElementById('fc-phonetic').innerText = `[${item.phonetic}]`;
+            document.getElementById('fc-counter').innerText = `${currentFcIndex + 1} / ${dataMonths.length}`;
+
+            // Reset překlopení
+            const inner = document.getElementById('flashcard-inner');
+            inner.classList.remove('rotate-y-180');
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            const inner = document.getElementById('flashcard-inner');
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                inner.classList.add('rotate-y-180');
+            } else {
+                inner.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextCard() {
+            currentFcIndex = (currentFcIndex + 1) % dataMonths.length;
+            updateFlashcard();
+        }
+
+        function prevCard() {
+            currentFcIndex = (currentFcIndex - 1 + dataMonths.length) % dataMonths.length;
+            updateFlashcard();
+        }
+
+        /* --- 3. KVÍZ --- */
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        function startQuiz() {
+            quizScore = 0;
+            currentQuizIndex = 0;
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-score').innerText = `Skóre: 0`;
+
+            // Generovat otázky
+            quizQuestions = [];
+            
+            // Namíchat měsíce pro různé otázky
+            const shuffled = [...dataMonths].sort(() => 0.5 - Math.random());
+
+            shuffled.forEach((item) => {
+                // Typ otázky 1: FR -> CZ, Typ 2: CZ -> FR
+                const type = Math.random() > 0.5 ? 'fr-to-cz' : 'cz-to-fr';
+                
+                let questionText = '';
+                let correctAnswer = '';
+                let wrongAnswers = [];
+
+                if (type === 'fr-to-cz') {
+                    questionText = `Co znamená francouzské slovo "${item.fr}"?`;
+                    correctAnswer = item.cz;
+                    wrongAnswers = dataMonths
+                        .filter(m => m.id !== item.id)
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, 3)
+                        .map(m => m.cz);
+                } else {
+                    questionText = `Jak se francouzsky řekne "${item.cz}"?`;
+                    correctAnswer = item.fr;
+                    wrongAnswers = dataMonths
+                        .filter(m => m.id !== item.id)
+                        .sort(() => 0.5 - Math.random())
+                        .slice(0, 3)
+                        .map(m => m.fr);
+                }
+
+                const options = [...wrongAnswers, correctAnswer].sort(() => 0.5 - Math.random());
+
+                quizQuestions.push({
+                    question: questionText,
+                    correct: correctAnswer,
+                    options: options,
+                    audioText: item.fr
+                });
+            });
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-progress').innerText = `Otázka ${currentQuizIndex + 1} z ${quizQuestions.length}`;
+            document.getElementById('quiz-question').innerText = q.question;
+
+            const audioBtn = document.getElementById('quiz-audio-btn');
+            audioBtn.classList.remove('hidden');
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.add('hidden');
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-opt-btn p-4 rounded-xl border border-slate-200 text-left font-medium hover:bg-slate-50 transition flex items-center justify-between";
+                btn.innerText = opt;
+                btn.onclick = () => checkQuizAnswer(btn, opt, q.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function playQuizAudio() {
+            const q = quizQuestions[currentQuizIndex];
+            if (q && q.audioText) {
+                playSpeech(q.audioText);
+            }
+        }
+
+        function checkQuizAnswer(selectedBtn, selectedOption, correctOption) {
+            // Deaktivovat všechna tlačítka
+            const buttons = document.querySelectorAll('.quiz-opt-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.innerText === correctOption) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                }
+            });
+
+            const feedback = document.getElementById('quiz-feedback');
+            const feedbackText = document.getElementById('quiz-feedback-text');
+            feedback.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+            if (selectedOption === correctOption) {
+                quizScore++;
+                document.getElementById('quiz-score').innerText = `Skóre: ${quizScore}`;
+                selectedBtn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                feedback.classList.add('bg-green-100', 'text-green-800');
+                feedbackText.innerHTML = `<i class="fa-solid fa-circle-check text-green-600 mr-2"></i> Správně!`;
+            } else {
+                selectedBtn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                feedback.classList.add('bg-red-100', 'text-red-800');
+                feedbackText.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600 mr-2"></i> Špatně! Správná odpověď byla: <strong>${correctOption}</strong>`;
+            }
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                // Konec kvízu
+                document.getElementById('quiz-container').classList.add('hidden');
+                document.getElementById('quiz-result').classList.remove('hidden');
+                document.getElementById('quiz-final-score').innerText = `Vaše konečné skóre: ${quizScore} z ${quizQuestions.length}`;
+            }
+        }
+
+        /* --- 4. ŘAZENÍ MĚSÍCŮ --- */
+        let userOrderedList = [];
+        let availablePool = [];
+
+        function initOrderGame() {
+            userOrderedList = [];
+            availablePool = [...dataMonths].sort(() => 0.5 - Math.random());
+            renderOrderGame();
+            document.getElementById('order-feedback').classList.add('hidden');
+        }
+
+        function renderOrderGame() {
+            const slotsContainer = document.getElementById('order-slots');
+            const poolContainer = document.getElementById('order-pool');
+
+            slotsContainer.innerHTML = '';
+            poolContainer.innerHTML = '';
+
+            // Vykreslit vložené
+            userOrderedList.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = "px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium flex items-center justify-between shadow-sm animate-fade-in";
+                btn.innerHTML = `<span><strong class="text-indigo-200 mr-1.5">${index + 1}.</strong> ${item.fr}</span> <i class="fa-solid fa-xmark text-xs ml-2 text-indigo-200"></i>`;
+                btn.onclick = () => removeFromOrder(index);
+                slotsContainer.appendChild(btn);
+            });
+
+            // Vykreslit nabídku
+            availablePool.forEach((item) => {
+                const btn = document.createElement('button');
+                btn.className = "px-3 py-2 bg-white hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-lg text-sm font-medium shadow-sm transition";
+                btn.innerText = item.fr;
+                btn.onclick = () => addToOrder(item);
+                poolContainer.appendChild(btn);
+            });
+        }
+
+        function addToOrder(item) {
+            userOrderedList.push(item);
+            availablePool = availablePool.filter(i => i.id !== item.id);
+            renderOrderGame();
+        }
+
+        function removeFromOrder(index) {
+            const removed = userOrderedList.splice(index, 1)[0];
+            availablePool.push(removed);
+            renderOrderGame();
+        }
+
+        function resetOrderGame() {
+            initOrderGame();
+        }
+
+        function checkOrderGame() {
+            const feedback = document.getElementById('order-feedback');
+            feedback.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+
+            if (userOrderedList.length !== 12) {
+                feedback.classList.add('bg-red-100', 'text-red-800');
+                feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Musíte seřadit všech 12 měsíců! (Nyní máte ${userOrderedList.length})`;
+                return;
+            }
+
+            let isCorrect = true;
+            for (let i = 0; i < 12; i++) {
+                if (userOrderedList[i].id !== i + 1) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                feedback.classList.add('bg-green-100', 'text-green-800');
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Perfektní! Všechny měsíce jsou ve správném pořadí od ledna do prosince.`;
+            } else {
+                feedback.classList.add('bg-red-100', 'text-red-800');
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> Některé měsíce nejsou ve správném pořadí. Zkuste to znovu!`;
+            }
+        }
+
+        /* --- 5. DOPLŇOVÁNÍ / SPELLING --- */
+        let spellingItems = [];
+        let activeSpellingInput = null;
+
+        function initSpellingGame() {
+            // Vybrat 6 náhodných měsíců
+            spellingItems = [...dataMonths].sort(() => 0.5 - Math.random()).slice(0, 6);
+            const container = document.getElementById('spelling-list');
+            container.innerHTML = '';
+            activeSpellingInput = null;
+
+            spellingItems.forEach((item, idx) => {
+                const row = document.createElement('div');
+                row.className = "flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-slate-50 rounded-xl gap-3 border border-slate-200";
+                row.innerHTML = `
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <span class="text-sm font-semibold text-slate-400 w-6">${idx + 1}.</span>
+                        <span class="text-sm font-bold text-slate-700 w-28">${item.cz}:</span>
+                    </div>
+                    <div class="flex-grow w-full sm:w-auto flex items-center gap-2">
+                        <input type="text" id="spelling-input-${idx}" placeholder="Napište francouzsky..." 
+                            onfocus="activeSpellingInput = this"
+                            class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-indigo-500 font-medium">
+                        <span id="spelling-result-${idx}" class="text-lg"></span>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function insertChar(char) {
+            // Pokud není vybrané žádné pole, vybereme první dostupné
+            if (!activeSpellingInput) {
+                const firstInput = document.getElementById('spelling-input-0');
+                if (firstInput) {
+                    activeSpellingInput = firstInput;
+                } else {
+                    return;
+                }
+            }
+
+            const input = activeSpellingInput;
+            const start = input.selectionStart || input.value.length;
+            const end = input.selectionEnd || input.value.length;
+            const val = input.value;
+
+            // Vložení znaku na pozici kurzoru
+            input.value = val.substring(0, start) + char + val.substring(end);
+            
+            // Posun kurzoru za vložený znak
+            input.selectionStart = input.selectionEnd = start + char.length;
+            input.focus();
+        }
+
+        function checkSpellingGame() {
+            spellingItems.forEach((item, idx) => {
+                const input = document.getElementById(`spelling-input-${idx}`);
+                const resultSpan = document.getElementById(`spelling-result-${idx}`);
+                const userText = input.value.trim().toLowerCase();
+                const correctText = item.fr.toLowerCase();
+
+                if (userText === correctText) {
+                    input.classList.remove('border-red-400', 'bg-red-50');
+                    input.classList.add('border-green-500', 'bg-green-50');
+                    resultSpan.innerHTML = `<i class="fa-solid fa-circle-check text-green-600"></i>`;
+                } else {
+                    input.classList.remove('border-green-500', 'bg-green-50');
+                    input.classList.add('border-red-400', 'bg-red-50');
+                    resultSpan.innerHTML = `<span class="text-xs text-red-600 font-semibold">Správně: ${item.fr}</span>`;
+                }
+            });
+        }
+
+        /* --- 6. SPOJOVÁNÍ (MATCHING) --- */
+        let selectedCz = null;
+        let selectedFr = null;
+        let matchedPairsCount = 0;
+
+        function initMatchingGame() {
+            selectedCz = null;
+            selectedFr = null;
+            matchedPairsCount = 0;
+            document.getElementById('matching-win-msg').classList.add('hidden');
+
+            const czContainer = document.getElementById('matching-cz-list');
+            const frContainer = document.getElementById('matching-fr-list');
+
+            czContainer.innerHTML = '';
+            frContainer.innerHTML = '';
+
+            // Zamíchat 6 náhodných měsíců
+            const sample = [...dataMonths].sort(() => 0.5 - Math.random()).slice(0, 6);
+
+            const czShuffled = [...sample].sort(() => 0.5 - Math.random());
+            const frShuffled = [...sample].sort(() => 0.5 - Math.random());
+
+            czShuffled.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "cz-btn w-full p-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl font-medium text-sm transition border border-slate-200 text-left";
+                btn.innerText = item.cz;
+                btn.dataset.id = item.id;
+                btn.onclick = () => selectMatchingCz(btn, item.id);
+                czContainer.appendChild(btn);
+            });
+
+            frShuffled.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "fr-btn w-full p-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl font-medium text-sm transition border border-slate-200 text-left flex justify-between items-center";
+                btn.innerHTML = `<span>${item.fr}</span> <i class="fa-solid fa-volume-high text-xs text-slate-400"></i>`;
+                btn.dataset.id = item.id;
+                btn.onclick = () => selectMatchingFr(btn, item.id, item.fr);
+                frContainer.appendChild(btn);
+            });
+        }
+
+        function selectMatchingCz(btn, id) {
+            // Zrušit výběr z předchozího
+            document.querySelectorAll('.cz-btn').forEach(b => {
+                if (!b.disabled) b.classList.remove('bg-indigo-600', 'text-white');
+            });
+
+            selectedCz = { btn, id };
+            btn.classList.add('bg-indigo-600', 'text-white');
+
+            checkMatchingPair();
+        }
+
+        function selectMatchingFr(btn, id, frText) {
+            playSpeech(frText);
+
+            document.querySelectorAll('.fr-btn').forEach(b => {
+                if (!b.disabled) b.classList.remove('bg-indigo-600', 'text-white');
+            });
+
+            selectedFr = { btn, id };
+            btn.classList.add('bg-indigo-600', 'text-white');
+
+            checkMatchingPair();
+        }
+
+        function checkMatchingPair() {
+            if (selectedCz && selectedFr) {
+                if (selectedCz.id === selectedFr.id) {
+                    // Správná dvojice
+                    selectedCz.btn.classList.remove('bg-indigo-600', 'text-white');
+                    selectedFr.btn.classList.remove('bg-indigo-600', 'text-white');
+
+                    selectedCz.btn.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+                    selectedFr.btn.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+
+                    selectedCz.btn.disabled = true;
+                    selectedFr.btn.disabled = true;
+
+                    matchedPairsCount++;
+                    if (matchedPairsCount === 6) {
+                        document.getElementById('matching-win-msg').classList.remove('hidden');
+                    }
+                } else {
+                    // Nesprávná dvojice - na chvíli červeně
+                    const czBtn = selectedCz.btn;
+                    const frBtn = selectedFr.btn;
+
+                    czBtn.classList.add('bg-red-500', 'text-white');
+                    frBtn.classList.add('bg-red-500', 'text-white');
+
+                    setTimeout(() => {
+                        czBtn.classList.remove('bg-red-500', 'bg-indigo-600', 'text-white');
+                        frBtn.classList.remove('bg-red-500', 'bg-indigo-600', 'text-white');
+                    }, 500);
+                }
+
+                selectedCz = null;
+                selectedFr = null;
+            }
+        }
+
+        // Inicializace při načtení stránky
+        window.onload = function() {
+            renderVocabulary();
+            updateFlashcard();
+            startQuiz();
+            initOrderGame();
+            initSpellingGame();
+            initMatchingGame();
+        };
+    </script>
+</body>
+</html>
