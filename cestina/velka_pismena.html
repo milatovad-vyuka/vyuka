@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procvičování velkých písmen – 9. třída (Cermat)</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --error: #ef4444;
+      --error-bg: #fef2f2;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-top: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--bg-color);
+      padding-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      background: var(--bg-color);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .mode-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-card {
+      min-height: 250px;
+    }
+
+    .question-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .options-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f4f4ff;
+    }
+
+    .option-btn.correct {
+      border-color: var(--success);
+      background-color: var(--success-bg);
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    .option-btn.wrong {
+      border-color: var(--error);
+      background-color: var(--error-bg);
+      color: #991b1b;
+    }
+
+    .explanation-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 8px;
+      display: none;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .explanation-box.correct {
+      display: block;
+      background: var(--success-bg);
+      border: 1px solid var(--success);
+      color: #065f46;
+    }
+
+    .explanation-box.wrong {
+      display: block;
+      background: var(--error-bg);
+      border: 1px solid var(--error);
+      color: #991b1b;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .next-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    .next-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .interactive-text {
+      font-size: 1.15rem;
+      line-height: 2.2;
+      background: var(--bg-color);
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .clickable-word {
+      padding: 2px 6px;
+      margin: 0 2px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-block;
+      border: 1px transparent solid;
+    }
+
+    .clickable-word:hover {
+      background: #e0e7ff;
+      border-color: var(--primary);
+    }
+
+    .clickable-word.selected {
+      background: #c7d2fe;
+      border-color: var(--primary);
+      font-weight: bold;
+    }
+
+    .clickable-word.found-error {
+      background: var(--error-bg);
+      border-color: var(--error);
+      color: #991b1b;
+      text-decoration: line-through;
+    }
+
+    .clickable-word.missed-error {
+      background: #fef08a;
+      border-color: #eab308;
+      font-weight: bold;
+    }
+
+    .choice-slot {
+      display: inline-block;
+      padding: 4px 8px;
+      margin: 0 4px;
+      border: 2px dashed var(--primary);
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 1.05rem;
+    }
+
+    .final-score {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .final-score h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .restart-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <h1>Procvičování velkých písmen</h1>
+      <p class="subtitle">Příprava na Cermat testy pro 9. třídu</p>
+    </header>
+
+    <div class="mode-selector">
+      <button class="mode-btn active" onclick="switchMode('choice')">Cermat chytáky (Test)</button>
+      <button class="mode-btn" onclick="switchMode('fill')">Doplňování ve větách</button>
+      <button class="mode-btn" onclick="switchMode('correct')">Hledání chyb v textu</button>
+    </div>
+
+    <div class="stats-bar">
+      <div>Otázka: <span id="current-q">1</span> / <span id="total-q">7</span></div>
+      <div>Skóre: <span id="score">0</span></div>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <main id="quiz-area" style="margin-top: 20px;">
+      <!-- Content dynamically inserted -->
+    </main>
+
+    <div class="controls">
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Další otázka &rarr;</button>
+    </div>
+  </div>
+
+  <script>
+    const choiceQuestions = [
+      {
+        question: "Vyber správně zapsanou větu týkající se přídavných jmen:",
+        options: [
+          { text: "Smetanova operní tvorba i smetanovská tradice jsou velmi bohaté.", correct: true },
+          { text: "smetanova operní tvorba i Smetanovská tradice jsou velmi bohaté.", correct: false },
+          { text: "Smetanova operní tvorba i Smetanovská tradice jsou velmi bohaté.", correct: false },
+          { text: "smetanova operní tvorba i smetanovská tradice jsou velmi bohaté.", correct: false }
+        ],
+        explanation: "Přivlastňovací přídavná jména na -ův/-in od vlastních jmen píšeme s velkým písmenem (Smetanova). Přídavná jména na -ský/-ovský vyjadřující typ/druh píšeme s malým (smetanovská)."
+      },
+      {
+        question: "Ve které z následujících možností je CHYBA v psaní velkých písmen u měst a obcí?",
+        options: [
+          { text: "Nové Město Nad Metují", correct: true },
+          { text: "Karlovy Vary", correct: false },
+          { text: "Františkovy Lázně", correct: false },
+          { text: "Praha-Záběhlice", correct: false }
+        ],
+        explanation: "V názvech měst píšeme všechna plnovýznamová slova s velkým písmenem, ale předložky jsou malé: Nové Město nad Metují."
+      },
+      {
+        question: "Urči možnost, ve které jsou VŠECHNY předložkové názvy napsány správně:",
+        options: [
+          { text: "ulice Na Můstku, restaurace U Tří kaprů, sídliště Mezi Zahrádkami", correct: true },
+          { text: "ulice Na můstku, restaurace u Tří Kaprů, sídliště Mezi zahrádkami", correct: false },
+          { text: "Ulice na Můstku, restaurace U tří Kaprů, sídliště mezi Zahrádkami", correct: false },
+          { text: "ulice na Můstku, restaurace U Tří Kaprů, sídliště mezi Zahrádkami", correct: false }
+        ],
+        explanation: "U předložkových názvů píšeme s velkým písmenem předložku na začátku i první slovo za předložkou (Na Můstku, U Tří kaprů, Mezi Zahrádkami)."
+      },
+      {
+        question: "Která ze stanic metra / zastávek MHD v Praze je zapsána v souladu s pravidly dopravy?",
+        options: [
+          { text: "Náměstí Míru", correct: true },
+          { text: "náměstí Míru", correct: false },
+          { text: "Náměstí míru", correct: false },
+          { text: "náměstí míru", correct: false }
+        ],
+        explanation: "Pro prostranství platí 'náměstí Míru'. Pro oficiální stanici metra/MHD se píše první slovo s velkým: 'Náměstí Míru'."
+      },
+      {
+        question: "Ve které možnosti jsou správně napsané obyvatelské a náboženské/názorové pojmy?",
+        options: [
+          { text: "Pražané i Evropané sledovali vývoj, který propagovali protestanti a husité.", correct: true },
+          { text: "pražané i evropané sledovali vývoj, který propagovali Protestanti a Husité.", correct: false },
+          { text: "Pražané i evropané sledovali vývoj, který propagovali Protestanti a husité.", correct: false },
+          { text: "pražané i Evropané sledovali vývoj, který propagovali protestanti a Husité.", correct: false }
+        ],
+        explanation: "Obyvatele a národy píšeme s velkým písmenem (Pražané, Evropané). Náboženské a myšlenkové skupiny s malým (protestanti, husité)."
+      },
+      {
+        question: "Vyber správný zápis názvů svátků a významných dnů:",
+        options: [
+          { text: "Přejeme vám veselé Vánoce, hezký Štědrý den a šťastný nový rok 2027.", correct: true },
+          { text: "Přejeme vám veselé vánoce, hezký štědrý den a šťastný Nový Rok 2027.", correct: false },
+          { text: "Přejeme vám veselé Vánoce, hezký Štědrý Den a šťastný Nový rok 2027.", correct: false },
+          { text: "Přejeme vám veselé vánoce, hezký štědrý den a šťastný nový Rok 2027.", correct: false }
+        ],
+        explanation: "Vánoce a Štědrý den jsou svátky (velké). 'Nový rok' s velkým N je jen 1. leden. V přání pro celý rok píšeme 'nový rok' s malým n."
+      },
+      {
+        question: "Označ řádek, kde je správně napsán název školy a veřejné instituce:",
+        options: [
+          { text: "Základní škola T. G. Masaryka a Ministerstvo školství", correct: true },
+          { text: "Základní Škola T. G. Masaryka a Ministerstvo Školství", correct: false },
+          { text: "základní škola T. G. Masaryka a ministerstvo školství", correct: false },
+          { text: "Základní Škola T.G. Masaryka a ministerstvo Školství", correct: false }
+        ],
+        explanation: "U institucí píšeme s velkým písmenem pouze první slovo (Základní škola..., Ministerstvo...)."
+      }
+    ];
+
+    const fillQuestions = [
+      {
+        sentence: "Na výlet jsme jeli do [J/j]izerských [H/h]or a ubytovali jsme se v [J/j]ablonci nad [N/n]isou.",
+        answers: ["J", "h", "J", "N"],
+        options: [["j", "J"], ["H", "h"], ["j", "J"], ["n", "N"]],
+        explanation: "Jizerské hory (první velké, druhé malé). Jablonec nad Nisou (město - všechna plnovýznamová velká)."
+      },
+      {
+        sentence: "Byli jsme se podívat na [S/s]everočeské [M/m]uzeum a prošli se po [N/n]áměstí [M/m]íru.",
+        answers: ["S", "m", "n", "M"],
+        options: [["s", "S"], ["M", "m"], ["N", "n"], ["m", "M"]],
+        explanation: "Severočeské muzeum (instituce - jen první velké). náměstí Míru (ulice/náměstí - druhové slovo malé)."
+      },
+      {
+        sentence: "Cestou jsme si četli [V/v]álku s [M/m]loky od [K/k]arla [Č/č]apka.",
+        answers: ["V", "m", "K", "Č"],
+        options: [["v", "V"], ["M", "m"], ["k", "K"], ["č", "Č"]],
+        explanation: "Válka s mloky (literární dílo - první slovo velké V, slovo mloci s malým m). Karel Čapek (jméno osoby)."
+      }
+    ];
+
+    const textCorrections = [
+      {
+        words: [
+          { text: "Naši", error: false },
+          { text: "sousedé", error: false },
+          { text: "jsou", error: false },
+          { text: "češi,", error: true, correct: "Češi", rule: "Národnosti píšeme s velkým písmenem (Češi)." },
+          { text: "kteří", error: false },
+          { text: "rádi", error: false },
+          { text: "cestují", error: false },
+          { text: "po", error: false },
+          { text: "české", error: true, correct: "České", rule: "V názvu státu je první slovo s velkým písmenem (Česká republika)." },
+          { text: "republice.", error: false },
+          { text: "Každé", error: false },
+          { text: "vánoce", error: true, correct: "Vánoce", rule: "Název svátku se píše s velkým písmenem (Vánoce)." },
+          { text: "jezdí", error: false },
+          { text: "na", error: false },
+          { text: "šumavu", error: true, correct: "Šumavu", rule: "Zeměpisné názvy píšeme s velkým písmenem (Šumava)." },
+          { text: "a", error: false },
+          { text: "navštěvují", error: false },
+          { text: "černé", error: true, correct: "Černé", rule: "U moří píšeme první slovo s velkým písmenem (Černé moře)." },
+          { text: "moře.", error: false }
+        ]
+      }
+    ];
+
+    let currentMode = 'choice';
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function initQuiz() {
+      currentIdx = 0;
+      score = 0;
+      answered = false;
+      document.getElementById('score').textContent = score;
+      renderQuestion();
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      initQuiz();
+    }
+
+    function renderQuestion() {
+      const quizArea = document.getElementById('quiz-area');
+      document.getElementById('next-btn').style.display = 'none';
+      answered = false;
+
+      if (currentMode === 'choice') {
+        renderChoiceMode(quizArea);
+      } else if (currentMode === 'fill') {
+        renderFillMode(quizArea);
+      } else if (currentMode === 'correct') {
+        renderCorrectMode(quizArea);
+      }
+
+      updateStats();
+    }
+
+    function updateStats() {
+      let total = 0;
+      if (currentMode === 'choice') total = choiceQuestions.length;
+      else if (currentMode === 'fill') total = fillQuestions.length;
+      else if (currentMode === 'correct') total = textCorrections.length;
+
+      document.getElementById('current-q').textContent = currentIdx + 1;
+      document.getElementById('total-q').textContent = total;
+      
+      const progress = ((currentIdx) / total) * 100;
+      document.getElementById('progress-fill').style.width = `${progress}%`;
+    }
+
+    function renderChoiceMode(container) {
+      if (currentIdx >= choiceQuestions.length) {
+        showFinalResults(container);
+        return;
+      }
+
+      const q = choiceQuestions[currentIdx];
+      const shuffledOptions = shuffleArray(q.options);
+
+      let html = `
+        <div class="quiz-card">
+          <div class="question-title">${q.question}</div>
+          <div class="options-grid">
+            ${shuffledOptions.map((opt, i) => `
+              <button class="option-btn" onclick="checkChoiceAnswer(${opt.correct}, this)">
+                <span>${String.fromCharCode(65 + i)}) ${opt.text}</span>
+              </button>
+            `).join('')}
+          </div>
+          <div id="explanation" class="explanation-box"></div>
+        </div>
+      `;
+      container.innerHTML = html;
+    }
+
+    function checkChoiceAnswer(isCorrect, btn) {
+      if (answered) return;
+      answered = true;
+
+      const q = choiceQuestions[currentIdx];
+      const explanation = document.getElementById('explanation');
+      const allBtns = document.querySelectorAll('.option-btn');
+
+      allBtns.forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        btn.classList.add('correct');
+        explanation.className = 'explanation-box correct';
+        explanation.innerHTML = `<strong>Správně!</strong><br>${q.explanation}`;
+        score += 10;
+      } else {
+        btn.classList.add('wrong');
+        explanation.className = 'explanation-box wrong';
+        explanation.innerHTML = `<strong>Chyba!</strong><br>${q.explanation}`;
+        
+        allBtns.forEach(b => {
+          if (b.innerText.includes(q.options.find(o => o.correct).text)) {
+            b.classList.add('correct');
+          }
+        });
+      }
+
+      document.getElementById('score').textContent = score;
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function renderFillMode(container) {
+      if (currentIdx >= fillQuestions.length) {
+        showFinalResults(container);
+        return;
+      }
+
+      const q = fillQuestions[currentIdx];
+      let parts = q.sentence.split(/\[.*?\]/);
+      
+      let interactiveSentence = "";
+      parts.forEach((part, idx) => {
+        interactiveSentence += part;
+        if (idx < q.options.length) {
+          const shuffledOpts = shuffleArray(q.options[idx]);
+          interactiveSentence += `
+            <select class="choice-slot" id="slot-${idx}">
+              <option value="">?</option>
+              ${shuffledOpts.map(o => `<option value="${o}">${o}</option>`).join('')}
+            </select>
+          `;
+        }
+      });
+
+      let html = `
+        <div class="quiz-card">
+          <div class="question-title">Doplň správná velká/malá písmena do vět:</div>
+          <div class="interactive-text">${interactiveSentence}</div>
+          <button class="mode-btn active" style="margin-top:10px;" onclick="checkFillAnswer()">Zkontrolovat odpovědi</button>
+          <div id="explanation" class="explanation-box"></div>
+        </div>
+      `;
+      container.innerHTML = html;
+    }
+
+    function checkFillAnswer() {
+      if (answered) return;
+      
+      const q = fillQuestions[currentIdx];
+      let correctCount = 0;
+      
+      q.answers.forEach((ans, idx) => {
+        const slot = document.getElementById(`slot-${idx}`);
+        if (slot.value === ans) {
+          slot.style.borderColor = 'var(--success)';
+          slot.style.background = 'var(--success-bg)';
+          correctCount++;
+        } else {
+          slot.style.borderColor = 'var(--error)';
+          slot.style.background = 'var(--error-bg)';
+        }
+        slot.disabled = true;
+      });
+
+      answered = true;
+      const explanation = document.getElementById('explanation');
+      
+      if (correctCount === q.answers.length) {
+        explanation.className = 'explanation-box correct';
+        explanation.innerHTML = `<strong>Skvělé! Všechno máš správně.</strong><br>${q.explanation}`;
+        score += 15;
+      } else {
+        explanation.className = 'explanation-box wrong';
+        explanation.innerHTML = `<strong>Některá písmena máš špatně (${correctCount}/${q.answers.length} správně).</strong><br>${q.explanation}`;
+      }
+
+      document.getElementById('score').textContent = score;
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function renderCorrectMode(container) {
+      if (currentIdx >= textCorrections.length) {
+        showFinalResults(container);
+        return;
+      }
+
+      const q = textCorrections[currentIdx];
+      
+      let wordSpans = q.words.map((w, idx) => 
+        `<span class="clickable-word" id="word-${idx}" onclick="toggleWordSelection(${idx})">${w.text}</span>`
+      ).join(" ");
+
+      let html = `
+        <div class="quiz-card">
+          <div class="question-title">Klikni na všechna slova v textu, ve kterých je CHYBA v psaní velkého/malého písmena:</div>
+          <div class="interactive-text" id="correction-text">${wordSpans}</div>
+          <button class="mode-btn active" onclick="checkCorrectionAnswer()">Zkontrolovat vybrané chyby</button>
+          <div id="explanation" class="explanation-box"></div>
+        </div>
+      `;
+      container.innerHTML = html;
+    }
+
+    function toggleWordSelection(idx) {
+      if (answered) return;
+      const el = document.getElementById(`word-${idx}`);
+      el.classList.toggle('selected');
+    }
+
+    function checkCorrectionAnswer() {
+      if (answered) return;
+      answered = true;
+
+      const q = textCorrections[currentIdx];
+      const explanation = document.getElementById('explanation');
+      
+      let totalErrorsInText = q.words.filter(w => w.error).length;
+      let correctlyFound = 0;
+      let falsePositives = 0;
+
+      let infoHtml = "<strong>Výsledky vyhledávání chyb:</strong><br><ul>";
+
+      q.words.forEach((w, idx) => {
+        const el = document.getElementById(`word-${idx}`);
+        const isSelected = el.classList.contains('selected');
+
+        if (w.error) {
+          if (isSelected) {
+            el.className = "clickable-word found-error";
+            correctlyFound++;
+          } else {
+            el.className = "clickable-word missed-error";
+          }
+          infoHtml += `<li><b>${w.text}</b> &rarr; správně <span style="color:var(--success);font-weight:bold;">${w.correct}</span>: ${w.rule}</li>`;
+        } else if (isSelected) {
+          falsePositives++;
+        }
+      });
+
+      infoHtml += "</ul>";
+
+      if (correctlyFound === totalErrorsInText && falsePositives === 0) {
+        explanation.className = 'explanation-box correct';
+        explanation.innerHTML = `<strong>Perfektní! Našel/našlas všech ${totalErrorsInText} chyb v textu!</strong><br>` + infoHtml;
+        score += 25;
+      } else {
+        explanation.className = 'explanation-box wrong';
+        explanation.innerHTML = `<strong>Našel/našlas ${correctlyFound} z ${totalErrorsInText} chyb (plus ${falsePositives} navíc).</strong><br>` + infoHtml;
+      }
+
+      document.getElementById('score').textContent = score;
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentIdx++;
+      renderQuestion();
+    }
+
+    function showFinalResults(container) {
+      document.getElementById('progress-fill').style.width = '100%';
+      container.innerHTML = `
+        <div class="final-score">
+          <h2>Skvělá práce!</h2>
+          <p style="font-size: 1.2rem; margin-bottom: 12px;">Dokončil jsi procvičovací modul.</p>
+          <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">Celkové skóre: ${score} bodů</p>
+          <button class="restart-btn" onclick="initQuiz()">Spustit znovu</button>
+        </div>
+      `;
+    }
+
+    initQuiz();
+  </script>
+</body>
+</html>
