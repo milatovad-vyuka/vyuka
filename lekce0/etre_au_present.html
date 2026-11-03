@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procvičování slovesa ÊTRE</title>
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --primary-dark: #357ABD;
+      --bg: #F4F7F6;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+      --border-radius: 12px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--primary-dark);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #E1E8ED;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #F8FAFC;
+    }
+
+    .audio-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .audio-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .audio-btn:active {
+      transform: scale(0.9);
+    }
+
+    .quiz-q {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #F8FAFC;
+      border-left: 4px solid var(--primary);
+      border-radius: 4px;
+    }
+
+    .quiz-q select {
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #CBD5E1;
+    }
+
+    .btn-check {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn-check:hover {
+      background: var(--primary-dark);
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .correct { color: #27AE60; }
+    .incorrect { color: #E74C3C; }
+  </style>
+</head>
+<body>
+
+  <h1>Le verbe ÊTRE (Sloveso být)</h1>
+
+  <div class="container">
+    <h2>1. Časování a výslovnost</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Osoba</th>
+          <th>Francouzsky</th>
+          <th>Výslovnost</th>
+          <th>Překlad</th>
+          <th>Zvuk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1. sg.</td>
+          <td><strong>je suis</strong></td>
+          <td>[žə swi]</td>
+          <td>já jsem</td>
+          <td><button class="audio-btn" onclick="speak('je suis')">🔊</button></td>
+        </tr>
+        <tr>
+          <td>2. sg.</td>
+          <td><strong>tu es</strong></td>
+          <td>[tü e]</td>
+          <td>ty jsi</td>
+          <td><button class="audio-btn" onclick="speak('tu es')">🔊</button></td>
+        </tr>
+        <tr>
+          <td>3. sg.</td>
+          <td><strong>il est / elle est</strong></td>
+          <td>[il e / el e]</td>
+          <td>on je / ona je</td>
+          <td><button class="audio-btn" onclick="speak('il est, elle est')">🔊</button></td>
+        </tr>
+        <tr>
+          <td>1. pl.</td>
+          <td><strong>nous sommes</strong></td>
+          <td>[nu som]</td>
+          <td>my jsme</td>
+          <td><button class="audio-btn" onclick="speak('nous sommes')">🔊</button></td>
+        </tr>
+        <tr>
+          <td>2. pl.</td>
+          <td><strong>vous êtes</strong></td>
+          <td>[vuz et]</td>
+          <td>vy jste</td>
+          <td><button class="audio-btn" onclick="speak('vous êtes')">🔊</button></td>
+        </tr>
+        <tr>
+          <td>3. pl.</td>
+          <td><strong>ils sont / elles sont</strong></td>
+          <td>[il son / el son]</td>
+          <td>oni jsou / ony jsou</td>
+          <td><button class="audio-btn" onclick="speak('ils sont, elles sont')">🔊</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <h2>2. Doplň správný tvar slovesa ÊTRE</h2>
+    
+    <div class="quiz-q">
+      1. Je 
+      <select id="q1">
+        <option value="">-- vybereš --</option>
+        <option value="suis">suis</option>
+        <option value="es">es</option>
+        <option value="est">est</option>
+      </select> 
+      le frère de Sophie.
+    </div>
+
+    <div class="quiz-q">
+      2. Nous 
+      <select id="q2">
+        <option value="">-- vybereš --</option>
+        <option value="êtes">êtes</option>
+        <option value="sommes">sommes</option>
+        <option value="sont">sont</option>
+      </select> 
+      une grande famille.
+    </div>
+
+    <div class="quiz-q">
+      3. Tu 
+      <select id="q3">
+        <option value="">-- vybereš --</option>
+        <option value="es">es</option>
+        <option value="est">est</option>
+        <option value="suis">suis</option>
+      </select> 
+      le père de Marc?
+    </div>
+
+    <div class="quiz-q">
+      4. Ils 
+      <select id="q4">
+        <option value="">-- vybereš --</option>
+        <option value="sommes">sommes</option>
+        <option value="êtes">êtes</option>
+        <option value="sont">sont</option>
+      </select> 
+      cousins.
+    </div>
+
+    <button class="btn-check" onclick="checkQuiz()">Zkontrolovat odpovědi</button>
+    <div id="quiz-result" class="result"></div>
+  </div>
+
+  <script>
+    let synth = window.speechSynthesis;
+    let voices = [];
+
+    function populateVoices() {
+      if (typeof synth !== 'undefined') {
+        voices = synth.getVoices();
+      }
+    }
+
+    populateVoices();
+    if (typeof synth !== 'undefined' && synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = populateVoices;
+    }
+
+    function speak(text) {
+      if (!('speechSynthesis' in window)) {
+        alert('Váš prohlížeč nepodporuje syntézu řeči.');
+        return;
+      }
+
+      synth.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      utterance.rate = 0.8;
+
+      if (voices.length === 0) {
+        voices = synth.getVoices();
+      }
+      
+      const frVoice = voices.find(v => v.lang.startsWith('fr') || v.lang.includes('FR'));
+      if (frVoice) {
+        utterance.voice = frVoice;
+      }
+
+      synth.speak(utterance);
+    }
+
+    function checkQuiz() {
+      const answers = { q1: 'suis', q2: 'sommes', q3: 'es', q4: 'sont' };
+      let score = 0;
+      let total = 4;
+
+      for (let key in answers) {
+        const select = document.getElementById(key);
+        if (select.value === answers[key]) {
+          score++;
+          select.style.border = '2px solid #27AE60';
+        } else {
+          select.style.border = '2px solid #E74C3C';
+        }
+      }
+
+      const resultDiv = document.getElementById('quiz-result');
+      if (score === total) {
+        resultDiv.className = 'result correct';
+        resultDiv.innerText = `Výborně! Máš ${score} z ${total} správně! 🎉`;
+      } else {
+        resultDiv.className = 'result incorrect';
+        resultDiv.innerText = `Máš ${score} z ${total} správně. Zkuste to znovu! 💡`;
+      }
+    }
+  </script>
+
+</body>
+</html>
