@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzština pro začátečníky: Zápor (La négation)</title>
+    <style>
+        :root {
+            --primary: #0055a5;
+            --secondary: #ef4135;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2c3e50;
+            --correct: #27ae60;
+            --wrong: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .section {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .rule-box {
+            background-color: #eef6ff;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .formula {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            background: #f0f4f8;
+            padding: 10px;
+            border-radius: 5px;
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .exercise-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .mc-options {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .mc-options label {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .mc-options label:hover {
+            background-color: #eef4fc;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            width: 280px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #003d75;
+        }
+
+        .btn-audio {
+            background-color: #eef4fc;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 2px 8px;
+            font-size: 0.85em;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+            margin-top: 0;
+        }
+
+        .btn-audio:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .accent-bar {
+            background-color: #eef4fc;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            border: 1px solid #d0e1fd;
+        }
+
+        .accent-bar span {
+            font-size: 0.9em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        .btn-char {
+            background-color: #ffffff;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 4px 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 0;
+            transition: all 0.2s;
+        }
+
+        .btn-char:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .feedback {
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .correct {
+            color: var(--correct);
+        }
+
+        .incorrect {
+            color: var(--wrong);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Francouzština: Tvorba záporu (La négation)</h1>
+
+    <!-- 1. GRAMATIKA -->
+    <div class="section">
+        <h2>1. Gramatická pravidla</h2>
+        
+        <p>Zápor ve francouzštině tvoříme pomocí dvou slovíček: <strong>ne</strong> a <strong>pas</strong>, která obklopují časované sloveso.</p>
+
+        <div class="formula">
+            NE + sloveso + PAS
+        </div>
+
+        <h3>Základní pravidlo vs. Zkracování (n')</h3>
+        <p>Pokud sloveso začíná na <strong>samohlásku (a, e, i, o, u)</strong> nebo <strong>němé H</strong>, dochází ke zkrácení z <strong>ne</strong> na <strong>n'</strong>.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Typ slovesa</th>
+                    <th>Vzorový tvar</th>
+                    <th>Příklad kladné věty</th>
+                    <th>Příklad záporné věty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Začíná na souhlásku</strong></td>
+                    <td>ne ... pas</td>
+                    <td>Je parle. <i>(Mluvím.)</i></td>
+                    <td>Je <strong>ne</strong> parle <strong>pas</strong>. <i>(Nemluvím.)</i></td>
+                </tr>
+                <tr>
+                    <td><strong>Začíná na samohlásku (a, e, i, o, u)</strong></td>
+                    <td>n' ... pas</td>
+                    <td>J'ai. <i>(Mám.)</i><br>J'aime. <i>(Mám rád.)</i></td>
+                    <td>Je <strong>n'</strong>ai <strong>pas</strong>. <i>(Nemám.)</i><br>Je <strong>n'</strong>aime <strong>pas</strong>. <i>(Nemám rád.)</i></td>
+                </tr>
+                <tr>
+                    <td><strong>Začíná na němé H</strong></td>
+                    <td>n' ... pas</td>
+                    <td>J'habite. <i>(Bydlím.)</i></td>
+                    <td>Je <strong>n'</strong>habite <strong>pas</strong>. <i>(Nebydlím.)</i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 2. VÝSLOVNOST -->
+    <div class="section">
+        <h2>2. Výslovnost (Prononciation)</h2>
+        <div class="rule-box">
+            <p><strong>1. Slovíčko PAS:</strong> Koncové <strong>S se nečte!</strong> Vyslovujeme čisté [pa].</p>
+            <p><strong>2. Vázání (Liaison):</strong> Pokud sloveso začíná na samohlásku nebo němé H a použijeme <strong>n'</strong>, vyslovuje se [n] plynule spojené se slovesem.</p>
+            <p><strong>3. Hovorová francouzština (Tip pro pokročilejší):</strong> V běžné mluvené francouzštině Francouzi slovíčko <i>NE / N'</i> často zcela vynechávají a říkají např. jen <i>"Je sais pas"</i>. Pro začátek se ale učte plný tvar!</p>
+        </div>
+
+        <h3>Přehled výslovnosti základních sloves:</h3>
+        <table>
+            <tr>
+                <th>Kladná věta</th>
+                <th>Záporná věta</th>
+                <th>Přibližná výslovnost záporu</th>
+                <th>Poslech</th>
+            </tr>
+            <tr>
+                <td>Je suis (Jsem)</td>
+                <td>Je ne suis pas</td>
+                <td>[ž ne süi pa]</td>
+                <td><button class="btn-audio" onclick="speak('Je ne suis pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>Tu es (Jsi)</td>
+                <td>Tu n'es pas</td>
+                <td>[ty ne pa]</td>
+                <td><button class="btn-audio" onclick="speak('Tu n\'es pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>Il est (On je)</td>
+                <td>Il n'est pas</td>
+                <td>[il ne pa]</td>
+                <td><button class="btn-audio" onclick="speak('Il n\'est pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>J'ai (Mám)</td>
+                <td>Je n'ai pas</td>
+                <td>[ž ne pa]</td>
+                <td><button class="btn-audio" onclick="speak('Je n\'ai pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>Vous avez (Máte)</td>
+                <td>Vous n'avez pas</td>
+                <td>[vu na-ve pa]</td>
+                <td><button class="btn-audio" onclick="speak('Vous n\'avez pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>Je parle (Mluvím)</td>
+                <td>Je ne parle pas</td>
+                <td>[ž ne parl pa]</td>
+                <td><button class="btn-audio" onclick="speak('Je ne parle pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>J'habite (Bydlím)</td>
+                <td>Je n'habite pas</td>
+                <td>[ž na-bit pa]</td>
+                <td><button class="btn-audio" onclick="speak('Je n\'habite pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>J'aime (Mám rád)</td>
+                <td>Je n'aime pas</td>
+                <td>[ž nem pa]</td>
+                <td><button class="btn-audio" onclick="speak('Je n\'aime pas')">🔊 Přehrát</button></td>
+            </tr>
+            <tr>
+                <td>Je déteste (Nenávidím)</td>
+                <td>Je ne déteste pas</td>
+                <td>[ž ne de-test pa]</td>
+                <td><button class="btn-audio" onclick="speak('Je ne déteste pas')">🔊 Přehrát</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 3. CVIČENÍ 1 -->
+    <div class="section">
+        <h2>Cvičení 1: Vyber správný tvar záporu (ne / n')</h2>
+        <p>Doplň do mezery správné slovíčko: <strong>ne</strong> nebo <strong>n'</strong>.</p>
+        
+        <div class="accent-bar">
+            <span>Pomocná tlačítka:</span>
+            <button type="button" class="btn-char" onclick="insertChar('\'')">'</button>
+            <button type="button" class="btn-char" onclick="insertChar('é')">é</button>
+            <button type="button" class="btn-char" onclick="insertChar('è')">è</button>
+            <button type="button" class="btn-char" onclick="insertChar('ê')">ê</button>
+            <button type="button" class="btn-char" onclick="insertChar('à')">à</button>
+            <button type="button" class="btn-char" onclick="insertChar('ç')">ç</button>
+        </div>
+
+        <form id="ex1">
+            <div class="exercise-item">
+                1. Je <input type="text" id="ex1_1" style="width: 70px;"> suis pas grand. (Nejsem vysoký.)
+                <span id="f1_1" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                2. Il <input type="text" id="ex1_2" style="width: 70px;"> aime pas le chocolat. (Nemá rád čokoládu.)
+                <span id="f1_2" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                3. Nous <input type="text" id="ex1_3" style="width: 70px;"> habitons pas à Prague. (Nebydlíme v Praze.)
+                <span id="f1_3" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                4. Tu <input type="text" id="ex1_4" style="width: 70px;"> parles pas français. (Nemluvíš francouzsky.)
+                <span id="f1_4" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                5. Elle <input type="text" id="ex1_5" style="width: 70px;"> a pas de chat. (Ona nemá kočku.)
+                <span id="f1_5" class="feedback"></span>
+            </div>
+            <button type="button" onclick="checkEx1()">Zkontrolovat Cvičení 1</button>
+        </form>
+    </div>
+
+    <!-- 4. CVIČENÍ 2 -->
+    <div class="section">
+        <h2>Cvičení 2: Převeď věty do záporu</h2>
+        <p>Napiš celou větu v záporu. Pozor na velké písmeno na začátku a tečku na konci!</p>
+
+        <div class="accent-bar">
+            <span>Pomocná tlačítka:</span>
+            <button type="button" class="btn-char" onclick="insertChar('\'')">'</button>
+            <button type="button" class="btn-char" onclick="insertChar('é')">é</button>
+            <button type="button" class="btn-char" onclick="insertChar('è')">è</button>
+            <button type="button" class="btn-char" onclick="insertChar('ê')">ê</button>
+            <button type="button" class="btn-char" onclick="insertChar('à')">à</button>
+            <button type="button" class="btn-char" onclick="insertChar('ç')">ç</button>
+        </div>
+
+        <form id="ex2">
+            <div class="exercise-item">
+                1. Je m'appelle Paul. (Jmenuji se Pavel.)<br>
+                &rarr; <input type="text" id="ex2_1">
+                <span id="f2_1" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                2. J'ai 20 ans. (Mám 20 let. / Je mi 20.)<br>
+                &rarr; <input type="text" id="ex2_2">
+                <span id="f2_2" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                3. Il est petit. (On je malý.)<br>
+                &rarr; <input type="text" id="ex2_3">
+                <span id="f2_3" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                4. J'aime le café. (Mám rád kávu.)<br>
+                &rarr; <input type="text" id="ex2_4">
+                <span id="f2_4" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                5. Vous habitez ici. (Bydlíte zde.)<br>
+                &rarr; <input type="text" id="ex2_5">
+                <span id="f2_5" class="feedback"></span>
+            </div>
+            <div class="exercise-item">
+                6. Je déteste le sport. (Nenávidím sport.)<br>
+                &rarr; <input type="text" id="ex2_6">
+                <span id="f2_6" class="feedback"></span>
+            </div>
+            <button type="button" onclick="checkEx2()">Zkontrolovat Cvičení 2</button>
+        </form>
+    </div>
+
+    <!-- 5. CVIČENÍ 3 (NOVÉ: VÝBĚR Z MOŽNOSTÍ) -->
+    <div class="section">
+        <h2>Cvičení 3: Vyber správnou odpoveď</h2>
+        <p>Zvol gramaticky správnou zápornou větu.</p>
+
+        <form id="ex3">
+            <div class="exercise-item">
+                <p><strong>1. "Ona nemá ráda čaj."</strong></p>
+                <div class="mc-options">
+                    <label><input type="radio" name="q3_1" value="a"> Elle ne aime pas le thé.</label>
+                    <label><input type="radio" name="q3_1" value="b"> Elle n'aime pas le thé.</label>
+                    <label><input type="radio" name="q3_1" value="c"> Elle pas aime le thé.</label>
+                </div>
+                <span id="f3_1" class="feedback"></span>
+            </div>
+
+            <div class="exercise-item">
+                <p><strong>2. "Nebydlím v Paříži."</strong></p>
+                <div class="mc-options">
+                    <label><input type="radio" name="q3_2" value="a"> Je n'habite pas à Paris.</label>
+                    <label><input type="radio" name="q3_2" value="b"> Je ne habite pas à Paris.</label>
+                    <label><input type="radio" name="q3_2" value="c"> Je n'habite pas pas à Paris.</label>
+                </div>
+                <span id="f3_2" class="feedback"></span>
+            </div>
+
+            <div class="exercise-item">
+                <p><strong>3. "Oni nemluví česky."</strong></p>
+                <div class="mc-options">
+                    <label><input type="radio" name="q3_3" value="a"> Ils n'parlent pas tchèque.</label>
+                    <label><input type="radio" name="q3_3" value="b"> Ils ne parlent pas tchèque.</label>
+                    <label><input type="radio" name="q3_3" value="c"> Ils ne parlent tchèque.</label>
+                </div>
+                <span id="f3_3" class="feedback"></span>
+            </div>
+
+            <div class="exercise-item">
+                <p><strong>4. "Nemáš psa."</strong></p>
+                <div class="mc-options">
+                    <label><input type="radio" name="q3_4" value="a"> Tu ne as pas de chien.</label>
+                    <label><input type="radio" name="q3_4" value="b"> Tu n'as pas de chien.</label>
+                    <label><input type="radio" name="q3_4" value="c"> Tu pas as de chien.</label>
+                </div>
+                <span id="f3_4" class="feedback"></span>
+            </div>
+
+            <div class="exercise-item">
+                <p><strong>5. "Nejsme v restauraci."</strong></p>
+                <div class="mc-options">
+                    <label><input type="radio" name="q3_5" value="a"> Nous ne sommes pas au restaurant.</label>
+                    <label><input type="radio" name="q3_5" value="b"> Nous n'sommes pas au restaurant.</label>
+                    <label><input type="radio" name="q3_5" value="c"> Nous sommes ne pas au restaurant.</label>
+                </div>
+                <span id="f3_5" class="feedback"></span>
+            </div>
+
+            <button type="button" onclick="checkEx3()">Zkontrolovat Cvičení 3</button>
+        </form>
+    </div>
+
+    <!-- JS LOGIKA -->
+    <script>
+        let lastFocusedInput = null;
+
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('focus', function() {
+                lastFocusedInput = this;
+            });
+        });
+
+        function insertChar(char) {
+            if (!lastFocusedInput) {
+                lastFocusedInput = document.getElementById('ex1_1');
+            }
+            
+            const start = lastFocusedInput.selectionStart;
+            const end = lastFocusedInput.selectionEnd;
+            const text = lastFocusedInput.value;
+            
+            lastFocusedInput.value = text.substring(0, start) + char + text.substring(end);
+            lastFocusedInput.focus();
+            lastFocusedInput.selectionStart = lastFocusedInput.selectionEnd = start + char.length;
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.9;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Váš prohlížeč nepodporuje hlasový výstup.");
+            }
+        }
+
+        function checkEx1() {
+            const answers = {
+                ex1_1: ["ne"],
+                ex1_2: ["n'", "n’", "n`"],
+                ex1_3: ["n'", "n’", "n`"],
+                ex1_4: ["ne"],
+                ex1_5: ["n'", "n’", "n`"]
+            };
+
+            for (let id in answers) {
+                let input = document.getElementById(id).value.trim().toLowerCase();
+                let feedback = document.getElementById('f' + id.substring(2));
+                if (answers[id].includes(input)) {
+                    feedback.textContent = "✓ Správně";
+                    feedback.className = "feedback correct";
+                } else {
+                    feedback.textContent = "✗ Špatně (Správně: " + answers[id][0] + ")";
+                    feedback.className = "feedback incorrect";
+                }
+            }
+        }
+
+        function checkEx2() {
+            const answers = {
+                ex2_1: ["Je ne m'appelle pas Paul.", "Je ne m'appelle pas paul.", "Je ne m’appelle pas Paul."],
+                ex2_2: ["Je n'ai pas 20 ans.", "Je n’ai pas 20 ans."],
+                ex2_3: ["Il n'est pas petit.", "Il n’est pas petit."],
+                ex2_4: ["Je n'aime pas le café.", "Je n'aime pas le cafe.", "Je n’aime pas le café."],
+                ex2_5: ["Vous n'habitez pas ici.", "Vous n’habitez pas ici."],
+                ex2_6: ["Je ne déteste pas le sport.", "Je ne deteste pas le sport."]
+            };
+
+            for (let id in answers) {
+                let input = document.getElementById(id).value.trim();
+                let feedback = document.getElementById('f' + id.substring(2));
+                
+                let cleanInput = input.replace(/\s+/g, ' ');
+
+                if (answers[id].some(correct => correct.toLowerCase() === cleanInput.toLowerCase())) {
+                    feedback.textContent = "✓ Správně";
+                    feedback.className = "feedback correct";
+                } else {
+                    feedback.textContent = "✗ Špatně (Správná odpověď: " + answers[id][0] + ")";
+                    feedback.className = "feedback incorrect";
+                }
+            }
+        }
+
+        function checkEx3() {
+            const correctAnswers = {
+                q3_1: "b",
+                q3_2: "a",
+                q3_3: "b",
+                q3_4: "b",
+                q3_5: "a"
+            };
+
+            for (let q in correctAnswers) {
+                let selected = document.querySelector(`input[name="${q}"]:checked`);
+                let feedback = document.getElementById('f' + q.substring(1));
+                
+                if (!selected) {
+                    feedback.textContent = "⚠️ Nevybráno";
+                    feedback.className = "feedback incorrect";
+                } else if (selected.value === correctAnswers[q]) {
+                    feedback.textContent = "✓ Správně";
+                    feedback.className = "feedback correct";
+                } else {
+                    feedback.textContent = "✗ Špatně";
+                    feedback.className = "feedback incorrect";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
