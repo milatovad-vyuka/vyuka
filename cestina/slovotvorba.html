@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2. část: Tvoření slov - Spojovačka a cvičení (7. třída)</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --border: #cbd5e1;
+      --success: #22c55e;
+      --error: #ef4444;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--primary);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+
+    p.subtitle {
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #64748b;
+      text-align: center;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    /* Spojovačka */
+    .container {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 80px;
+      margin-bottom: 24px;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    line {
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 48%;
+      z-index: 2;
+    }
+
+    .item {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 54px;
+      font-size: 15px;
+    }
+
+    .item:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .item.selected {
+      border-color: var(--primary);
+      background-color: #e0f2fe;
+    }
+
+    .item.correct {
+      border-color: var(--success);
+      background-color: #dcfce7;
+      color: #14532d;
+    }
+
+    .item.incorrect {
+      border-color: var(--error);
+      background-color: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--border);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: background-color 0.2s;
+    }
+
+    .left-col .dot { right: -18px; }
+    .right-col .dot { left: -18px; }
+
+    .item.selected .dot, .item:hover .dot {
+      background-color: var(--primary);
+    }
+
+    /* Sekce cvičení */
+    .exercise-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .exercise-card h3 {
+      margin-top: 0;
+      color: #0f172a;
+      font-size: 18px;
+    }
+
+    .q-group {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .q-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .q-title {
+      font-weight: 500;
+    }
+
+    select, input[type="text"] {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    input[type="text"] {
+      width: 150px;
+    }
+
+    select.correct, input.correct {
+      border-color: var(--success);
+      background-color: #dcfce7;
+      color: #14532d;
+    }
+
+    select.incorrect, input.incorrect {
+      border-color: var(--error);
+      background-color: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    .info-box {
+      background-color: #f0f9ff;
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .footnote {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* Ovládací tlačítka */
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover { background-color: var(--primary-hover); }
+    button.reset-btn { background-color: #64748b; }
+    button.reset-btn:hover { background-color: #475569; }
+    button.solution-btn { background-color: #0d9488; }
+    button.solution-btn:hover { background-color: #0f766e; }
+
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    #solution-box {
+      margin-top: 24px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      padding: 20px;
+      display: none;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+    }
+
+    #solution-box h3 { margin-top: 0; color: var(--primary); }
+
+    .solution-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .solution-table th, .solution-table td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    .solution-table th { background-color: #e0f2fe; color: var(--primary-hover); }
+    .solution-table tr:nth-child(even) { background-color: #f8fafc; }
+    .solution-table td.term { font-weight: bold; color: #0f172a; width: 35%; }
+
+    .pair-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .pair-card h4 {
+      margin: 0 0 8px 0;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-wrapper">
+    <h1>2. část: Tvoření slov (Slovotvorba)</h1>
+    <p class="subtitle">Spojování pojmů a praktická cvičení pro 7. třídu ZŠ</p>
+
+    <!-- NÁPOVĚDA PRO SEDMÁKY -->
+    <div class="info-box">
+      <strong>💡 Jaký je rozdíl mezi kořenem slova a slovotvorným základem?</strong><br>
+      • <strong>Kořen slova</strong> je společná část celého rodokmenu slov (např. u slov <i>hřebík, hřebíček, hřebíkárna</i> je kořen <strong>hřeb</strong>).<br>
+      • <strong>Slovotvorný základ</strong> je část základového slova, ze které přímo tvoříme slovo nové (např. u dvojice <i>hřebík : hřebíček</i> je základ <strong>hřebík-</strong>*).
+    </div>
+
+    <!-- 1. SPOJOVAČKA -->
+    <h2>1. Spojovačka pojmů</h2>
+    <div class="container" id="game-container">
+      <svg id="svg-canvas"></svg>
+
+      <div class="column left-col" id="left-column">
+        <div class="item" data-id="1">Slovo základové<div class="dot"></div></div>
+        <div class="item" data-id="2">Slovo odvozené<div class="dot"></div></div>
+        <div class="item" data-id="3">Slovotvorný základ<div class="dot"></div></div>
+        <div class="item" data-id="4">Slovotvorný prostředek<div class="dot"></div></div>
+      </div>
+
+      <div class="column right-col" id="right-column">
+        <div class="item" data-id="1">Původní slovo, ze kterého přímo tvoříme slovo nové.<div class="dot"></div></div>
+        <div class="item" data-id="2">Nové slovo vytvořené ze základového slova.<div class="dot"></div></div>
+        <div class="item" data-id="3">Část základového slova, ke které přidáváme předponu nebo příponu.<div class="dot"></div></div>
+        <div class="item" data-id="4">Vzniká pomocí něj nové slovo (např. předpona, přípona nebo koncovka).<div class="dot"></div></div>
+      </div>
+    </div>
+
+    <!-- 2. PRAKTICKÁ CVIČENÍ -->
+    <h2>2. Praktické procvičování</h2>
+
+    <!-- Cvičení A -->
+    <div class="exercise-card">
+      <h3>A) Poznej slovo základové a odvozené</h3>
+      
+      <div class="q-group">
+        <span class="q-title">1. Ve dvojici <i>hřebík : hřebíček</i> je slovo <strong>hřebík</strong>:</span>
+        <select id="qa1">
+          <option value="">-- Vyber --</option>
+          <option value="zakladove">Slovo základové</option>
+          <option value="odvozene">Slovo odvozené</option>
+        </select>
+      </div>
+
+      <div class="q-group">
+        <span class="q-title">2. Ve dvojici <i>hřebík : hřebíček</i> je slovo <strong>hřebíček</strong>:</span>
+        <select id="qa2">
+          <option value="">-- Vyber --</option>
+          <option value="zakladove">Slovo základové</option>
+          <option value="odvozene">Slovo odvozené</option>
+        </select>
+      </div>
+
+      <div class="q-group">
+        <span class="q-title">3. Ve dvojici <i>lesní : podlesní</i> je slovo <strong>podlesní</strong>:</span>
+        <select id="qa3">
+          <option value="">-- Vyber --</option>
+          <option value="zakladove">Slovo základové</option>
+          <option value="odvozene">Slovo odvozené</option>
+        </select>
+      </div>
+
+      <div class="q-group">
+        <span class="q-title">4. Ve dvojici <i>zahradník : zahradnice</i> je slovo <strong>zahradník</strong>:</span>
+        <select id="qa4">
+          <option value="">-- Vyber --</option>
+          <option value="zakladove">Slovo základové</option>
+          <option value="odvozene">Slovo odvozené</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Cvičení B -->
+    <div class="exercise-card">
+      <h3>B) Urči slovotvorný základ a kořen slova</h3>
+      <p style="margin-top:0; color:#64748b; font-size:14px;">Porovnej dvojici slov a ujasni si rozdíl mezi <strong>slovotvorným základem</strong> a <strong>kořenem slova</strong>:</p>
+
+      <div class="pair-card">
+        <h4>1. Dvojice: <i>hřebík : hřebíček</i></h4>
+        <div class="q-group"><label>Slovotvorný základ*: <input type="text" id="qb1_1" placeholder="z jakého základu..."></label></div>
+        <div class="q-group"><label>Kořen slova: <input type="text" id="qb1_2" placeholder="kořen slova..."></label></div>
+      </div>
+
+      <div class="pair-card">
+        <h4>2. Dvojice: <i>lesní : podlesní</i></h4>
+        <div class="q-group"><label>Slovotvorný základ: <input type="text" id="qb2_1" placeholder="z jakého základu..."></label></div>
+        <div class="q-group"><label>Kořen slova: <input type="text" id="qb2_2" placeholder="kořen slova..."></label></div>
+      </div>
+
+      <div class="pair-card">
+        <h4>3. Dvojice: <i>zahrada : zahradník</i></h4>
+        <div class="q-group"><label>Slovotvorný základ: <input type="text" id="qb3_1" placeholder="z jakého základu..."></label></div>
+        <div class="q-group"><label>Kořen slova: <input type="text" id="qb3_2" placeholder="kořen slova..."></label></div>
+      </div>
+
+      <div class="footnote">
+        * <strong>Poznámka:</strong> Při odvozování slova <i>hřebíček</i> ze slova <i>hřebík</i> došlo ke střídání hlásky <strong>k &rarr; č</strong> (hřebí<b>k</b> &rarr; hřebí<b>č</b>-ek). Slovotvorný základ je tedy <i>hřebík-</i> (resp. <i>hřebíč-</i>).
+      </div>
+    </div>
+
+    <!-- Cvičení C -->
+    <div class="exercise-card">
+      <h3>C) Čím bylo slovo vytvořeno? (Slovotvorný prostředek)</h3>
+      <p style="margin-top:0; color:#64748b; font-size:14px;">Vyber, jaký slovotvorný prostředek se použil pro vytvoření nového slova:</p>
+
+      <div class="q-group">
+        <span class="q-title">1. <i>hřebík : hřebíč-<strong>EK</strong></i> (vytvořeno pomocí):</span>
+        <select id="qc1">
+          <option value="">-- Vyber --</option>
+          <option value="predpona">Předpona</option>
+          <option value="pripona">Přípona</option>
+          <option value="kombinace">Kombinace předpony a přípony</option>
+        </select>
+      </div>
+
+      <div class="q-group">
+        <span class="q-title">2. <i>lesní : <strong>POD-</strong>lesní</i> (vytvořeno pomocí):</span>
+        <select id="qc2">
+          <option value="">-- Vyber --</option>
+          <option value="predpona">Předpona</option>
+          <option value="pripona">Přípona</option>
+          <option value="kombinace">Kombinace předpony a přípony</option>
+        </select>
+      </div>
+
+      <div class="q-group">
+        <span class="q-title">3. <i>moře : <strong>ZÁ-</strong>moř-<strong>SKÝ</strong></i> (vytvořeno pomocí):</span>
+        <select id="qc3">
+          <option value="">-- Vyber --</option>
+          <option value="predpona">Předpona</option>
+          <option value="pripona">Přípona</option>
+          <option value="kombinace">Kombinace předpony a přípony</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TLAČÍTKA -->
+    <div class="controls">
+      <button onclick="checkAnswers()">Zkontrolovat vše</button>
+      <button class="solution-btn" onclick="toggleSolution()">Zobrazit správné řešení</button>
+      <button class="reset-btn" onclick="resetGame()">Vynulovat</button>
+    </div>
+
+    <div id="result"></div>
+
+    <!-- TABULKA ŘEŠENÍ -->
+    <div id="solution-box">
+      <h3>Přehled správných odpovědí</h3>
+      
+      <h4>1. Spojovačka</h4>
+      <table class="solution-table">
+        <thead>
+          <tr><th>Pojem</th><th>Vysvětlení</th></tr>
+        </thead>
+        <tbody id="solution-tbody"></tbody>
+      </table>
+
+      <h4 style="margin-top: 20px;">2. Poznej slovo základové a odvozené (A)</h4>
+      <ul style="line-height: 1.6;">
+        <li>1. hřebík : hřebíček &mdash; <strong>hřebík</strong> je slovo základové</li>
+        <li>2. hřebík : hřebíček &mdash; <strong>hřebíček</strong> je slovo odvozené</li>
+        <li>3. lesní : podlesní &mdash; <strong>podlesní</strong> je slovo odvozené</li>
+        <li>4. zahradník : zahradnice &mdash; <strong>zahradník</strong> je slovo základové</li>
+      </ul>
+
+      <h4 style="margin-top: 20px;">3. Slovotvorný základ vs. kořen slova (B)</h4>
+      <ul style="line-height: 1.6;">
+        <li><strong>hřebík : hřebíček</strong> &mdash; slovotvorný základ: <i>hřebík- / hřebíč-</i> (změna k &rarr; č) | kořen slova: <i>hřeb-</i></li>
+        <li><strong>lesní : podlesní</strong> &mdash; slovotvorný základ: <i>lesní-</i> | kořen slova: <i>les-</i></li>
+        <li><strong>zahrada : zahradník</strong> &mdash; slovotvorný základ: <i>zahrad-</i> | kořen slova: <i>hrad-</i></li>
+      </ul>
+
+      <h4 style="margin-top: 20px;">4. Jak slovo vzniklo (C)</h4>
+      <ul style="line-height: 1.6;">
+        <li>1. hřebíček: <strong>Přípona</strong> (přípona -ek)</li>
+        <li>2. POD-lesní: <strong>Předpona</strong> (předpona pod-)</li>
+        <li>3. ZÁ-moř-SKÝ: <strong>Kombinace předpony a přípony</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let selectedLeft = null;
+    let connections = [];
+    const svg = document.getElementById('svg-canvas');
+    const container = document.getElementById('game-container');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const rightCol = document.getElementById('right-column');
+      const items = Array.from(rightCol.children);
+      items.sort(() => Math.random() - 0.5);
+      items.forEach(item => rightCol.appendChild(item));
+      setupListeners();
+      generateSolutionTable();
+    });
+
+    function setupListeners() {
+      document.querySelectorAll('.left-col .item').forEach(item => {
+        item.addEventListener('click', () => selectLeft(item));
+      });
+
+      document.querySelectorAll('.right-col .item').forEach(item => {
+        item.addEventListener('click', () => selectRight(item));
+      });
+
+      window.addEventListener('resize', updateLines);
+    }
+
+    function selectLeft(item) {
+      document.querySelectorAll('.left-col .item').forEach(i => i.classList.remove('selected'));
+      selectedLeft = item;
+      item.classList.add('selected');
+    }
+
+    function selectRight(item) {
+      if (!selectedLeft) return;
+
+      removeConnectionFor(selectedLeft);
+      removeConnectionFor(item);
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('stroke', '#0284c7');
+      svg.appendChild(line);
+
+      connections.push({ leftEl: selectedLeft, rightEl: item, lineEl: line });
+      selectedLeft.classList.remove('selected');
+      selectedLeft = null;
+
+      updateLines();
+    }
+
+    function removeConnectionFor(element) {
+      const index = connections.findIndex(c => c.leftEl === element || c.rightEl === element);
+      if (index !== -1) {
+        svg.removeChild(connections[index].lineEl);
+        connections.splice(index, 1);
+      }
+    }
+
+    function updateLines() {
+      const containerRect = container.getBoundingClientRect();
+      connections.forEach(c => {
+        const leftDot = c.leftEl.querySelector('.dot').getBoundingClientRect();
+        const rightDot = c.rightEl.querySelector('.dot').getBoundingClientRect();
+        c.lineEl.setAttribute('x1', leftDot.left + leftDot.width / 2 - containerRect.left);
+        c.lineEl.setAttribute('y1', leftDot.top + leftDot.height / 2 - containerRect.top);
+        c.lineEl.setAttribute('x2', rightDot.left + rightDot.width / 2 - containerRect.left);
+        c.lineEl.setAttribute('y2', rightDot.top + rightDot.height / 2 - containerRect.top);
+      });
+    }
+
+    function checkAnswers() {
+      let totalPoints = 0;
+      let earnedPoints = 0;
+
+      // 1. Spojovačka (4 body)
+      totalPoints += 4;
+      if (connections.length === 4) {
+        connections.forEach(c => {
+          const isCorrect = c.leftEl.dataset.id === c.rightEl.dataset.id;
+          if (isCorrect) {
+            c.leftEl.classList.add('correct');
+            c.rightEl.classList.add('correct');
+            c.lineEl.setAttribute('stroke', '#22c55e');
+            earnedPoints++;
+          } else {
+            c.leftEl.classList.add('incorrect');
+            c.rightEl.classList.add('incorrect');
+            c.lineEl.setAttribute('stroke', '#ef4444');
+          }
+        });
+      }
+
+      // 2. Cvičení A (4 body)
+      const correctA = { qa1: 'zakladove', qa2: 'odvozene', qa3: 'odvozene', qa4: 'zakladove' };
+      totalPoints += 4;
+      for (let key in correctA) {
+        const select = document.getElementById(key);
+        select.classList.remove('correct', 'incorrect');
+        if (select.value === correctA[key]) {
+          select.classList.add('correct');
+          earnedPoints++;
+        } else if (select.value !== "") {
+          select.classList.add('incorrect');
+        }
+      }
+
+      // 3. Cvičení B (6 bodů)
+      totalPoints += 6;
+      const checkHelper = (id, validAnswers) => {
+        const input = document.getElementById(id);
+        const val = input.value.trim().toLowerCase();
+        input.classList.remove('correct', 'incorrect');
+        if (validAnswers.includes(val)) {
+          input.classList.add('correct');
+          earnedPoints++;
+        } else if (val !== "") {
+          input.classList.add('incorrect');
+        }
+      };
+
+      // hřebík : hřebíček
+      checkHelper('qb1_1', ['hřebík', 'hrebik', 'hřebík-', 'hřebíč', 'hrebic', 'hřebíč-']);
+      checkHelper('qb1_2', ['hřeb', 'hreb', 'hřeb-']);
+
+      // lesní : podlesní
+      checkHelper('qb2_1', ['lesní', 'lesni', 'lesní-']);
+      checkHelper('qb2_2', ['les', 'les-']);
+
+      // zahrada : zahradník
+      checkHelper('qb3_1', ['zahrad', 'zahrad-']);
+      checkHelper('qb3_2', ['hrad', 'hrad-']);
+
+      // 4. Cvičení C (3 body)
+      const correctC = { qc1: 'pripona', qc2: 'predpona', qc3: 'kombinace' };
+      totalPoints += 3;
+      for (let key in correctC) {
+        const select = document.getElementById(key);
+        select.classList.remove('correct', 'incorrect');
+        if (select.value === correctC[key]) {
+          select.classList.add('correct');
+          earnedPoints++;
+        } else if (select.value !== "") {
+          select.classList.add('incorrect');
+        }
+      }
+
+      // Výpočet výsledků
+      const percentage = Math.round((earnedPoints / totalPoints) * 100);
+      const resultEl = document.getElementById('result');
+
+      if (connections.length < 4) {
+        resultEl.style.color = '#eab308';
+        resultEl.innerText = `Nezapomeň propojit spojovačku! Průběžné skóre: ${earnedPoints} z ${totalPoints} bodů (${percentage} %)`;
+      } else if (earnedPoints === totalPoints) {
+        resultEl.style.color = '#22c55e';
+        resultEl.innerText = `Skvělá práce! Úspěšnost: ${percentage} % (${earnedPoints} z ${totalPoints} bodů) 🎉`;
+      } else {
+        resultEl.style.color = '#ef4444';
+        resultEl.innerText = `Úspěšnost: ${percentage} % (${earnedPoints} z ${totalPoints} bodů). Zkontroluj červená políčka!`;
+      }
+    }
+
+    function toggleSolution() {
+      const box = document.getElementById('solution-box');
+      box.style.display = box.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function generateSolutionTable() {
+      const leftItems = Array.from(document.querySelectorAll('.left-col .item'));
+      const rightItems = Array.from(document.querySelectorAll('.right-col .item'));
+      const tbody = document.getElementById('solution-tbody');
+      tbody.innerHTML = '';
+
+      leftItems.forEach(left => {
+        const matchingRight = rightItems.find(right => right.dataset.id === left.dataset.id);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="term">${left.childNodes[0].textContent.trim()}</td><td>${matchingRight.childNodes[0].textContent.trim()}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function resetGame() {
+      connections.forEach(c => svg.removeChild(c.lineEl));
+      connections = [];
+      selectedLeft = null;
+      document.querySelectorAll('.item').forEach(i => i.classList.remove('selected', 'correct', 'incorrect'));
+      
+      document.querySelectorAll('select, input').forEach(el => {
+        el.value = '';
+        el.classList.remove('correct', 'incorrect');
+      });
+
+      document.getElementById('result').innerText = '';
+      document.getElementById('solution-box').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
