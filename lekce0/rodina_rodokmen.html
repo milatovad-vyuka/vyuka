@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Famille - Rodokmen & Slovíčka</title>
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --primary: #3b82f6;
+      --accent: #ef4444;
+      --text: #1e293b;
+      --border: #cbd5e1;
+      --success: #10b981;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    h1 { margin: 0 0 10px 0; color: #0f172a; }
+
+    .tab-nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 1.05em;
+      font-weight: bold;
+      cursor: pointer;
+      color: #475569;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .controls {
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-reset { background: #64748b; }
+    .status-bar { font-weight: bold; font-size: 1.1em; color: var(--accent); }
+
+    .tree-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+
+    #svg-lines {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 1;
+    }
+
+    .tree-container {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      padding: 30px 0;
+      position: relative;
+      z-index: 2;
+      min-width: 850px;
+    }
+
+    .generation { display: flex; justify-content: space-around; width: 100%; }
+
+    .family-couple {
+      display: flex;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px dashed var(--border);
+    }
+
+    .person-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 10px;
+      width: 100px;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 3px solid transparent;
+      user-select: none;
+    }
+
+    .person-card:hover { transform: scale(1.05); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .person-card.active-me { border-color: var(--accent); background: #fef2f2; transform: scale(1.08); }
+
+    .avatar { font-size: 2.2em; margin-bottom: 4px; }
+    .name { font-weight: bold; font-size: 1em; }
+    .age { font-size: 0.8em; color: #64748b; }
+
+    .gen-1 .person-card { border-top: 5px solid #f59e0b; }
+    .gen-2 .person-card { border-top: 5px solid var(--primary); }
+    .gen-3 .person-card { border-top: 5px solid var(--success); }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: none; border: none;
+      font-size: 1.5em; cursor: pointer;
+    }
+
+    .relation-answer {
+      background: #eff6ff;
+      border: 2px solid var(--primary);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #1e40af;
+      display: none;
+    }
+
+    .audio-btn {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9em;
+      margin-top: 8px;
+    }
+    .audio-btn-sec { background: #8b5cf6; margin-bottom: 10px; }
+
+    .vocab-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .matching-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .match-card {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 15px 10px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .match-card:hover { border-color: var(--primary); background: #e0f2fe; }
+    .match-card.selected { border-color: #f59e0b; background: #fef3c7; }
+    .match-card.matched { border-color: var(--success); background: #dcfce7; color: #166534; cursor: default; }
+
+    .quiz-box {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px dashed #e2e8f0;
+    }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px 15px;
+      margin: 8px 0;
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+    }
+
+    .quiz-option:hover { background: #e2e8f0; }
+    .quiz-option.correct { background: #dcfce7; border-color: var(--success); color: #166534; }
+    .quiz-option.wrong { background: #fee2e2; border-color: var(--accent); color: #991b1b; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🇫🇷 La Famille</h1>
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('tree-tab')">🌳 Interaktivní Rodokmen</button>
+      <button class="tab-btn" onclick="switchTab('vocab-tab')">📖 Procvičování slovíček</button>
+    </div>
+  </header>
+
+  <!-- TAB 1: RODOKMEN -->
+  <div id="tree-tab" class="tab-content active">
+    <div class="controls">
+      <div class="status-bar" id="statusBar">Pohled: Všichni (Vyberte postavu "MOI")</div>
+      <button class="btn btn-reset" onclick="resetSelection()">Zrušit výběr postavy</button>
+    </div>
+
+    <div class="tree-wrapper">
+      <svg id="svg-lines"></svg>
+      
+      <div class="tree-container" id="treeContainer">
+        <!-- Generace 1 -->
+        <div class="generation gen-1">
+          <div class="family-couple" id="couple-henri-simone">
+            <div class="person-card" id="card-henri" onclick="handleCardClick('henri')">
+              <div class="avatar">👴</div>
+              <div class="name">Henri</div>
+              <div class="age">75 ans</div>
+            </div>
+            <div class="person-card" id="card-simone" onclick="handleCardClick('simone')">
+              <div class="avatar">👵</div>
+              <div class="name">Simone</div>
+              <div class="age">72 ans</div>
+            </div>
+          </div>
+          
+          <div class="family-couple" id="couple-pierre-marie">
+            <div class="person-card" id="card-pierre" onclick="handleCardClick('pierre')">
+              <div class="avatar">👴</div>
+              <div class="name">Pierre</div>
+              <div class="age">74 ans</div>
+            </div>
+            <div class="person-card" id="card-marie" onclick="handleCardClick('marie')">
+              <div class="avatar">👵</div>
+              <div class="name">Marie</div>
+              <div class="age">71 ans</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generace 2 -->
+        <div class="generation gen-2">
+          <div class="family-couple" id="couple-thomas-chloe">
+            <div class="person-card" id="card-thomas" onclick="handleCardClick('thomas')">
+              <div class="avatar">👨</div>
+              <div class="name">Thomas</div>
+              <div class="age">45 ans</div>
+            </div>
+            <div class="person-card" id="card-chloe" onclick="handleCardClick('chloe')">
+              <div class="avatar">👩</div>
+              <div class="name">Chloé</div>
+              <div class="age">42 ans</div>
+            </div>
+          </div>
+
+          <div class="family-couple" id="couple-julien-claire">
+            <div class="person-card" id="card-julien" onclick="handleCardClick('julien')">
+              <div class="avatar">👨‍🦰</div>
+              <div class="name">Julien</div>
+              <div class="age">46 ans</div>
+            </div>
+            <div class="person-card" id="card-claire" onclick="handleCardClick('claire')">
+              <div class="avatar">👩‍🦱</div>
+              <div class="name">Claire</div>
+              <div class="age">44 ans</div>
+            </div>
+          </div>
+
+          <div class="family-couple" id="couple-luc-sophie">
+            <div class="person-card" id="card-luc" onclick="handleCardClick('luc')">
+              <div class="avatar">👨‍🦲</div>
+              <div class="name">Luc</div>
+              <div class="age">40 ans</div>
+            </div>
+            <div class="person-card" id="card-sophie" onclick="handleCardClick('sophie')">
+              <div class="avatar">👩‍🦰</div>
+              <div class="name">Sophie</div>
+              <div class="age">38 ans</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generace 3 -->
+        <div class="generation gen-3">
+          <div class="family-couple" style="border:none; background:none;">
+            <div class="person-card" id="card-camille" onclick="handleCardClick('camille')">
+              <div class="avatar">👧</div>
+              <div class="name">Camille</div>
+              <div class="age">14 ans</div>
+            </div>
+          </div>
+
+          <div class="family-couple" style="border:none; background:none;">
+            <div class="person-card" id="card-hugo" onclick="handleCardClick('hugo')">
+              <div class="avatar">👦</div>
+              <div class="name">Hugo</div>
+              <div class="age">16 ans</div>
+            </div>
+            <div class="person-card" id="card-lucas" onclick="handleCardClick('lucas')">
+              <div class="avatar">🧑</div>
+              <div class="name">Lucas</div>
+              <div class="age">12 ans</div>
+            </div>
+            <div class="person-card" id="card-lea" onclick="handleCardClick('lea')">
+              <div class="avatar">👧</div>
+              <div class="name">Léa</div>
+              <div class="age">9 ans</div>
+            </div>
+          </div>
+
+          <div class="family-couple" style="border:none; background:none;">
+            <div class="person-card" id="card-antoine" onclick="handleCardClick('antoine')">
+              <div class="avatar">👦</div>
+              <div class="name">Antoine</div>
+              <div class="age">10 ans</div>
+            </div>
+            <div class="person-card" id="card-manon" onclick="handleCardClick('manon')">
+              <div class="avatar">👶</div>
+              <div class="name">Manon</div>
+              <div class="age">5 ans</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: SLOVÍČKA A PEXESO -->
+  <div id="vocab-tab" class="tab-content">
+    <div class="vocab-container">
+      <h2>🧩 Spojovací Pexeso (Francouzština <-> Čeština)</h2>
+      <p>Kliknutím spojte francouzské slovíčko s jeho českým významem:</p>
+      
+      <div class="matching-grid" id="matchingGrid"></div>
+
+      <div class="quiz-box">
+        <h2>❓ Rychlý Kvíz rodinných příslušníků</h2>
+        <div id="quizContainer">
+          <p id="quizQuestion" style="font-size:1.1em; font-weight:bold;"></p>
+          <div id="quizOptions"></div>
+          <p id="quizFeedback" style="font-weight:bold; margin-top:10px;"></p>
+          <button class="btn" id="btnNextQuestion" style="display:none; margin-top:10px;" onclick="loadNextQuestion()">Další otázka ➔</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal okno pro Rodokmen -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <div class="avatar" id="modalAvatar" style="font-size:4em;"></div>
+      <h2 id="modalName"></h2>
+      <p id="modalAge"></p>
+
+      <div id="quizSection" style="display:none;">
+        <p style="font-size:1.3em; font-weight:bold; margin-bottom:5px;">Qui est-ce ?</p>
+        <button class="audio-btn audio-btn-sec" onclick="speakText('Qui est-ce ?')">🔊 Poslechnout otázku</button>
+        <br><br>
+        <button class="btn" onclick="toggleAnswer()">👁️ Zobrazit správnou odpověď</button>
+        <div class="relation-answer" id="relationAnswer"></div>
+        <br>
+        <button class="audio-btn" id="btnSpeakAnswer" onclick="speakAnswer()">🔊 Poslechnout odpověď</button>
+      </div>
+
+      <div id="defaultSection">
+        <button class="btn" style="background:#10b981;" onclick="setAsMe()">🎯 Zvolit tuto postavu jako "MOI"</button>
+        <br><br>
+        <button class="audio-btn" onclick="speakName()">🔊 Přečíst jméno francouzsky</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      
+      if (tabId === 'tree-tab') {
+        setTimeout(drawLines, 50);
+      }
+    }
+
+    const people = {
+      henri: { name: "Henri", age: "75 ans", avatar: "👴", gen: 1, spouse: "simone", gender: "m" },
+      simone: { name: "Simone", age: "72 ans", avatar: "👵", gen: 1, spouse: "henri", gender: "f" },
+      pierre: { name: "Pierre", age: "74 ans", avatar: "👴", gen: 1, spouse: "marie", gender: "m" },
+      marie: { name: "Marie", age: "71 ans", avatar: "👵", gen: 1, spouse: "pierre", gender: "f" },
+      
+      thomas: { name: "Thomas", age: "45 ans", avatar: "👨", gen: 2, spouse: "chloe", parents: ["henri", "simone"], gender: "m" },
+      chloe: { name: "Chloé", age: "42 ans", avatar: "👩", gen: 2, spouse: "thomas", gender: "f" },
+      julien: { name: "Julien", age: "46 ans", avatar: "👨‍🦰", gen: 2, spouse: "claire", parents: ["henri", "simone"], gender: "m" },
+      claire: { name: "Claire", age: "44 ans", avatar: "👩‍🦱", gen: 2, spouse: "julien", parents: ["pierre", "marie"], gender: "f" },
+      luc: { name: "Luc", age: "40 ans", avatar: "👨‍🦲", gen: 2, spouse: "sophie", parents: ["pierre", "marie"], gender: "m" },
+      sophie: { name: "Sophie", age: "38 ans", avatar: "👩‍🦰", gen: 2, spouse: "luc", gender: "f" },
+
+      camille: { name: "Camille", age: "14 ans", avatar: "👧", gen: 3, parents: ["thomas", "chloe"], gender: "f" },
+      hugo: { name: "Hugo", age: "16 ans", avatar: "👦", gen: 3, parents: ["julien", "claire"], gender: "m" },
+      lucas: { name: "Lucas", age: "12 ans", avatar: "🧑", gen: 3, parents: ["julien", "claire"], gender: "m" },
+      lea: { name: "Léa", age: "9 ans", avatar: "👧", gen: 3, parents: ["julien", "claire"], gender: "f" },
+      antoine: { name: "Antoine", age: "10 ans", avatar: "👦", gen: 3, parents: ["luc", "sophie"], gender: "m" },
+      manon: { name: "Manon", age: "5 ans", avatar: "👶", gen: 3, parents: ["luc", "sophie"], gender: "f" }
+    };
+
+    const parentChildConnections = [
+      { parentCouple: "couple-henri-simone", children: ["card-thomas", "card-julien"] },
+      { parentCouple: "couple-pierre-marie", children: ["card-claire", "card-luc"] },
+      { parentCouple: "couple-thomas-chloe", children: ["card-camille"] },
+      { parentCouple: "couple-julien-claire", children: ["card-hugo", "card-lucas", "card-lea"] },
+      { parentCouple: "couple-luc-sophie", children: ["card-antoine", "card-manon"] }
+    ];
+
+    let selectedMe = null;
+    let currentTarget = null;
+
+    function getRelation(meId, targetId) {
+      if (meId === targetId) return "C'est moi !";
+      const me = people[meId];
+      const target = people[targetId];
+
+      if (me.spouse === targetId) {
+        return target.gender === 'm' ? "C'est mon mari." : "C'est ma femme.";
+      }
+      if (me.parents && me.parents.includes(targetId)) {
+        return target.gender === 'm' ? "C'est mon père." : "C'est ma mère.";
+      }
+      if (target.parents && (target.parents.includes(meId) || (me.spouse && target.parents.includes(me.spouse)))) {
+        return target.gender === 'm' ? "C'est mon fils." : "C'est ma fille.";
+      }
+      if (me.parents && target.parents && me.parents.some(p => target.parents.includes(p))) {
+        return target.gender === 'm' ? "C'est mon frère." : "C'est ma sœur.";
+      }
+      if (me.gen === 3 && target.gen === 1) {
+        return target.gender === 'm' ? "C'est mon grand-père." : "C'est ma grand-mère.";
+      }
+      if (me.gen === 1 && target.gen === 3) {
+        return target.gender === 'm' ? "C'est mon petit-fils." : "C'est ma petite-fille.";
+      }
+      if (me.gen === 3 && target.gen === 2) {
+        return target.gender === 'm' ? "C'est mon oncle." : "C'est ma tante.";
+      }
+      if (me.gen === 2 && target.gen === 3) {
+        return target.gender === 'm' ? "C'est mon neveu." : "C'est ma nièce.";
+      }
+      if (me.gen === 3 && target.gen === 3) {
+        return target.gender === 'm' ? "C'est mon cousin." : "C'est ma cousine.";
+      }
+      if (me.gen === 2 && target.gen === 2) {
+        return target.gender === 'm' ? "C'est mon beau-frère." : "C'est ma belle-sœur.";
+      }
+      if (me.gen === 1 && target.gen === 2) {
+        return target.gender === 'm' ? "C'est mon beau-fils." : "C'est ma belle-fille.";
+      }
+      if (me.gen === 2 && target.gen === 1) {
+        return target.gender === 'm' ? "C'est mon beau-père." : "C'est ma belle-mère.";
+      }
+
+      return target.gender === 'm' ? "C'est mon parent." : "C'est ma parente.";
+    }
+
+    function drawLines() {
+      const svg = document.getElementById('svg-lines');
+      const wrapper = document.querySelector('.tree-wrapper');
+      if (!wrapper || !svg) return;
+      const wrapperRect = wrapper.getBoundingClientRect();
+      
+      svg.setAttribute('width', wrapper.scrollWidth);
+      svg.setAttribute('height', wrapper.scrollHeight);
+      svg.innerHTML = '';
+
+      parentChildConnections.forEach(conn => {
+        const coupleEl = document.getElementById(conn.parentCouple);
+        if (!coupleEl) return;
+        const coupleRect = coupleEl.getBoundingClientRect();
+        const startX = (coupleRect.left + coupleRect.right) / 2 - wrapperRect.left + wrapper.scrollLeft;
+        const startY = coupleRect.bottom - wrapperRect.top + wrapper.scrollTop;
+
+        conn.children.forEach(childId => {
+          const childEl = document.getElementById(childId);
+          if (!childEl) return;
+          const childRect = childEl.getBoundingClientRect();
+          const endX = (childRect.left + childRect.right) / 2 - wrapperRect.left + wrapper.scrollLeft;
+          const endY = childRect.top - wrapperRect.top + wrapper.scrollTop;
+
+          const midY = startY + (endY - startY) / 2;
+          const pathD = `M ${startX} ${startY} V ${midY} H ${endX} V ${endY}`;
+
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", pathD);
+          path.setAttribute("stroke", "#94a3b8");
+          path.setAttribute("stroke-width", "2.5");
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke-linecap", "round");
+          svg.appendChild(path);
+        });
+      });
+    }
+
+    window.addEventListener('load', drawLines);
+    window.addEventListener('resize', drawLines);
+
+    function handleCardClick(id) {
+      currentTarget = id;
+      const person = people[id];
+      document.getElementById('modalAvatar').innerText = person.avatar;
+      document.getElementById('modalName').innerText = person.name;
+      document.getElementById('modalAge').innerText = person.age;
+
+      const quizSec = document.getElementById('quizSection');
+      const defSec = document.getElementById('defaultSection');
+      const ansDiv = document.getElementById('relationAnswer');
+      ansDiv.style.display = 'none';
+
+      if (selectedMe) {
+        if (selectedMe === id) {
+          quizSec.style.display = 'none';
+          defSec.style.display = 'block';
+        } else {
+          quizSec.style.display = 'block';
+          defSec.style.display = 'none';
+          ansDiv.innerText = getRelation(selectedMe, id);
+        }
+      } else {
+        quizSec.style.display = 'none';
+        defSec.style.display = 'block';
+      }
+      document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function setAsMe() {
+      selectedMe = currentTarget;
+      document.getElementById('statusBar').innerText = `Pohled z perspektivy: ${people[selectedMe].name} (MOI)`;
+      closeModal();
+      updateTreeVisuals();
+    }
+
+    function resetSelection() {
+      selectedMe = null;
+      document.getElementById('statusBar').innerText = 'Pohled: Všichni (Vyberte postavu "MOI")';
+      updateTreeVisuals();
+    }
+
+    function updateTreeVisuals() {
+      const cards = document.querySelectorAll('.person-card');
+      cards.forEach(card => card.classList.remove('active-me'));
+      if (selectedMe) {
+        const activeCard = document.getElementById(`card-${selectedMe}`);
+        if (activeCard) activeCard.classList.add('active-me');
+      }
+    }
+
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+    function toggleAnswer() {
+      const ansDiv = document.getElementById('relationAnswer');
+      ansDiv.style.display = ansDiv.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'fr-FR';
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+    function speakName() { if (currentTarget) speakText(people[currentTarget].name); }
+    function speakAnswer() { speakText(document.getElementById('relationAnswer').innerText); }
+
+    const vocabPairs = [
+      { fr: "le père", cz: "otec" },
+      { fr: "la mère", cz: "matka" },
+      { fr: "le grand-père", cz: "dědeček" },
+      { fr: "la grand-mère", cz: "babička" },
+      { fr: "le frère", cz: "bratr" },
+      { fr: "la sœur", cz: "sestra" },
+      { fr: "l'oncle", cz: "strýc" },
+      { fr: "la tante", cz: "teta" },
+      { fr: "le cousin", cz: "bratranec" },
+      { fr: "la cousine", cz: "sestřenice" }
+    ];
+
+    let selectedCards = [];
+
+    function initMatchingGame() {
+      const grid = document.getElementById('matchingGrid');
+      grid.innerHTML = '';
+      let cardsData = [];
+
+      vocabPairs.forEach((pair, idx) => {
+        cardsData.push({ id: idx, text: pair.fr, lang: 'fr' });
+        cardsData.push({ id: idx, text: pair.cz, lang: 'cz' });
+      });
+
+      cardsData.sort(() => Math.random() - 0.5);
+
+      cardsData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'match-card';
+        card.innerText = item.text;
+        card.dataset.id = item.id;
+        card.dataset.lang = item.lang;
+        card.onclick = () => handleMatchSelect(card);
+        grid.appendChild(card);
+      });
+    }
+
+    function handleMatchSelect(card) {
+      if (card.classList.contains('matched') || card.classList.contains('selected')) return;
+
+      if (card.dataset.lang === 'fr') speakText(card.innerText);
+
+      card.classList.add('selected');
+      selectedCards.push(card);
+
+      if (selectedCards.length === 2) {
+        const [c1, c2] = selectedCards;
+        if (c1.dataset.id === c2.dataset.id && c1.dataset.lang !== c2.dataset.lang) {
+          c1.classList.remove('selected');
+          c2.classList.remove('selected');
+          c1.classList.add('matched');
+          c2.classList.add('matched');
+          selectedCards = [];
+        } else {
+          setTimeout(() => {
+            c1.classList.remove('selected');
+            c2.classList.remove('selected');
+            selectedCards = [];
+          }, 800);
+        }
+      }
+    }
+
+    const quizData = [
+      { q: "Jak se řekne francouzsky 'strýc'?", options: ["le frère", "l'oncle", "le grand-père"], a: 1 },
+      { q: "Doplň člen: ___ grand-mère", options: ["le", "la", "les"], a: 1 },
+      { q: "Jak se řekne 'má sestřenice'?", options: ["mon cousin", "ma tante", "ma cousine"], a: 2 },
+      { q: "Kdo je 'le père de mon père' (otec mého otce)?", options: ["mon oncle", "mon grand-père", "mon frère"], a: 1 },
+      { q: "Jak se francouzsky řekne 'sestra'?", options: ["la sœur", "la mère", "la fille"], a: 0 }
+    ];
+
+    let currentQuizIndex = 0;
+
+    function loadQuestion() {
+      const q = quizData[currentQuizIndex];
+      document.getElementById('quizQuestion').innerText = `${currentQuizIndex + 1}. ${q.q}`;
+      document.getElementById('quizFeedback').innerText = '';
+      document.getElementById('btnNextQuestion').style.display = 'none';
+      
+      const optsDiv = document.getElementById('quizOptions');
+      optsDiv.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.innerText = opt;
+        btn.onclick = () => checkQuizAnswer(idx, btn);
+        optsDiv.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selectedIdx, btn) {
+      const q = quizData[currentQuizIndex];
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach(o => o.onclick = null);
+
+      if (selectedIdx === q.a) {
+        btn.classList.add('correct');
+        document.getElementById('quizFeedback').innerText = "Bravo ! 🎉 Správně!";
+        document.getElementById('quizFeedback').style.color = "#166534";
+        speakText(q.options[q.a]);
+      } else {
+        btn.classList.add('wrong');
+        options[q.a].classList.add('correct');
+        document.getElementById('quizFeedback').innerText = "Špatně, správná odpověď byla zvýrazněna zeleně.";
+        document.getElementById('quizFeedback').style.color = "#991b1b";
+      }
+
+      document.getElementById('btnNextQuestion').style.display = 'inline-block';
+    }
+
+    function loadNextQuestion() {
+      currentQuizIndex = (currentQuizIndex + 1) % quizData.length;
+      loadQuestion();
+    }
+
+    window.addEventListener('load', () => {
+      initMatchingGame();
+      loadQuestion();
+    });
+  </script>
+</body>
+</html>
