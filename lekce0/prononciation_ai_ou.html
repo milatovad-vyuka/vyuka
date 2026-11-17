@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzská výslovnost: AI vs. OU</title>
+    <!-- Načtení Tailwind CSS pro moderní a responzivní design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Načtení Google Fontu Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Jemná animace pro karty a zpětnou vazbu */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Hlavní kontejner -->
+    <div class="max-w-2xl w-full mx-auto px-4 py-6 sm:py-10 flex-grow">
+        
+        <!-- Hlavička aplikace -->
+        <header class="text-center mb-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold tracking-wide uppercase mb-2">
+                <span>🇫🇷</span> Fonetika pro začátečníky
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Francouzské dvojhlásky <span class="text-indigo-600">ai</span> a <span class="text-rose-600">ou</span>
+            </h1>
+            <p class="text-slate-500 text-sm sm:text-base mt-1">
+                Poslouchejte, čtěte a trénujte správnou výslovnost základních slov.
+            </p>
+        </header>
+
+        <!-- Sbalitelná karta: Přehled pravidel -->
+        <div class="mb-6 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <button id="toggleRulesBtn" type="button" class="w-full px-5 py-3.5 flex items-center justify-between text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors focus:outline-none">
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Přehled pravidel výslovnosti
+                </span>
+                <svg id="rulesChevron" class="w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="rulesContent" class="hidden px-5 pb-5 pt-1 border-t border-slate-100 bg-slate-50/50">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                    <div class="p-3.5 rounded-xl bg-indigo-50/80 border border-indigo-100">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-indigo-900 text-lg">ai → [e] / [ɛ]</span>
+                            <span class="text-xs font-medium px-2 py-0.5 rounded bg-indigo-200/70 text-indigo-800">jako české „e“</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-indigo-800/90 leading-relaxed">
+                            Čte se jako otevřené české <strong>[e]</strong> (např. <em>paire</em> [pér]). <strong>Nikdy</strong> se nečte jako české „aj“!
+                        </p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-rose-50/80 border border-rose-100">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-rose-900 text-lg">ou → [u]</span>
+                            <span class="text-xs font-medium px-2 py-0.5 rounded bg-rose-200/70 text-rose-800">jako české „u“</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-rose-800/90 leading-relaxed">
+                            Čte se jako jednoduché české <strong>[u]</strong> (např. <em>pour</em> [púr]). <strong>Nikdy</strong> se nečte jako „ou“ ve slově <em>louka</em>!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upozornění pro případ nepodporovaného hlasového syntetizéru -->
+        <div id="speechWarning" class="hidden mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm flex items-start gap-3">
+            <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <div>
+                <p class="font-semibold">Francouzský hlas nebyl v prohlížeči nalezen</p>
+                <p class="text-xs mt-0.5 text-amber-700">Váš prohlížeč nebo zařízení nemusí podporovat automatické předčítání ve francouzštině (fr-FR). Cvičení můžete nadále používat pomocí fonetického přepisu a režimu Doplňovačka.</p>
+            </div>
+        </div>
+
+        <!-- Přepínač režimů (Taby) -->
+        <div class="grid grid-cols-2 gap-2 p-1.5 bg-slate-200/70 rounded-2xl mb-6">
+            <button id="tabListen" type="button" class="py-2.5 px-3 rounded-xl font-semibold text-sm transition-all bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-2">
+                <span>🎧</span> 1. Poslech a výběr
+            </button>
+            <button id="tabFill" type="button" class="py-2.5 px-3 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2">
+                <span>✍️</span> 2. Doplňovačka
+            </button>
+        </div>
+
+        <!-- Hlavní karta cvičení -->
+        <main class="bg-white rounded-3xl shadow-md border border-slate-200/80 p-5 sm:p-8">
+            
+            <!-- Horní lišta: Skóre a ovládání -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-100 text-sm">
+                <div class="flex items-center gap-3">
+                    <span class="font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-full">
+                        Otázka <span id="questionCounter" class="text-indigo-600">1</span> / <span id="totalQuestions">10</span>
+                    </span>
+                    <span class="font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
+                        Skóre: <span id="scoreCounter">0</span>
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="streakBadge" class="hidden font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs">
+                        🔥 <span id="streakCount">0</span> v řadě
+                    </span>
+                    <button id="restartBtn" type="button" title="Zamíchat a začít znovu" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Obsah aktivní otázky -->
+            <div id="quizArea">
+                
+                <!-- Ovládání viditelnosti textu (pouze pro Režim 1: Poslech) -->
+                <div id="listenOptionsBar" class="flex justify-center mb-4">
+                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-500 hover:text-slate-700 select-none bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200/70">
+                        <input type="checkbox" id="showWordToggle" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <span>Zobrazit psané slovo před odpovědí (snazší)</span>
+                    </label>
+                </div>
+
+                <!-- Středová část: Audio tlačítko a zobrazení slova -->
+                <div class="text-center my-6">
+                    <div class="flex items-center justify-center gap-3 mb-4">
+                        <button id="playAudioBtn" type="button" class="group inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-semibold shadow-md shadow-indigo-200 transition-all">
+                            <svg id="speakerIcon" class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                            <span>Poslechnout slovo</span>
+                        </button>
+                        <button id="playSlowBtn" type="button" title="Přehrát pomalu" class="p-4 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-medium transition-all text-sm flex items-center gap-1">
+                            <span>🐢</span>
+                            <span class="hidden sm:inline">Pomalu</span>
+                        </button>
+                    </div>
+
+                    <!-- Zobrazení slova / doplňovačky -->
+                    <div id="promptDisplay" class="min-h-[84px] flex flex-col items-center justify-center">
+                        <!-- Dynamicky vyplňováno JavaScriptem -->
+                    </div>
+                </div>
+
+                <!-- Tlačítka pro výběr odpovědi -->
+                <div id="answerButtons" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-6">
+                    <button type="button" data-choice="ai" class="choice-btn py-4 px-5 rounded-2xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group">
+                        <span class="text-2xl font-bold text-slate-800 group-hover:text-indigo-700">ai</span>
+                        <span class="text-xs font-medium text-slate-500 group-hover:text-indigo-600">čte se jako české [e]</span>
+                    </button>
+                    <button type="button" data-choice="ou" class="choice-btn py-4 px-5 rounded-2xl border-2 border-slate-200 hover:border-rose-500 hover:bg-rose-50/50 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group">
+                        <span class="text-2xl font-bold text-slate-800 group-hover:text-rose-700">ou</span>
+                        <span class="text-xs font-medium text-slate-500 group-hover:text-rose-600">čte se jako české [u]</span>
+                    </button>
+                </div>
+
+                <!-- Zpětná vazba po odpovědi -->
+                <div id="feedbackBox" class="hidden mt-6 p-5 rounded-2xl border animate-fade-in">
+                    <div class="flex items-start gap-3">
+                        <div id="feedbackIcon" class="text-2xl shrink-0"></div>
+                        <div class="flex-grow">
+                            <h3 id="feedbackTitle" class="font-bold text-base"></h3>
+                            <div class="mt-2 p-3 rounded-xl bg-white/80 border border-black/5">
+                                <div class="flex flex-wrap items-baseline gap-2">
+                                    <span id="revealWord" class="text-xl font-bold text-slate-900"></span>
+                                    <span id="revealIpa" class="text-sm font-mono text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded"></span>
+                                    <span class="text-slate-400">–</span>
+                                    <span id="revealMeaning" class="text-sm font-medium text-slate-700"></span>
+                                </div>
+                                <p id="revealTip" class="text-xs text-slate-600 mt-1.5 leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="nextBtn" type="button" class="mt-4 w-full py-3.5 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold transition-colors flex items-center justify-center gap-2">
+                        <span>Další slovo</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Obrazovka po dokončení sady otázek -->
+            <div id="summaryArea" class="hidden text-center py-6 animate-fade-in">
+                <div id="summaryEmoji" class="text-5xl mb-3">🎉</div>
+                <h2 class="text-2xl font-bold text-slate-900">Cvičení dokončeno!</h2>
+                <p id="summaryText" class="text-slate-600 mt-2 max-w-md mx-auto"></p>
+                
+                <div class="my-6 inline-flex items-center gap-6 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div>
+                        <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Úspěšnost</div>
+                        <div id="summaryPercent" class="text-2xl font-bold text-indigo-600">100 %</div>
+                    </div>
+                    <div class="w-px h-8 bg-slate-200"></div>
+                    <div>
+                        <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Správně</div>
+                        <div id="summaryFraction" class="text-2xl font-bold text-slate-800">10 / 10</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-center mt-2">
+                    <button id="playAgainBtn" type="button" class="py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-sm transition-colors">
+                        Procvičit znovu (nové pořadí)
+                    </button>
+                    <button id="switchModeSummaryBtn" type="button" class="py-3.5 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition-colors">
+                        Vyzkoušet druhý režim
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Patička -->
+    <footer class="text-center py-5 px-4 text-xs text-slate-400">
+        Tip: Klikněte na tlačítko „Poslechnout slovo“ opakovaně a zkuste slovo vyslovit nahlas po mluvčím.
+    </footer>
+
+    <script>
+        /**
+         * Slovní zásoba pro procvičování dvojhlásek 'ai' a 'ou'.
+         * Každá položka obsahuje:
+         * - word: celé francouzské slovo
+         * - masked: slovo se skrytou dvojhláskou pro režim Doplňovačka
+         * - target: správná dvojhláska ('ai' nebo 'ou')
+         * - ipa: mezinárodní fonetický přepis
+         * - meaning: český význam
+         * - tip: vysvětlující poznámka k výslovnosti
+         */
+        const VOCABULARY = [
+            // Slova s 'ai' -> [e] / [ɛ]
+            {
+                word: "paire",
+                masked: "p _ _ re",
+                target: "ai",
+                ipa: "/pɛʁ/",
+                meaning: "pár (dvojice)",
+                tip: "Dvojhláska „ai“ se vyslovuje jako otevřené české [e]. Koncové „-e“ je němé."
+            },
+            {
+                word: "lait",
+                masked: "l _ _ t",
+                target: "ai",
+                ipa: "/lɛ/",
+                meaning: "mléko",
+                tip: "Čte se jednoduše [le]. Koncové „-t“ se ve francouzštině nevyslovuje."
+            },
+            {
+                word: "mais",
+                masked: "m _ _ s",
+                target: "ai",
+                ipa: "/mɛ/",
+                meaning: "ale",
+                tip: "Čte se [me]. Koncové „-s“ je němé."
+            },
+            {
+                word: "vrai",
+                masked: "vr _ _",
+                target: "ai",
+                ipa: "/vʁɛ/",
+                meaning: "pravdivý / pravda",
+                tip: "Čisté zakončení na otevřené [e] – vyslovujeme [vre]."
+            },
+            {
+                word: "chaise",
+                masked: "ch _ _ se",
+                target: "ai",
+                ipa: "/ʃɛz/",
+                meaning: "židle",
+                tip: "Spojení „ch“ se čte jako české [š], „ai“ jako [e] a „s“ mezi samohláskami jako [z] → [šéz]."
+            },
+            {
+                word: "fraise",
+                masked: "fr _ _ se",
+                target: "ai",
+                ipa: "/fʁɛz/",
+                meaning: "jahoda",
+                tip: "Podobně jako u slova chaise se „s“ čte jako [z] a koncové „-e“ je němé → [fréz]."
+            },
+            {
+                word: "maison",
+                masked: "m _ _ son",
+                target: "ai",
+                ipa: "/mɛ.zɔ̃/",
+                meaning: "dům",
+                tip: "První slabika zní [me], druhá obsahuje nosovku [zõ]."
+            },
+            {
+                word: "aimer",
+                masked: "_ _ mer",
+                target: "ai",
+                ipa: "/ɛ.me/",
+                meaning: "mít rád / milovat",
+                tip: "Na začátku slyšíte otevřené [e], koncovka slovesa „-er“ se čte jako zavřené [e]."
+            },
+
+            // Slova s 'ou' -> [u]
+            {
+                word: "pour",
+                masked: "p _ _ r",
+                target: "ou",
+                ipa: "/puʁ/",
+                meaning: "pro",
+                tip: "Dvojhláska „ou“ se vždy čte jako jednoduché české [u], tedy [púr]."
+            },
+            {
+                word: "sous",
+                masked: "s _ _ s",
+                target: "ou",
+                ipa: "/su/",
+                meaning: "pod",
+                tip: "Čte se jako české [su]. Koncové „-s“ se nevyslovuje."
+            },
+            {
+                word: "loup",
+                masked: "l _ _ p",
+                target: "ou",
+                ipa: "/lu/",
+                meaning: "vlk",
+                tip: "Čte se [lu]. Koncové „-p“ je němé."
+            },
+            {
+                word: "chou",
+                masked: "ch _ _",
+                target: "ou",
+                ipa: "/ʃu/",
+                meaning: "zelí (nebo „miláček“)",
+                tip: "Spojení „ch“ [š] + „ou“ [u] dá dohromady jednoduché [šu]."
+            },
+            {
+                word: "rouge",
+                masked: "r _ _ ge",
+                target: "ou",
+                ipa: "/ʁuʒ/",
+                meaning: "červený",
+                tip: "Písmeno „g“ před „e“ se čte jako české [ž] → [rúž]."
+            },
+            {
+                word: "jour",
+                masked: "j _ _ r",
+                target: "ou",
+                ipa: "/ʒuʁ/",
+                meaning: "den",
+                tip: "Francouzské „j“ se čte jako české [ž], dohromady tedy [žúr]."
+            },
+            {
+                word: "douze",
+                masked: "d _ _ ze",
+                target: "ou",
+                ipa: "/duz/",
+                meaning: "dvanáct",
+                tip: "Čte se [dúz], koncové „-e“ je němé."
+            },
+            {
+                word: "poulet",
+                masked: "p _ _ let",
+                target: "ou",
+                ipa: "/pu.lɛ/",
+                meaning: "kuře",
+                tip: "V první slabice je „ou“ [u] → [pu], koncové „-et“ pak zní jako otevřené [e] → [pule]."
+            }
+        ];
+
+        // Stav aplikace
+        const state = {
+            mode: 'listen',          // 'listen' (Poslech a výběr) nebo 'fill' (Doplňovačka)
+            questions: [],           // Zamíchaná sada otázek pro aktuální kolo
+            currentIndex: 0,         // Index aktuální otázky
+            score: 0,                // Počet správných odpovědí
+            streak: 0,               // Počet správných odpovědí v řadě
+            answered: false,         // Zda uživatel na aktuální otázku již odpověděl
+            showWordInListen: false, // Zda zobrazovat slovo v režimu poslechu
+            frenchVoice: null,       // Nalezený francouzský hlas v prohlížeči
+            speechSupported: 'speechSynthesis' in window
+        };
+
+        const ROUND_LENGTH = 10; // Počet otázek v jedné sérii
+
+        // Reference na DOM elementy
+        const els = {
+            toggleRulesBtn: document.getElementById('toggleRulesBtn'),
+            rulesContent: document.getElementById('rulesContent'),
+            rulesChevron: document.getElementById('rulesChevron'),
+            speechWarning: document.getElementById('speechWarning'),
+            tabListen: document.getElementById('tabListen'),
+            tabFill: document.getElementById('tabFill'),
+            questionCounter: document.getElementById('questionCounter'),
+            totalQuestions: document.getElementById('totalQuestions'),
+            scoreCounter: document.getElementById('scoreCounter'),
+            streakBadge: document.getElementById('streakBadge'),
+            streakCount: document.getElementById('streakCount'),
+            restartBtn: document.getElementById('restartBtn'),
+            quizArea: document.getElementById('quizArea'),
+            listenOptionsBar: document.getElementById('listenOptionsBar'),
+            showWordToggle: document.getElementById('showWordToggle'),
+            playAudioBtn: document.getElementById('playAudioBtn'),
+            playSlowBtn: document.getElementById('playSlowBtn'),
+            promptDisplay: document.getElementById('promptDisplay'),
+            answerButtons: document.getElementById('answerButtons'),
+            feedbackBox: document.getElementById('feedbackBox'),
+            feedbackIcon: document.getElementById('feedbackIcon'),
+            feedbackTitle: document.getElementById('feedbackTitle'),
+            revealWord: document.getElementById('revealWord'),
+            revealIpa: document.getElementById('revealIpa'),
+            revealMeaning: document.getElementById('revealMeaning'),
+            revealTip: document.getElementById('revealTip'),
+            nextBtn: document.getElementById('nextBtn'),
+            summaryArea: document.getElementById('summaryArea'),
+            summaryEmoji: document.getElementById('summaryEmoji'),
+            summaryText: document.getElementById('summaryText'),
+            summaryPercent: document.getElementById('summaryPercent'),
+            summaryFraction: document.getElementById('summaryFraction'),
+            playAgainBtn: document.getElementById('playAgainBtn'),
+            switchModeSummaryBtn: document.getElementById('switchModeSummaryBtn')
+        };
+
+        /**
+         * Inicializace hlasového syntetizéru (Web Speech API)
+         */
+        function initSpeech() {
+            if (!state.speechSupported) {
+                els.speechWarning.classList.remove('hidden');
+                return;
+            }
+
+            const loadVoices = () => {
+                try {
+                    const voices = window.speechSynthesis.getVoices();
+                    if (voices.length > 0) {
+                        // Preferujeme nativní francouzský hlas (fr-FR nebo jakýkoli fr)
+                        state.frenchVoice = voices.find(v => v.lang === 'fr-FR') || 
+                                            voices.find(v => v.lang.startsWith('fr')) || 
+                                            null;
+                        if (!state.frenchVoice) {
+                            els.speechWarning.classList.remove('hidden');
+                        } else {
+                            els.speechWarning.classList.add('hidden');
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Chyba při načítání hlasů:", err);
+                }
+            };
+
+            loadVoices();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+
+        /**
+         * Přehraje zadané francouzské slovo nahlas
+         * @param {string} text - Slovo k přečtení
+         * @param {number} rate - Rychlost řeči (1.0 = normální, 0.65 = pomalá)
+         */
+        function speakWord(text, rate = 0.95) {
+            if (!state.speechSupported) return;
+
+            try {
+                // Zrušení případného probíhajícího čtení
+                window.speechSynthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = rate;
+                if (state.frenchVoice) {
+                    utterance.voice = state.frenchVoice;
+                }
+
+                // Vizuální odezva na tlačítku při přehrávání
+                els.playAudioBtn.classList.add('ring-4', 'ring-indigo-200');
+                utterance.onend = () => {
+                    els.playAudioBtn.classList.remove('ring-4', 'ring-indigo-200');
+                };
+                utterance.onerror = () => {
+                    els.playAudioBtn.classList.remove('ring-4', 'ring-indigo-200');
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } catch (error) {
+                console.error("Nepodařilo se přehrát zvuk:", error);
+            }
+        }
+
+        /**
+         * Pomocná funkce pro zamíchání pole (Fisher-Yates shuffle)
+         */
+        function shuffleArray(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        /**
+         * Spustí novou sérii otázek
+         */
+        function startNewRound() {
+            state.questions = shuffleArray(VOCABULARY).slice(0, ROUND_LENGTH);
+            state.currentIndex = 0;
+            state.score = 0;
+            state.streak = 0;
+            state.answered = false;
+
+            els.totalQuestions.textContent = state.questions.length;
+            els.summaryArea.classList.add('hidden');
+            els.quizArea.classList.remove('hidden');
+
+            updateStatsUI();
+            renderQuestion();
+        }
+
+        /**
+         * Aktualizuje horní lištu se skóre a sérií
+         */
+        function updateStatsUI() {
+            els.questionCounter.textContent = Math.min(state.currentIndex + 1, state.questions.length);
+            els.scoreCounter.textContent = state.score;
+
+            if (state.streak >= 2) {
+                els.streakBadge.classList.remove('hidden');
+                els.streakCount.textContent = state.streak;
+            } else {
+                els.streakBadge.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Vykreslí aktuální otázku podle zvoleného režimu
+         */
+        function renderQuestion() {
+            const current = state.questions[state.currentIndex];
+            state.answered = false;
+
+            // Skrytí zpětné vazby a reset tlačítek odpovědí
+            els.feedbackBox.classList.add('hidden');
+            const choiceBtns = els.answerButtons.querySelectorAll('.choice-btn');
+            choiceBtns.forEach(btn => {
+                btn.disabled = false;
+                btn.className = "choice-btn py-4 px-5 rounded-2xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group cursor-pointer";
+            });
+
+            if (state.mode === 'listen') {
+                els.listenOptionsBar.classList.remove('hidden');
+                
+                if (state.showWordInListen) {
+                    els.promptDisplay.innerHTML = `
+                        <div class="text-3xl sm:text-4xl font-bold text-slate-800 tracking-wide">${current.word}</div>
+                        <p class="text-xs text-slate-400 mt-2">Jakou dvojhlásku ve slově slyšíte a vidíte?</p>
+                    `;
+                } else {
+                    els.promptDisplay.innerHTML = `
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 text-slate-500 text-sm font-medium">
+                            <span>🙈</span> Slovo je skryté – poslouchejte zvuk
+                        </div>
+                        <p class="text-xs text-slate-400 mt-2">Slyšíte ve slově české <strong>[e] (ai)</strong> nebo <strong>[u] (ou)</strong>?</p>
+                    `;
+                }
+            } else {
+                // Režim 2: Doplňovačka
+                els.listenOptionsBar.classList.add('hidden');
+                els.promptDisplay.innerHTML = `
+                    <div class="text-3xl sm:text-4xl font-bold text-slate-800 tracking-wider font-mono bg-slate-50 px-6 py-2.5 rounded-2xl border border-slate-200/80">
+                        ${current.masked}
+                    </div>
+                    <div class="mt-2.5 text-sm font-medium text-slate-600">
+                        Český význam: <span class="text-indigo-700 font-semibold">${current.meaning}</span>
+                    </div>
+                `;
+            }
+
+            updateStatsUI();
+        }
+
+        /**
+         * Zpracuje odpověď uživatele
+         * @param {string} selectedChoice - 'ai' nebo 'ou'
+         */
+        function handleAnswer(selectedChoice) {
+            if (state.answered) return;
+            state.answered = true;
+
+            const current = state.questions[state.currentIndex];
+            const isCorrect = selectedChoice === current.target;
+
+            // Aktualizace skóre a série
+            if (isCorrect) {
+                state.score++;
+                state.streak++;
+            } else {
+                state.streak = 0;
+            }
+            updateStatsUI();
+
+            // Zvýraznění tlačítek odpovědí
+            const choiceBtns = els.answerButtons.querySelectorAll('.choice-btn');
+            choiceBtns.forEach(btn => {
+                btn.disabled = true;
+                const val = btn.dataset.choice;
+
+                if (val === current.target) {
+                    // Správná odpověď (zelená)
+                    btn.className = "choice-btn py-4 px-5 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-900 flex flex-col items-center justify-center gap-1 shadow-sm";
+                } else if (val === selectedChoice && !isCorrect) {
+                    // Špatná volba uživatele (červená)
+                    btn.className = "choice-btn py-4 px-5 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-900 flex flex-col items-center justify-center gap-1 opacity-90";
+                } else {
+                    // Ostatní neaktivní
+                    btn.className = "choice-btn py-4 px-5 rounded-2xl border-2 border-slate-100 bg-slate-50/50 text-slate-400 flex flex-col items-center justify-center gap-1 opacity-60";
+                }
+            });
+
+            // Zobrazení detailní zpětné vazby
+            els.feedbackBox.classList.remove('hidden', 'bg-emerald-50/80', 'border-emerald-200', 'bg-rose-50/80', 'border-rose-200');
+            if (isCorrect) {
+                els.feedbackBox.classList.add('bg-emerald-50/80', 'border-emerald-200');
+                els.feedbackIcon.textContent = "✅";
+                els.feedbackTitle.textContent = "Výborně! Správná odpověď.";
+                els.feedbackTitle.className = "font-bold text-base text-emerald-900";
+            } else {
+                els.feedbackBox.classList.add('bg-rose-50/80', 'border-rose-200');
+                els.feedbackIcon.textContent = "❌";
+                els.feedbackTitle.textContent = `Nevadí, správně je dvojhláska „${current.target}“.`;
+                els.feedbackTitle.className = "font-bold text-base text-rose-900";
+            }
+
+            // Zvýraznění dvojhlásky v odhaleném slově
+            const highlightedWord = current.word.replace(
+                current.target, 
+                `<span class="underline decoration-2 underline-offset-4 ${current.target === 'ai' ? 'text-indigo-600 decoration-indigo-400' : 'text-rose-600 decoration-rose-400'}">${current.target}</span>`
+            );
+
+            els.revealWord.innerHTML = highlightedWord;
+            els.revealIpa.textContent = current.ipa;
+            els.revealMeaning.textContent = current.meaning;
+            els.revealTip.textContent = current.tip;
+
+            // Změna textu tlačítka Další u poslední otázky
+            if (state.currentIndex === state.questions.length - 1) {
+                els.nextBtn.querySelector('span').textContent = "Zobrazit výsledky";
+            } else {
+                els.nextBtn.querySelector('span').textContent = "Další slovo";
+            }
+
+            // Pokud bylo v doplňovačce slovo skryté, automaticky ho ještě jednou přehrajeme pro upevnění
+            speakWord(current.word, 0.95);
+        }
+
+        /**
+         * Přechod na další otázku nebo zobrazení závěrečného shrnutí
+         */
+        function nextQuestion() {
+            if (state.currentIndex < state.questions.length - 1) {
+                state.currentIndex++;
+                renderQuestion();
+                // Automatické přehrání nového slova v režimu poslechu
+                if (state.mode === 'listen') {
+                    speakWord(state.questions[state.currentIndex].word, 0.95);
+                }
+            } else {
+                showSummary();
+            }
+        }
+
+        /**
+         * Zobrazí závěrečnou obrazovku s hodnocením
+         */
+        function showSummary() {
+            els.quizArea.classList.add('hidden');
+            els.summaryArea.classList.remove('hidden');
+
+            const total = state.questions.length;
+            const percent = Math.round((state.score / total) * 100);
+
+            els.summaryPercent.textContent = `${percent} %`;
+            els.summaryFraction.textContent = `${state.score} / ${total}`;
+
+            if (percent === 100) {
+                els.summaryEmoji.textContent = "🏆";
+                els.summaryText.textContent = "Perfektní výkon! Rozlišování francouzského [e] a [u] máte v malíku.";
+            } else if (percent >= 70) {
+                els.summaryEmoji.textContent = "👏";
+                els.summaryText.textContent = "Skvělá práce! Většinu slov jste určili naprosto správně.";
+            } else {
+                els.summaryEmoji.textContent = "💪";
+                els.summaryText.textContent = "Dobrý začátek! Zkuste si slova ještě párkrát poslechnout a opakovat nahlas.";
+            }
+        }
+
+        /**
+         * Přepnutí mezi režimem Poslech a Doplňovačka
+         */
+        function switchMode(newMode) {
+            if (state.mode === newMode) return;
+            state.mode = newMode;
+
+            if (newMode === 'listen') {
+                els.tabListen.className = "py-2.5 px-3 rounded-xl font-semibold text-sm transition-all bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-2";
+                els.tabFill.className = "py-2.5 px-3 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2";
+            } else {
+                els.tabFill.className = "py-2.5 px-3 rounded-xl font-semibold text-sm transition-all bg-white text-indigo-600 shadow-sm flex items-center justify-center gap-2";
+                els.tabListen.className = "py-2.5 px-3 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2";
+            }
+
+            startNewRound();
+        }
+
+        // --- Nastavení posluchačů událostí (Event Listeners) ---
+
+        // Sbalení / rozbalení přehledu pravidel
+        els.toggleRulesBtn.addEventListener('click', () => {
+            const isHidden = els.rulesContent.classList.toggle('hidden');
+            els.rulesChevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        // Přepínání tabů
+        els.tabListen.addEventListener('click', () => switchMode('listen'));
+        els.tabFill.addEventListener('click', () => switchMode('fill'));
+
+        // Přepínač zobrazení slova v režimu poslechu
+        els.showWordToggle.addEventListener('change', (e) => {
+            state.showWordInListen = e.target.checked;
+            if (!state.answered) {
+                renderQuestion();
+            }
+        });
+
+        // Tlačítka pro přehrání zvuku
+        els.playAudioBtn.addEventListener('click', () => {
+            const current = state.questions[state.currentIndex];
+            if (current) speakWord(current.word, 0.95);
+        });
+
+        els.playSlowBtn.addEventListener('click', () => {
+            const current = state.questions[state.currentIndex];
+            if (current) speakWord(current.word, 0.6);
+        });
+
+        // Kliknutí na odpověď (ai / ou)
+        els.answerButtons.addEventListener('click', (e) => {
+            const btn = e.target.closest('.choice-btn');
+            if (btn && !btn.disabled) {
+                handleAnswer(btn.dataset.choice);
+            }
+        });
+
+        // Další otázka a restart
+        els.nextBtn.addEventListener('click', nextQuestion);
+        els.restartBtn.addEventListener('click', startNewRound);
+        els.playAgainBtn.addEventListener('click', startNewRound);
+        els.switchModeSummaryBtn.addEventListener('click', () => {
+            switchMode(state.mode === 'listen' ? 'fill' : 'listen');
+        });
+
+        // Klávesové zkratky (Mezerník = přehrát zvuk, Enter = další otázka)
+        document.addEventListener('keydown', (e) => {
+            if (els.summaryArea.classList.contains('hidden')) {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    const current = state.questions[state.currentIndex];
+                    if (current) speakWord(current.word, 0.95);
+                } else if (e.code === 'Enter' && state.answered) {
+                    e.preventDefault();
+                    nextQuestion();
+                }
+            }
+        });
+
+        // Spuštění aplikace po načtení stránky
+        window.addEventListener('DOMContentLoaded', () => {
+            initSpeech();
+            startNewRound();
+        });
+    </script>
+</body>
+</html>
