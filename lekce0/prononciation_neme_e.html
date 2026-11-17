@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzská výslovnost: Němé koncové -e</title>
+    <!-- Tailwind CSS pro moderní responzivní vzhled -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.28s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Francouzská trikolóra jako jemný horní akcent -->
+    <div class="w-full h-1.5 flex">
+        <div class="w-1/3 bg-blue-600"></div>
+        <div class="w-1/3 bg-white"></div>
+        <div class="w-1/3 bg-rose-600"></div>
+    </div>
+
+    <!-- Hlavní kontejner -->
+    <div class="max-w-3xl w-full mx-auto px-4 py-6 sm:py-10 flex-grow">
+        
+        <!-- Hlavička aplikace -->
+        <header class="text-center mb-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold tracking-wide uppercase mb-2.5">
+                <span>🇫🇷</span> Francouzská fonetika
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Němé koncové <span class="text-slate-400 line-through decoration-rose-500 decoration-2">-e</span>
+            </h1>
+            <p class="text-slate-500 text-sm sm:text-base mt-1.5 max-w-xl mx-auto">
+                Procvičování minimálních párů: jak koncové <strong>-e</strong> probouzí souhlásky a jak se liší od čárkovaného <strong>-é</strong>.
+            </p>
+        </header>
+
+        <!-- Horní lišta: Tahák pravidel + Přehled 13 párů -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+            <!-- Sbalitelný tahák pravidel -->
+            <button id="toggleRulesBtn" type="button" class="bg-white px-4 py-3.5 rounded-2xl shadow-xs border border-slate-200 flex items-center justify-between text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
+                <span class="flex items-center gap-2.5 text-sm">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">💡</span>
+                    <span>Tahák: 3 základní pravidla</span>
+                </span>
+                <svg id="rulesChevron" class="w-4 h-4 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <!-- Sbalitelný přehled 13 minimálních párů -->
+            <button id="togglePairsBtn" type="button" class="bg-white px-4 py-3.5 rounded-2xl shadow-xs border border-slate-200 flex items-center justify-between text-left font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
+                <span class="flex items-center gap-2.5 text-sm">
+                    <span class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">📖</span>
+                    <span>Přehled slovíček (13 párů)</span>
+                </span>
+                <svg id="pairsChevron" class="w-4 h-4 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+        </div>
+
+        <!-- Rozbalovací karta: Tahák pravidel -->
+        <div id="rulesContent" class="hidden mb-6 bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-3 animate-fade-in">
+            <!-- Pravidlo 1 -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <span class="font-bold text-slate-900 text-sm sm:text-base">1. Němé -e na konci se nečte</span>
+                    <span class="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-white border border-slate-200 text-slate-700">ami [ami] = amie [ami]</span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    Samotné koncové <strong>-e</strong> bez čárky nevyslovujeme. Stojí-li za samohláskou (jako u <em>amie</em>), výslovnost se vůbec nezmění.
+                </p>
+            </div>
+
+            <!-- Pravidlo 2 -->
+            <div class="p-3.5 rounded-xl bg-blue-50/80 border border-blue-100">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <span class="font-bold text-blue-950 text-sm sm:text-base">2. Němé -e probudí souhlásku před sebou</span>
+                    <span class="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-white border border-blue-200 text-blue-800">petit [peti] → petite [petit]</span>
+                </div>
+                <p class="text-xs sm:text-sm text-blue-900/85 leading-relaxed">
+                    Bez <strong>-e</strong> bývá koncová souhláska němá (<em>petit</em> [peti], <em>grand</em> [grã], <em>gris</em> [gri]). Přidáním němého <strong>-e</strong> tato souhláska ožije a vysloví se (<em>petite</em> [petit], <em>grande</em> [grãd], <em>grise</em> [griz]).
+                </p>
+            </div>
+
+            <!-- Pravidlo 3 -->
+            <div class="p-3.5 rounded-xl bg-rose-50/80 border border-rose-100">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <span class="font-bold text-rose-950 text-sm sm:text-base">3. Čárkované -é se čte jako české [é]</span>
+                    <span class="text-xs font-mono font-semibold px-2.5 py-0.5 rounded bg-white border border-rose-200 text-rose-800">porte [port] vs. porté [porté]</span>
+                </div>
+                <p class="text-xs sm:text-sm text-rose-900/85 leading-relaxed">
+                    Má-li písmeno <strong>é</strong> na konci čárku doprava, nikdy není němé! Vyslovuje se zřetelně jako [é]: <em>parle</em> [parl] vs. <em>parlé</em> [parlé].
+                </p>
+            </div>
+        </div>
+
+        <!-- Rozbalovací karta: Přehled všech 13 minimálních párů -->
+        <div id="pairsContent" class="hidden mb-6 bg-white rounded-2xl shadow-xs border border-slate-200 p-4 sm:p-5 animate-fade-in">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-sm font-bold text-slate-800">Všech 13 minimálních párů (klikněte na 🔊 pro poslech)</h2>
+            </div>
+            <div class="overflow-x-auto max-h-80 overflow-y-auto pr-1">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead class="sticky top-0 bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-[11px] tracking-wider">
+                        <tr>
+                            <th class="py-2 px-2.5">Bez -e / základní tvar</th>
+                            <th class="py-2 px-2.5">S koncovým -e / -é</th>
+                            <th class="py-2 px-2.5 hidden sm:table-cell">Pravidlo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pairsTableBody" class="divide-y divide-slate-100">
+                        <!-- Dynamicky naplněno JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Upozornění pro případ nepodporovaného hlasového syntetizéru -->
+        <div id="speechWarning" class="hidden mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm flex items-start gap-3">
+            <span class="text-lg shrink-0">⚠️</span>
+            <div>
+                <p class="font-semibold">Francouzský hlas není v prohlížeči dostupný</p>
+                <p class="text-xs mt-0.5 text-amber-700">Váš prohlížeč nepodporuje automatické předčítání (fr-FR). Úrovně <strong>2. Jak se to čte?</strong> a <strong>3. Z výslovnosti ke slovu</strong> můžete plnohodnotně procvičovat i bez zvuku.</p>
+            </div>
+        </div>
+
+        <!-- Přepínač 3 úrovní (Taby) -->
+        <nav aria-label="Výběr úrovně cvičení" class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 bg-slate-200/80 rounded-2xl mb-6">
+            <button id="tab1" type="button" data-mode="1" class="mode-tab py-2.5 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-white text-blue-700 shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>🎧</span> 1. Poslech (A / B)
+            </button>
+            <button id="tab2" type="button" data-mode="2" class="mode-tab py-2.5 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>🗣️</span> 2. Jak se to čte?
+            </button>
+            <button id="tab3" type="button" data-mode="3" class="mode-tab py-2.5 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 cursor-pointer">
+                <span>✍️</span> 3. Z výslovnosti ke slovu
+            </button>
+        </nav>
+
+        <!-- Hlavní karta cvičení -->
+        <main class="bg-white rounded-3xl shadow-md border border-slate-200/80 p-5 sm:p-8">
+            
+            <!-- Horní lišta: Skóre, série a progress bar -->
+            <div class="mb-6">
+                <div class="flex flex-wrap items-center justify-between gap-2 text-sm mb-2.5">
+                    <div class="flex items-center gap-2.5">
+                        <span class="font-semibold text-slate-700 bg-slate-100 px-3 py-1 rounded-full text-xs sm:text-sm">
+                            Otázka <span id="questionCounter" class="text-blue-700 font-bold">1</span> / <span id="totalQuestions">10</span>
+                        </span>
+                        <span class="font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full text-xs sm:text-sm">
+                            Skóre: <span id="scoreCounter" class="font-bold">0</span>
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="streakBadge" class="hidden font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full text-xs">
+                            🔥 <span id="streakCount">0</span> v řadě
+                        </span>
+                        <button id="restartBtn" type="button" title="Zamíchat a začít kolo znovu" class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <!-- Progress bar -->
+                <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-blue-600 transition-all duration-300 rounded-full" style="width: 10%;"></div>
+                </div>
+            </div>
+
+            <!-- Obsah aktivní otázky -->
+            <div id="quizArea">
+                
+                <!-- Volitelná nápověda pro aktuální úroveň -->
+                <div id="modeOptionBar" class="flex justify-center mb-4"></div>
+
+                <!-- Zadání otázky -->
+                <div id="promptSection" class="text-center my-4"></div>
+
+                <!-- Možnosti odpovědí -->
+                <div id="answerContainer" class="mt-6"></div>
+
+                <!-- Zpětná vazba po odpovědi -->
+                <div id="feedbackBox" class="hidden mt-6 p-5 rounded-2xl border animate-fade-in">
+                    <div class="flex items-start gap-3">
+                        <div id="feedbackIcon" class="text-2xl shrink-0"></div>
+                        <div class="flex-grow">
+                            <h3 id="feedbackTitle" class="font-bold text-base"></h3>
+                            <div id="feedbackDetailCard" class="mt-3 p-3.5 rounded-xl bg-white/95 border border-black/5 space-y-3"></div>
+                        </div>
+                    </div>
+                    <button id="nextBtn" type="button" class="mt-4 w-full py-3.5 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                        <span>Další otázka</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Závěrečná obrazovka po dokončení kola -->
+            <div id="summaryArea" class="hidden text-center py-6 animate-fade-in">
+                <div id="summaryEmoji" class="text-5xl mb-3">🎉</div>
+                <h2 class="text-2xl font-bold text-slate-900">Kolo dokončeno!</h2>
+                <p id="summaryText" class="text-slate-600 mt-2 max-w-md mx-auto text-sm sm:text-base"></p>
+                
+                <div class="my-6 inline-flex items-center gap-6 px-6 py-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div>
+                        <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Úspěšnost</div>
+                        <div id="summaryPercent" class="text-2xl font-bold text-blue-600">100 %</div>
+                    </div>
+                    <div class="w-px h-8 bg-slate-200"></div>
+                    <div>
+                        <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Správně</div>
+                        <div id="summaryFraction" class="text-2xl font-bold text-slate-800">10 / 10</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-center mt-2">
+                    <button id="playAgainBtn" type="button" class="py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs transition-colors cursor-pointer">
+                        Hrát znovu (zamíchat)
+                    </button>
+                    <button id="nextLevelSummaryBtn" type="button" class="py-3.5 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold transition-colors cursor-pointer">
+                        Přejít na další úroveň →
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Patička -->
+    <footer class="text-center py-5 px-4 text-xs text-slate-400">
+        Klávesové zkratky: <strong>Mezerník</strong> = přehrát zvuk • <strong>Enter</strong> = další otázka
+    </footer>
+
+    <script>
+        /**
+         * ============================================================================
+         * 13 ČISTÝCH MINIMÁLNÍCH PÁRŮ (bez slov "rouge" a "table", pouze český přepis)
+         * ============================================================================
+         */
+        const MINIMAL_PAIRS = [
+            {
+                id: 1,
+                ruleTag: "němé -t vs. probuzené -t",
+                wordA: {
+                    text: "petit",
+                    formatted: 'peti<span class="text-slate-400 line-through">t</span>',
+                    pron: "[peti]",
+                    meaning: "malý (mužský rod)",
+                    distractors: ["[petit]", "[petité]"]
+                },
+                wordB: {
+                    text: "petite",
+                    formatted: 'peti<span class="text-blue-600 font-extrabold underline decoration-2">t</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[petit]",
+                    meaning: "malá (ženský rod)",
+                    distractors: ["[peti]", "[petité]"]
+                },
+                explanation: "Slovo „petit“ [peti] má na konci němé -t. Přidáním němé koncovky -e ve slově „petite“ [petit] se písmeno -t- probudí a vysloví."
+            },
+            {
+                id: 2,
+                ruleTag: "němé -d vs. probuzené -d",
+                wordA: {
+                    text: "grand",
+                    formatted: 'gran<span class="text-slate-400 line-through">d</span>',
+                    pron: "[grã]",
+                    meaning: "velký (mužský rod)",
+                    distractors: ["[grãd]", "[grandé]"]
+                },
+                wordB: {
+                    text: "grande",
+                    formatted: 'gran<span class="text-blue-600 font-extrabold underline decoration-2">d</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[grãd]",
+                    meaning: "velká (ženský rod)",
+                    distractors: ["[grã]", "[grãdé]"]
+                },
+                explanation: "Bez koncového -e je písmeno -d němé [grã]. Ve tvaru „grande“ [grãd] němé -e probudí zřetelné [d]."
+            },
+            {
+                id: 3,
+                ruleTag: "němé -s vs. probuzené [z]",
+                wordA: {
+                    text: "gris",
+                    formatted: 'gri<span class="text-slate-400 line-through">s</span>',
+                    pron: "[gri]",
+                    meaning: "šedý (mužský rod)",
+                    distractors: ["[griz]", "[gris]"]
+                },
+                wordB: {
+                    text: "grise",
+                    formatted: 'gri<span class="text-blue-600 font-extrabold underline decoration-2">s</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[griz]",
+                    meaning: "šedá (ženský rod)",
+                    distractors: ["[gri]", "[grizé]"]
+                },
+                explanation: "U slova „gris“ [gri] se koncové -s nečte. V ženském rodě „grise“ [griz] se -s- díky němému -e vysloví jako české [z]."
+            },
+            {
+                id: 4,
+                ruleTag: "němé -t vs. probuzené -tt",
+                wordA: {
+                    text: "chat",
+                    formatted: 'cha<span class="text-slate-400 line-through">t</span>',
+                    pron: "[ša]",
+                    meaning: "kocour",
+                    distractors: ["[šat]", "[čat]"]
+                },
+                wordB: {
+                    text: "chatte",
+                    formatted: 'cha<span class="text-blue-600 font-extrabold underline decoration-2">tt</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[šat]",
+                    meaning: "kočka",
+                    distractors: ["[ša]", "[šaté]"]
+                },
+                explanation: "Kocour „chat“ se čte jen [ša]. Kočka „chatte“ [šat] má na konci němé -e, které probudí vyslovené [t]."
+            },
+            {
+                id: 5,
+                ruleTag: "němé -t vs. probuzené -t",
+                wordA: {
+                    text: "vert",
+                    formatted: 'ver<span class="text-slate-400 line-through">t</span>',
+                    pron: "[ver]",
+                    meaning: "zelený (mužský rod)",
+                    distractors: ["[vert]", "[verté]"]
+                },
+                wordB: {
+                    text: "verte",
+                    formatted: 'ver<span class="text-blue-600 font-extrabold underline decoration-2">t</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[vert]",
+                    meaning: "zelená (ženský rod)",
+                    distractors: ["[ver]", "[verté]"]
+                },
+                explanation: "U „vert“ [ver] koncové -t neslyšíme. U „verte“ [vert] ho němé koncové -e probudí."
+            },
+            {
+                id: 6,
+                ruleTag: "němé -d vs. probuzené -d",
+                wordA: {
+                    text: "froid",
+                    formatted: 'froi<span class="text-slate-400 line-through">d</span>',
+                    pron: "[frwa]",
+                    meaning: "studený (mužský rod)",
+                    distractors: ["[frwad]", "[froid]"]
+                },
+                wordB: {
+                    text: "froide",
+                    formatted: 'froi<span class="text-blue-600 font-extrabold underline decoration-2">d</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[frwad]",
+                    meaning: "studená (ženský rod)",
+                    distractors: ["[frwa]", "[frwadé]"]
+                },
+                explanation: "Mužský rod „froid“ [frwa] má němé koncové -d. Ženský rod „froide“ [frwad] vysloví na konci [d] díky němému -e."
+            },
+            {
+                id: 7,
+                ruleTag: "němé -t vs. probuzené -t",
+                wordA: {
+                    text: "lent",
+                    formatted: 'len<span class="text-slate-400 line-through">t</span>',
+                    pron: "[lã]",
+                    meaning: "pomalý (mužský rod)",
+                    distractors: ["[lãt]", "[lent]"]
+                },
+                wordB: {
+                    text: "lente",
+                    formatted: 'len<span class="text-blue-600 font-extrabold underline decoration-2">t</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[lãt]",
+                    meaning: "pomalá (ženský rod)",
+                    distractors: ["[lã]", "[lãté]"]
+                },
+                explanation: "Slovo „lent“ [lã] končí nosovkou a -t se nečte. V ženském rodě „lente“ [lãt] němé -e probudí koncové [t]."
+            },
+            {
+                id: 8,
+                ruleTag: "němé -c vs. změna na [š]",
+                wordA: {
+                    text: "blanc",
+                    formatted: 'blan<span class="text-slate-400 line-through">c</span>',
+                    pron: "[blã]",
+                    meaning: "bílý (mužský rod)",
+                    distractors: ["[blãš]", "[blank]"]
+                },
+                wordB: {
+                    text: "blanche",
+                    formatted: 'blan<span class="text-blue-600 font-extrabold underline decoration-2">ch</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[blãš]",
+                    meaning: "bílá (ženský rod)",
+                    distractors: ["[blã]", "[blãšé]"]
+                },
+                explanation: "U „blanc“ [blã] se koncové -c nečte. V ženském rodě „blanche“ [blãš] je na konci němé -e a spojení -ch- se čte jako české [š]."
+            },
+            {
+                id: 9,
+                ruleTag: "němé -s vs. probuzené [z]",
+                wordA: {
+                    text: "français",
+                    formatted: 'françai<span class="text-slate-400 line-through">s</span>',
+                    pron: "[frãsé]",
+                    meaning: "francouzský (mužský rod)",
+                    distractors: ["[frãséz]", "[frãsajs]"]
+                },
+                wordB: {
+                    text: "française",
+                    formatted: 'françai<span class="text-blue-600 font-extrabold underline decoration-2">s</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[frãséz]",
+                    meaning: "francouzská (ženský rod)",
+                    distractors: ["[frãsé]", "[frãsézé]"]
+                },
+                explanation: "Mužský rod „français“ [frãsé] má němé -s. Ženský rod „française“ [frãséz] vyslovuje na konci [z] díky němému -e."
+            },
+            {
+                id: 10,
+                ruleTag: "nosovka [õ] vs. probuzené [n]",
+                wordA: {
+                    text: "bon",
+                    formatted: 'b<span class="text-slate-700 font-bold">on</span>',
+                    pron: "[bõ]",
+                    meaning: "dobrý (mužský rod)",
+                    distractors: ["[bon]", "[bõn]"]
+                },
+                wordB: {
+                    text: "bonne",
+                    formatted: 'bo<span class="text-blue-600 font-extrabold underline decoration-2">nn</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[bon]",
+                    meaning: "dobrá (ženský rod)",
+                    distractors: ["[bõ]", "[boné]"]
+                },
+                explanation: "V „bon“ [bõ] tvoří -on nosovku. Když v ženském rodě přidáme -ne („bonne“ [bon]), nosovka zmizí a vysloví se zřetelné [n]."
+            },
+            {
+                id: 11,
+                ruleTag: "němé -e vs. čárkované -é",
+                wordA: {
+                    text: "porte",
+                    formatted: 'por<span class="text-blue-600 font-extrabold">t</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[port]",
+                    meaning: "dveře / nosí",
+                    distractors: ["[porté]", "[por]"]
+                },
+                wordB: {
+                    text: "porté",
+                    formatted: 'port<span class="text-rose-600 font-extrabold underline decoration-2">é</span>',
+                    pron: "[porté]",
+                    meaning: "nošený / nesl",
+                    distractors: ["[port]", "[portu]"]
+                },
+                explanation: "„Porte“ [port] končí němým -e (slyšíme jen [t] na konci), zatímco „porté“ [porté] má čárku a končí zřetelným [é]."
+            },
+            {
+                id: 12,
+                ruleTag: "němé -e vs. čárkované -é",
+                wordA: {
+                    text: "parle",
+                    formatted: 'par<span class="text-blue-600 font-extrabold">l</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[parl]",
+                    meaning: "mluví",
+                    distractors: ["[parlé]", "[par]"]
+                },
+                wordB: {
+                    text: "parlé",
+                    formatted: 'parl<span class="text-rose-600 font-extrabold underline decoration-2">é</span>',
+                    pron: "[parlé]",
+                    meaning: "mluvený / mluvil",
+                    distractors: ["[parl]", "[parlu]"]
+                },
+                explanation: "Ve slově „parle“ [parl] je -e na konci němé. Čárkované -é ve slově „parlé“ [parlé] se čte jako zřetelné [é]."
+            },
+            {
+                id: 13,
+                ruleTag: "němé -e po samohlásce (stejná výslovnost)",
+                wordA: {
+                    text: "ami",
+                    formatted: 'am<span class="text-slate-800 font-bold">i</span>',
+                    pron: "[ami]",
+                    meaning: "kamarád (mužský rod)",
+                    distractors: ["[am]", "[amij]"]
+                },
+                wordB: {
+                    text: "amie",
+                    formatted: 'am<span class="text-slate-800 font-bold">i</span><span class="text-slate-400 line-through">e</span>',
+                    pron: "[ami]",
+                    meaning: "kamarádka (ženský rod)",
+                    distractors: ["[amié]", "[amije]"]
+                },
+                explanation: "Po samohlásce (-i) nemá němé -e žádnou souhlásku, kterou by probudilo – proto se „ami“ i „amie“ vyslovují naprosto stejně: [ami]!"
+            }
+        ];
+
+        /**
+         * ============================================================================
+         * STAV APLIKACE A LOGIKA
+         * ============================================================================
+         */
+        const ROUND_LENGTH = 10;
+
+        const state = {
+            mode: 1,                  // 1 = Poslech (A/B), 2 = Jak se to čte?, 3 = Z výslovnosti ke slovu
+            questions: [],            // Zamíchaná sada 10 otázek pro aktuální kolo
+            currentIndex: 0,          // Index aktuální otázky
+            score: 0,                 // Počet správných odpovědí
+            streak: 0,                // Série správných odpovědí v řadě
+            answered: false,          // Zda už uživatel odpověděl
+            showMeaningInL1: true,    // Zobrazit český překlad v Úrovni 1
+            showMeaningInL3: true,    // Zobrazit nápovědu významu v Úrovni 3
+            frenchVoice: null,        // Nalezený francouzský hlas (fr-FR)
+            speechSupported: 'speechSynthesis' in window
+        };
+
+        // Reference na DOM prvky
+        const els = {
+            toggleRulesBtn: document.getElementById('toggleRulesBtn'),
+            rulesContent: document.getElementById('rulesContent'),
+            rulesChevron: document.getElementById('rulesChevron'),
+            togglePairsBtn: document.getElementById('togglePairsBtn'),
+            pairsContent: document.getElementById('pairsContent'),
+            pairsChevron: document.getElementById('pairsChevron'),
+            pairsTableBody: document.getElementById('pairsTableBody'),
+            speechWarning: document.getElementById('speechWarning'),
+            modeTabs: document.querySelectorAll('.mode-tab'),
+            questionCounter: document.getElementById('questionCounter'),
+            totalQuestions: document.getElementById('totalQuestions'),
+            scoreCounter: document.getElementById('scoreCounter'),
+            streakBadge: document.getElementById('streakBadge'),
+            streakCount: document.getElementById('streakCount'),
+            progressBar: document.getElementById('progressBar'),
+            restartBtn: document.getElementById('restartBtn'),
+            quizArea: document.getElementById('quizArea'),
+            modeOptionBar: document.getElementById('modeOptionBar'),
+            promptSection: document.getElementById('promptSection'),
+            answerContainer: document.getElementById('answerContainer'),
+            feedbackBox: document.getElementById('feedbackBox'),
+            feedbackIcon: document.getElementById('feedbackIcon'),
+            feedbackTitle: document.getElementById('feedbackTitle'),
+            feedbackDetailCard: document.getElementById('feedbackDetailCard'),
+            nextBtn: document.getElementById('nextBtn'),
+            summaryArea: document.getElementById('summaryArea'),
+            summaryEmoji: document.getElementById('summaryEmoji'),
+            summaryText: document.getElementById('summaryText'),
+            summaryPercent: document.getElementById('summaryPercent'),
+            summaryFraction: document.getElementById('summaryFraction'),
+            playAgainBtn: document.getElementById('playAgainBtn'),
+            nextLevelSummaryBtn: document.getElementById('nextLevelSummaryBtn')
+        };
+
+        /**
+         * Inicializace Web Speech API (francouzský hlas)
+         */
+        function initSpeech() {
+            if (!state.speechSupported) {
+                els.speechWarning.classList.remove('hidden');
+                return;
+            }
+
+            const loadVoices = () => {
+                try {
+                    const voices = window.speechSynthesis.getVoices();
+                    if (voices.length > 0) {
+                        const frVoices = voices.filter(v => v.lang === 'fr-FR' || v.lang === 'fr_FR');
+                        const anyFr = voices.filter(v => v.lang.startsWith('fr'));
+                        state.frenchVoice = frVoices.find(v => !v.localService) || frVoices[0] || anyFr[0] || null;
+
+                        if (!state.frenchVoice) {
+                            els.speechWarning.classList.remove('hidden');
+                        } else {
+                            els.speechWarning.classList.add('hidden');
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Chyba načítání hlasů:", e);
+                }
+            };
+
+            loadVoices();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        }
+
+        /**
+         * Přehraje francouzské slovo pomocí Web Speech API
+         */
+        function speakWord(text, rate = 0.92, onComplete = null) {
+            if (!state.speechSupported) return;
+
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'fr-FR';
+                utterance.rate = rate;
+                if (state.frenchVoice) {
+                    utterance.voice = state.frenchVoice;
+                }
+
+                const mainAudioBtn = document.getElementById('playAudioBtn');
+                if (mainAudioBtn) mainAudioBtn.classList.add('ring-4', 'ring-blue-200');
+
+                utterance.onend = () => {
+                    if (mainAudioBtn) mainAudioBtn.classList.remove('ring-4', 'ring-blue-200');
+                    if (typeof onComplete === 'function') onComplete();
+                };
+                utterance.onerror = () => {
+                    if (mainAudioBtn) mainAudioBtn.classList.remove('ring-4', 'ring-blue-200');
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } catch (err) {
+                console.error("Chyba syntézy řeči:", err);
+            }
+        }
+
+        /**
+         * Přehraje obě slova z minimálního páru krátce za sebou
+         */
+        function comparePairAudio(word1, word2) {
+            speakWord(word1, 0.88, () => {
+                setTimeout(() => speakWord(word2, 0.88), 450);
+            });
+        }
+
+        /**
+         * Náhodné zamíchání pole (Fisher-Yates)
+         */
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        /**
+         * Vygeneruje 10 otázek pro aktuální úroveň ze seznamu MINIMAL_PAIRS
+         */
+        function startNewRound() {
+            state.currentIndex = 0;
+            state.score = 0;
+            state.streak = 0;
+            state.answered = false;
+
+            if (state.mode === 1) {
+                // Úroveň 1: Poslech (A / B) – vybíráme z párů, kde se slova liší výslovností (pár 1–12)
+                const audiblePairs = MINIMAL_PAIRS.filter(p => p.wordA.pron !== p.wordB.pron);
+                const selectedPairs = shuffleArray(audiblePairs).slice(0, ROUND_LENGTH);
+
+                state.questions = selectedPairs.map(pair => {
+                    const targetKey = Math.random() < 0.5 ? 'wordA' : 'wordB';
+                    return {
+                        pair,
+                        targetKey,
+                        targetWordObj: pair[targetKey]
+                    };
+                });
+            } else if (state.mode === 2) {
+                // Úroveň 2: Jak se to čte? – všechna jednotlivá slova ze všech 13 párů (26 slov)
+                const allWords = [];
+                MINIMAL_PAIRS.forEach(pair => {
+                    allWords.push({ pair, side: 'wordA', item: pair.wordA });
+                    allWords.push({ pair, side: 'wordB', item: pair.wordB });
+                });
+
+                state.questions = shuffleArray(allWords).slice(0, ROUND_LENGTH).map(entry => {
+                    const options = shuffleArray([entry.item.pron, ...entry.item.distractors]);
+                    return {
+                        ...entry,
+                        options
+                    };
+                });
+            } else {
+                // Úroveň 3: Z výslovnosti ke slovu – páry s rozdílnou výslovností (pár 1–12)
+                const audiblePairs = MINIMAL_PAIRS.filter(p => p.wordA.pron !== p.wordB.pron);
+                const selectedPairs = shuffleArray(audiblePairs).slice(0, ROUND_LENGTH);
+
+                state.questions = selectedPairs.map(pair => {
+                    const targetKey = Math.random() < 0.5 ? 'wordA' : 'wordB';
+                    const otherKey = targetKey === 'wordA' ? 'wordB' : 'wordA';
+                    const choices = shuffleArray([pair[targetKey].text, pair[otherKey].text]);
+                    return {
+                        pair,
+                        targetKey,
+                        targetWordObj: pair[targetKey],
+                        choices
+                    };
+                });
+            }
+
+            els.totalQuestions.textContent = state.questions.length;
+            els.summaryArea.classList.add('hidden');
+            els.quizArea.classList.remove('hidden');
+
+            updateStatsUI();
+            renderQuestion();
+        }
+
+        /**
+         * Aktualizuje horní lištu (číslo otázky, skóre, sérii a progress bar)
+         */
+        function updateStatsUI() {
+            const total = state.questions.length;
+            const currentNum = Math.min(state.currentIndex + 1, total);
+
+            els.questionCounter.textContent = currentNum;
+            els.scoreCounter.textContent = state.score;
+            els.progressBar.style.width = `${(currentNum / total) * 100}%`;
+
+            if (state.streak >= 2) {
+                els.streakBadge.classList.remove('hidden');
+                els.streakCount.textContent = state.streak;
+            } else {
+                els.streakBadge.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Vykreslí aktuální otázku podle aktivní úrovně (1, 2 nebo 3)
+         */
+        function renderQuestion() {
+            const current = state.questions[state.currentIndex];
+            state.answered = false;
+            els.feedbackBox.classList.add('hidden');
+
+            if (state.mode === 1) {
+                // === ÚROVEŇ 1: Poslech (A / B) ===
+                els.modeOptionBar.innerHTML = `
+                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-500 hover:text-slate-700 select-none bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200/80">
+                        <input type="checkbox" id="toggleMeaningL1" ${state.showMeaningInL1 ? 'checked' : ''} class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Zobrazit český překlad pod slovy</span>
+                    </label>
+                `;
+                document.getElementById('toggleMeaningL1').addEventListener('change', (e) => {
+                    state.showMeaningInL1 = e.target.checked;
+                    if (!state.answered) renderQuestion();
+                });
+
+                els.promptSection.innerHTML = `
+                    <div class="flex items-center justify-center gap-3 mb-4">
+                        <button id="playAudioBtn" type="button" class="group inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-semibold shadow-md shadow-blue-200 transition-all cursor-pointer">
+                            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                            <span>Poslechnout slovo</span>
+                        </button>
+                        <button id="playSlowBtn" type="button" title="Zpomalená výslovnost (0.65x)" class="p-4 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-medium transition-all text-sm flex items-center gap-1.5 cursor-pointer">
+                            <span>🐢</span>
+                            <span class="hidden sm:inline">Pomalu</span>
+                        </button>
+                    </div>
+                    <p class="text-sm text-slate-500">Vyberte psanou formu (A nebo B), kterou jste slyšeli:</p>
+                `;
+
+                const meaningA = state.showMeaningInL1 ? `<span class="text-xs font-medium text-slate-500">${current.pair.wordA.meaning}</span>` : '';
+                const meaningB = state.showMeaningInL1 ? `<span class="text-xs font-medium text-slate-500">${current.pair.wordB.meaning}</span>` : '';
+
+                els.answerContainer.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <button type="button" data-choice="wordA" class="choice-btn py-5 px-5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group cursor-pointer relative">
+                            <span class="absolute top-3 left-3.5 text-xs font-bold text-slate-400 group-hover:text-blue-600">A</span>
+                            <span class="text-2xl sm:text-3xl font-bold text-slate-800 group-hover:text-blue-700">${current.pair.wordA.text}</span>
+                            ${meaningA}
+                        </button>
+                        <button type="button" data-choice="wordB" class="choice-btn py-5 px-5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group cursor-pointer relative">
+                            <span class="absolute top-3 left-3.5 text-xs font-bold text-slate-400 group-hover:text-blue-600">B</span>
+                            <span class="text-2xl sm:text-3xl font-bold text-slate-800 group-hover:text-blue-700">${current.pair.wordB.text}</span>
+                            ${meaningB}
+                        </button>
+                    </div>
+                `;
+
+            } else if (state.mode === 2) {
+                // === ÚROVEŇ 2: Jak se to čte? (Psané slovo -> 3 hranaté závorky) ===
+                els.modeOptionBar.innerHTML = `
+                    <span class="text-xs font-medium text-slate-400">
+                        Podívejte se na konec slova a vyberte správnou výslovnost v závorkách:
+                    </span>
+                `;
+
+                els.promptSection.innerHTML = `
+                    <div class="inline-block bg-slate-50 px-8 py-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-wide">${current.item.text}</div>
+                        <div class="text-sm font-medium text-blue-700 mt-1.5">${current.item.meaning}</div>
+                    </div>
+                `;
+
+                const optionsHtml = current.options.map((opt, idx) => {
+                    const letter = ['A', 'B', 'C'][idx];
+                    return `
+                        <button type="button" data-choice="${opt}" class="choice-btn py-4 px-4 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group cursor-pointer relative">
+                            <span class="absolute top-2.5 left-3 text-xs font-bold text-slate-400 group-hover:text-blue-600">${letter}</span>
+                            <span class="text-xl sm:text-2xl font-mono font-bold text-slate-800 group-hover:text-blue-700">${opt}</span>
+                        </button>
+                    `;
+                }).join('');
+
+                els.answerContainer.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        ${optionsHtml}
+                    </div>
+                `;
+
+            } else {
+                // === ÚROVEŇ 3: Z výslovnosti ke slovu (Přepis -> Psaná forma A / B) ===
+                els.modeOptionBar.innerHTML = `
+                    <label class="inline-flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-500 hover:text-slate-700 select-none bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200/80">
+                        <input type="checkbox" id="toggleMeaningL3" ${state.showMeaningInL3 ? 'checked' : ''} class="rounded text-blue-600 focus:ring-blue-500">
+                        <span>Zobrazit nápovědu rodu / významu</span>
+                    </label>
+                `;
+                document.getElementById('toggleMeaningL3').addEventListener('change', (e) => {
+                    state.showMeaningInL3 = e.target.checked;
+                    if (!state.answered) renderQuestion();
+                });
+
+                const meaningLine = state.showMeaningInL3
+                    ? `<div class="text-sm font-medium text-slate-600 mt-2.5">Význam: <span class="text-blue-700 font-semibold">${current.targetWordObj.meaning}</span></div>`
+                    : `<div class="text-xs text-slate-400 mt-2.5">Vyberte psanou podobu odpovídající této výslovnosti</div>`;
+
+                els.promptSection.innerHTML = `
+                    <div class="inline-block bg-blue-50/70 px-8 py-4 rounded-2xl border border-blue-100">
+                        <div class="text-xs font-semibold uppercase tracking-wider text-blue-400 mb-1">Výslovnost</div>
+                        <div class="text-3xl sm:text-4xl font-mono font-extrabold text-blue-950 tracking-wide">${current.targetWordObj.pron}</div>
+                    </div>
+                    ${meaningLine}
+                `;
+
+                const choicesHtml = current.choices.map((wordChoice, idx) => {
+                    const letter = ['A', 'B'][idx];
+                    return `
+                        <button type="button" data-choice="${wordChoice}" class="choice-btn py-5 px-5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40 active:scale-[0.99] transition-all flex flex-col items-center justify-center gap-1 group cursor-pointer relative">
+                            <span class="absolute top-3 left-3.5 text-xs font-bold text-slate-400 group-hover:text-blue-600">${letter}</span>
+                            <span class="text-2xl sm:text-3xl font-bold text-slate-800 group-hover:text-blue-700">${wordChoice}</span>
+                        </button>
+                    `;
+                }).join('');
+
+                els.answerContainer.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        ${choicesHtml}
+                    </div>
+                `;
+            }
+
+            // Posluchače pro tlačítka zvuku v Úrovni 1
+            const playBtn = document.getElementById('playAudioBtn');
+            const slowBtn = document.getElementById('playSlowBtn');
+            if (playBtn) {
+                playBtn.addEventListener('click', () => speakWord(current.targetWordObj.text, 0.92));
+            }
+            if (slowBtn) {
+                slowBtn.addEventListener('click', () => speakWord(current.targetWordObj.text, 0.65));
+            }
+
+            updateStatsUI();
+        }
+
+        /**
+         * Vyhodnotí odpověď uživatele a zobrazí rozbor minimálního páru
+         */
+        function handleAnswer(selectedChoice) {
+            if (state.answered) return;
+            state.answered = true;
+
+            const current = state.questions[state.currentIndex];
+            let correctChoice = '';
+            if (state.mode === 1) correctChoice = current.targetKey;
+            else if (state.mode === 2) correctChoice = current.item.pron;
+            else correctChoice = current.targetWordObj.text;
+
+            const isCorrect = selectedChoice === correctChoice;
+
+            if (isCorrect) {
+                state.score++;
+                state.streak++;
+            } else {
+                state.streak = 0;
+            }
+            updateStatsUI();
+
+            // Vizuální označení tlačítek
+            const btns = els.answerContainer.querySelectorAll('.choice-btn');
+            btns.forEach(btn => {
+                btn.disabled = true;
+                const val = btn.dataset.choice;
+
+                if (val === correctChoice) {
+                    btn.classList.remove('border-slate-200', 'hover:border-blue-500', 'hover:bg-blue-50/40');
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50/90', 'shadow-xs');
+                } else if (val === selectedChoice && !isCorrect) {
+                    btn.classList.remove('border-slate-200');
+                    btn.classList.add('border-rose-500', 'bg-rose-50/90');
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            // Nastavení hlavičky zpětné vazby
+            els.feedbackBox.classList.remove('hidden', 'bg-emerald-50/80', 'border-emerald-200', 'bg-rose-50/80', 'border-rose-200');
+            if (isCorrect) {
+                els.feedbackBox.classList.add('bg-emerald-50/80', 'border-emerald-200');
+                els.feedbackIcon.textContent = "✅";
+                els.feedbackTitle.textContent = "Výborně! Správná odpověď.";
+                els.feedbackTitle.className = "font-bold text-base text-emerald-900";
+            } else {
+                els.feedbackBox.classList.add('bg-rose-50/80', 'border-rose-200');
+                els.feedbackIcon.textContent = "❌";
+                els.feedbackTitle.className = "font-bold text-base text-rose-900";
+                if (state.mode === 1) {
+                    els.feedbackTitle.textContent = `Těsně vedle – slyšeli jste slovo „${current.targetWordObj.text}“ ${current.targetWordObj.pron}.`;
+                } else if (state.mode === 2) {
+                    els.feedbackTitle.textContent = `Nevadí – slovo „${current.item.text}“ se čte ${current.item.pron}.`;
+                } else {
+                    els.feedbackTitle.textContent = `Nevadí – přepis ${current.targetWordObj.pron} patří ke slovu „${current.targetWordObj.text}“.`;
+                }
+            }
+
+            // Vykreslení porovnání obou slov z minimálního páru
+            const { wordA, wordB, explanation } = current.pair;
+            const activeSide = state.mode === 2 ? current.side : current.targetKey;
+            const wordToSpeak = state.mode === 2 ? current.item.text : current.targetWordObj.text;
+
+            els.feedbackDetailCard.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Porovnání minimálního páru:</span>
+                    <button type="button" onclick="comparePairAudio('${wordA.text}', '${wordB.text}')" class="px-3 py-1.5 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer">
+                        <span>🔁</span> Porovnat obě slova
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <button type="button" onclick="speakWord('${wordA.text}', 0.9)" class="p-2.5 rounded-xl border ${activeSide === 'wordA' ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 bg-slate-50/70'} hover:bg-blue-50 transition-colors text-left flex items-center justify-between cursor-pointer">
+                        <div>
+                            <div class="text-lg font-bold text-slate-900">${wordA.formatted}</div>
+                            <div class="text-xs font-mono font-semibold text-blue-700">${wordA.pron}</div>
+                            <div class="text-xs text-slate-500">${wordA.meaning}</div>
+                        </div>
+                        <span class="text-lg">🔊</span>
+                    </button>
+                    <button type="button" onclick="speakWord('${wordB.text}', 0.9)" class="p-2.5 rounded-xl border ${activeSide === 'wordB' ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 bg-slate-50/70'} hover:bg-blue-50 transition-colors text-left flex items-center justify-between cursor-pointer">
+                        <div>
+                            <div class="text-lg font-bold text-slate-900">${wordB.formatted}</div>
+                            <div class="text-xs font-mono font-semibold text-blue-700">${wordB.pron}</div>
+                            <div class="text-xs text-slate-500">${wordB.meaning}</div>
+                        </div>
+                        <span class="text-lg">🔊</span>
+                    </button>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed pt-0.5">${explanation}</p>
+            `;
+
+            // V Úrovni 2 a 3 slovo po odpovědi rovnou přečteme nahlas
+            if (state.mode === 2 || state.mode === 3) {
+                speakWord(wordToSpeak, 0.92);
+            }
+
+            els.nextBtn.querySelector('span').textContent =
+                state.currentIndex === state.questions.length - 1 ? "Zobrazit výsledky" : "Další otázka";
+        }
+
+        /**
+         * Přechod na další otázku nebo zobrazení závěrečného shrnutí
+         */
+        function nextQuestion() {
+            if (state.currentIndex < state.questions.length - 1) {
+                state.currentIndex++;
+                renderQuestion();
+                if (state.mode === 1) {
+                    speakWord(state.questions[state.currentIndex].targetWordObj.text, 0.92);
+                }
+            } else {
+                showSummary();
+            }
+        }
+
+        /**
+         * Zobrazení závěrečného vyhodnocení kola
+         */
+        function showSummary() {
+            els.quizArea.classList.add('hidden');
+            els.summaryArea.classList.remove('hidden');
+
+            const total = state.questions.length;
+            const percent = Math.round((state.score / total) * 100);
+
+            els.summaryPercent.textContent = `${percent} %`;
+            els.summaryFraction.textContent = `${state.score} / ${total}`;
+
+            if (percent === 100) {
+                els.summaryEmoji.textContent = "🏆";
+                els.summaryText.textContent = "Naprosto bezchybné! Němé koncové -e máte skvěle zvládnuté.";
+            } else if (percent >= 70) {
+                els.summaryEmoji.textContent = "👏";
+                els.summaryText.textContent = "Výborná práce! Už bezpečně poznáte, kdy němé -e probudí souhlásku.";
+            } else {
+                els.summaryEmoji.textContent = "💪";
+                els.summaryText.textContent = "Dobrý trénink! Zkuste si kolo zopakovat nebo nahlédnout do Taháku pravidel nahoře.";
+            }
+
+            const nextLevel = state.mode < 3 ? state.mode + 1 : 1;
+            els.nextLevelSummaryBtn.textContent = state.mode < 3
+                ? `Přejít na úroveň ${nextLevel} →`
+                : "Zpět na úroveň 1 →";
+        }
+
+        /**
+         * Přepnutí mezi úrovněmi 1, 2 a 3
+         */
+        function switchMode(newMode) {
+            if (state.mode === newMode) return;
+            state.mode = newMode;
+
+            els.modeTabs.forEach(tab => {
+                const tabMode = Number(tab.dataset.mode);
+                if (tabMode === newMode) {
+                    tab.className = "mode-tab py-2.5 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all bg-white text-blue-700 shadow-xs flex items-center justify-center gap-1.5 cursor-pointer";
+                } else {
+                    tab.className = "mode-tab py-2.5 px-3 rounded-xl font-semibold text-xs sm:text-sm transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 cursor-pointer";
+                }
+            });
+
+            startNewRound();
+        }
+
+        /**
+         * Naplní přehledovou tabulku všech 13 minimálních párů
+         */
+        function populatePairsTable() {
+            els.pairsTableBody.innerHTML = MINIMAL_PAIRS.map(pair => `
+                <tr class="hover:bg-slate-50/90 transition-colors">
+                    <td class="py-2.5 px-2.5">
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="speakWord('${pair.wordA.text}', 0.9)" class="p-1 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs cursor-pointer" title="Poslechnout ${pair.wordA.text}">🔊</button>
+                            <div>
+                                <span class="font-bold text-slate-900">${pair.wordA.text}</span>
+                                <span class="font-mono text-blue-700 text-xs ml-1">${pair.wordA.pron}</span>
+                                <div class="text-[11px] text-slate-400">${pair.wordA.meaning}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-2.5 px-2.5">
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="speakWord('${pair.wordB.text}', 0.9)" class="p-1 rounded-md bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs cursor-pointer" title="Poslechnout ${pair.wordB.text}">🔊</button>
+                            <div>
+                                <span class="font-bold text-slate-900">${pair.wordB.text}</span>
+                                <span class="font-mono text-rose-700 text-xs ml-1">${pair.wordB.pron}</span>
+                                <div class="text-[11px] text-slate-400">${pair.wordB.meaning}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-2.5 px-2.5 text-xs text-slate-500 hidden sm:table-cell">${pair.ruleTag}</td>
+                </tr>
+            `).join('');
+        }
+
+        /**
+         * Získá aktuální slovo k přehrání přes Mezerník
+         */
+        function getCurrentAudioWord() {
+            const current = state.questions[state.currentIndex];
+            if (!current) return null;
+            if (state.mode === 1) return current.targetWordObj.text;
+            if (state.mode === 2) return state.answered ? current.item.text : null;
+            if (state.mode === 3) return state.answered ? current.targetWordObj.text : null;
+            return null;
+        }
+
+        // --- Posluchače událostí ---
+
+        els.toggleRulesBtn.addEventListener('click', () => {
+            const isHidden = els.rulesContent.classList.toggle('hidden');
+            els.rulesChevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+            if (!isHidden) {
+                els.pairsContent.classList.add('hidden');
+                els.pairsChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        els.togglePairsBtn.addEventListener('click', () => {
+            const isHidden = els.pairsContent.classList.toggle('hidden');
+            els.pairsChevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+            if (!isHidden) {
+                els.rulesContent.classList.add('hidden');
+                els.rulesChevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        els.modeTabs.forEach(tab => {
+            tab.addEventListener('click', () => switchMode(Number(tab.dataset.mode)));
+        });
+
+        els.answerContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.choice-btn');
+            if (btn && !btn.disabled) {
+                handleAnswer(btn.dataset.choice);
+            }
+        });
+
+        els.nextBtn.addEventListener('click', nextQuestion);
+        els.restartBtn.addEventListener('click', startNewRound);
+        els.playAgainBtn.addEventListener('click', startNewRound);
+        els.nextLevelSummaryBtn.addEventListener('click', () => {
+            switchMode(state.mode < 3 ? state.mode + 1 : 1);
+        });
+
+        // Klávesové zkratky (Mezerník = zvuk, Enter = další)
+        document.addEventListener('keydown', (e) => {
+            if (els.summaryArea.classList.contains('hidden')) {
+                if (e.code === 'Space') {
+                    const word = getCurrentAudioWord();
+                    if (word) {
+                        e.preventDefault();
+                        speakWord(word, 0.92);
+                    }
+                } else if (e.code === 'Enter' && state.answered) {
+                    e.preventDefault();
+                    nextQuestion();
+                }
+            }
+        });
+
+        // Spuštění po načtení
+        window.addEventListener('DOMContentLoaded', () => {
+            initSpeech();
+            populatePairsTable();
+            startNewRound();
+        });
+    </script>
+</body>
+</html>
