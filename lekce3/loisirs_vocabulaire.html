@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les loisirs – Slovní zásoba (8. třída)</title>
+    <!-- Načtení Tailwind CSS pro moderní responzivní stylování -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Načtení Google Fontu Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+ <                   }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tab-active {
+            background-color: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+        }
+        .match-card {
+            transition: all 0.2s ease;
+        }
+        .match-card:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        @keyframes pulse-once {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .animate-pop {
+            animation: pulse-once 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Horní lišta s názvem a ukazatelem skóre -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm shrink-0">
+                    FR
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Les loisirs – Slovní zásoba</h1>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Pracovní list 1/2 • Volný čas a aktivity • 8. třída ZŠ</p>
+                </div>
+            </div>
+
+            <!-- Přehled celkového pokroku -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                <div class="text-sm">
+                    <span class="text-slate-500">Celkové skóre:</span>
+                    <span id="total-score-text" class="font-bold text-blue-600 ml-1">0 / 34</span>
+                </div>
+                <div class="w-24 sm:w-28 bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="total-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <button onclick="resetAllExercises()" title="Vynulovat všechna cvičení" class="px-2.5 py-1 rounded-lg bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 text-xs font-semibold transition cursor-pointer">
+                    🔄 Resetovat vše
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigační záložky -->
+        <nav class="max-w-5xl mx-auto px-4 sm:px-6 pb-3 overflow-x-auto">
+            <div class="flex gap-2 min-w-max">
+                <button onclick="switchTab('slovnicek')" id="tab-slovnicek" class="tab-active px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    📖 Slovníček (20)
+                </button>
+                <button onclick="switchTab('cviceni1')" id="tab-cviceni1" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    1. Spojovačka (16)
+                </button>
+                <button onclick="switchTab('cviceni2')" id="tab-cviceni2" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    2. Poslechový kvíz (10)
+                </button>
+                <button onclick="switchTab('cviceni3')" id="tab-cviceni3" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    3. Poznávání frází (8)
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hlavní obsahová oblast -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+        <!-- Oznámení / stavová zpráva (místo alertu) -->
+        <div id="toast-message" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium transition-opacity duration-300"></div>
+
+        <!-- ==================== SEKCE 0: SLOVNÍČEK ==================== -->
+        <section id="section-slovnicek" class="space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1">Slovní zásoba • 8. třída</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Slovníček – Les loisirs (20 výrazů)</h2>
+                        <p class="text-sm text-slate-600 mt-1">Klikni na 🔊 pro poslech výslovnosti. Můžeš si také skrýt české překlady a vyzkoušet se.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="toggleTranslations()" id="btn-toggle-cz" class="px-4 py-2.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold text-sm transition cursor-pointer border border-indigo-200">
+                            👁️ Skrýt české významy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vyhledávání ve slovníčku -->
+                <div class="mb-5">
+                    <input type="text" id="vocab-search" oninput="renderVocabulary()" placeholder="Hledat francouzsky nebo česky..." class="w-full sm:w-80 px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                </div>
+
+                <!-- Mřížka slovíček -->
+                <div id="vocab-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Generováno pomocí JS -->
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="switchTab('cviceni1')" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+                    Přejít na 1. cvičení (Spojovačka) →
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SEKCE 1: SPOJOVAČKA (16 bodů) ==================== -->
+        <section id="section-cviceni1" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 1 • 16 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Spojovačka slovní zásoby Les loisirs</h2>
+                        <p class="text-sm text-slate-600 mt-1">Klikni nejprve na český výraz vlevo a poté na odpovídající francouzský překlad vpravo.</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="score-ex1" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 16 správně</span>
+                    </div>
+                </div>
+
+                <!-- Sada A (8 dvojic) -->
+                <div class="mt-5">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Část A – Pohyb, hudba a volný čas venku (8 dvojic)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div id="match-cz-a" class="space-y-2"></div>
+                        <div id="match-fr-a" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Sada B (8 dvojic) -->
+                <div class="mt-7 pt-6 border-t border-slate-100">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Část B – Kultura, přátelé a další činnosti (8 dvojic)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div id="match-cz-b" class="space-y-2"></div>
+                        <div id="match-fr-b" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="initExercise1()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition cursor-pointer">
+                        🔄 Zamíchat znovu
+                    </button>
+                    <button onclick="switchTab('cviceni2')" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition cursor-pointer">
+                        Další cvičení (Poslech) →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SEKCE 2: POSLECHOVÝ KVÍZ (10 bodů) ==================== -->
+        <section id="section-cviceni2" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 2 • 10 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Poslechový kvíz – Poznej slovíčko podle výslovnosti</h2>
+                        <p class="text-sm text-slate-600 mt-1">Klikni na tlačítko <strong>🔊 Přehrát francouzsky</strong> u každé položky a vyber ze 4 možností správný český význam.</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="score-ex2" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 10 bodů</span>
+                    </div>
+                </div>
+
+                <!-- Seznam 10 poslechových otázek -->
+                <div id="ex2-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Generováno JS -->
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="initExercise2()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition cursor-pointer">
+                        🔄 Nový poslech (zamíchat)
+                    </button>
+                    <button onclick="switchTab('cviceni3')" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition cursor-pointer">
+                        Další cvičení →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SEKCE 3: POZNÁVÁNÍ FRÁZÍ ZE SLOVNÍČKU (8 bodů) ==================== -->
+        <section id="section-cviceni3" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 3 • 8 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Vyber správnou francouzskou frázi podle českého zadání</h2>
+                        <p class="text-sm text-slate-600 mt-1">U každého českého významu vyber z nabídky přesně tu frázi, která mu odpovídá ve slovníčku.</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="score-ex3" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 8 bodů</span>
+                    </div>
+                </div>
+
+                <div id="ex3-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Generováno JS -->
+                </div>
+
+                <div id="ex3-feedback" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="checkExercise3()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+                            ✓ Zkontrolovat odpovědi
+                        </button>
+                        <button onclick="resetExercise3()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition cursor-pointer">
+                            🔄 Vymazat
+                        </button>
+                    </div>
+                    <button onclick="showFinalSummary()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold text-sm shadow-md transition cursor-pointer">
+                        🏆 Vyhodnotit slovní zásobu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Závěrečná karta s celkovým hodnocením -->
+            <div id="final-summary-card" class="hidden bg-gradient-to-br from-blue-600 to-cyan-700 text-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider mb-2">Výsledek – Slovní zásoba</span>
+                        <h3 id="final-title" class="text-2xl sm:text-3xl font-extrabold">Skvělá práce!</h3>
+                        <p id="final-message" class="text-blue-100 mt-2 text-sm sm:text-base max-w-xl">
+                            Dokončil(a) jsi procvičování francouzské slovní zásoby Les loisirs.
+                        </p>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm px-6 py-4 rounded-2xl text-center shrink-0 border border-white/20">
+                        <div class="text-xs uppercase tracking-wider text-blue-100 font-semibold">Celkový zisk</div>
+                        <div id="final-score-big" class="text-3xl sm:text-4xl font-extrabold mt-1">0 / 34</div>
+                        <div id="final-percent" class="text-sm font-bold text-amber-300 mt-1">0 %</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Patička -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400">
+            Pracovní list 1/2 • Francouzský jazyk (8. třída) • Les loisirs – Slovní zásoba
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           DATA: Přesná slovní zásoba (20 výrazů) z vloženého pracovního listu
+           ========================================================================== */
+        const vocabulary = [
+            { fr: "aller au cinéma", cz: "jít do kina", speak: "aller au cinéma" },
+            { fr: "faire du vélo", cz: "jezdit na kole", speak: "faire du vélo" },
+            { fr: "écouter de la musique", cz: "poslouchat hudbu", speak: "écouter de la musique" },
+            { fr: "jouer d'un instrument", cz: "hrát na hudební nástroj", speak: "jouer d'un instrument" },
+            { fr: "danser", cz: "tančit", speak: "danser" },
+            { fr: "faire du jogging", cz: "běhat (kondičně)", speak: "faire du jogging" },
+            { fr: "faire une promenade", cz: "jít na procházku", speak: "faire une promenade" },
+            { fr: "prendre des photos", cz: "fotit / dělat fotky", speak: "prendre des photos" },
+            { fr: "jouer aux échecs", cz: "hrát šachy", speak: "jouer aux échecs" },
+            { fr: "regarder la télé", cz: "dívat se na televizi", speak: "regarder la télé" },
+            { fr: "rencontrer des amis", cz: "setkat se s přáteli", speak: "rencontrer des amis" },
+            { fr: "lire", cz: "číst", speak: "lire" },
+            { fr: "surfer sur Internet", cz: "surfovat na internetu", speak: "surfer sur Internet" },
+            { fr: "voyager", cz: "cestovat", speak: "voyager" },
+            { fr: "écrire des lettres", cz: "psát dopisy", speak: "écrire des lettres" },
+            { fr: "faire du lèche-vitrines", cz: "okukovat výlohy / chodit po obchodech", speak: "faire du lèche-vitrines" },
+            { fr: "faire de la gym / gymnastique", cz: "cvičit gymnastiku", speak: "faire de la gym, faire de la gymnastique" },
+            { fr: "visiter un musée", cz: "navštívit muzeum", speak: "visiter un musée" },
+            { fr: "cuisiner", cz: "vařit", speak: "cuisiner" },
+            { fr: "téléphoner", cz: "telefonovat", speak: "téléphoner" }
+        ];
+
+        /* ==========================================================================
+           STAV APLIKACE A SKÓRE
+           ========================================================================== */
+        let hideCzech = false;
+        const scores = {
+            ex1: 0, // max 16
+            ex2: 0, // max 10
+            ex3: 0  // max 8
+        };
+        const MAX_TOTAL = 34;
+
+        function updateGlobalScore() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3;
+            const percent = Math.round((total / MAX_TOTAL) * 100);
+            document.getElementById('total-score-text').textContent = `${total} / ${MAX_TOTAL}`;
+            document.getElementById('total-progress-bar').style.width = `${percent}%`;
+        }
+
+        function resetAllExercises() {
+            initExercise1();
+            initExercise2();
+            resetExercise3();
+            document.getElementById('final-summary-card').classList.add('hidden');
+            showToast("Všechna cvičení byla vynulována.");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-message');
+            toast.textContent = msg;
+            toast.classList.remove('hidden', 'opacity-0');
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        /* ==========================================================================
+           NAVIGACE MEZI ZÁLOŽKAMI
+           ========================================================================== */
+        function switchTab(tabName) {
+            const sections = ['slovnicek', 'cviceni1', 'cviceni2', 'cviceni3'];
+            sections.forEach(sec => {
+                const secEl = document.getElementById(`section-${sec}`);
+                const tabEl = document.getElementById(`tab-${sec}`);
+                if (sec === tabName) {
+                    secEl.classList.remove('hidden');
+                    tabEl.classList.add('tab-active');
+                    tabEl.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+                } else {
+                    secEl.classList.add('hidden');
+                    tabEl.classList.remove('tab-active');
+                    tabEl.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ==========================================================================
+           WEB SPEECH API: Výslovnost francouzštiny
+           ========================================================================== */
+        let cachedFrenchVoice = null;
+
+        function loadFrenchVoice() {
+            if (!('speechSynthesis' in window)) return null;
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return null;
+            cachedFrenchVoice =
+                voices.find(v => v.lang === 'fr-FR' && /google|thomas|amélie|denise|hortense|paul|julie/i.test(v.name)) ||
+                voices.find(v => v.lang === 'fr-FR') ||
+                voices.find(v => v.lang.toLowerCase().startsWith('fr')) ||
+                null;
+            return cachedFrenchVoice;
+        }
+
+        if ('speechSynthesis' in window && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+            window.speechSynthesis.onvoiceschanged = loadFrenchVoice;
+        }
+
+        function speakFrench(text) {
+            try {
+                if (!('speechSynthesis' in window)) {
+                    showToast("Tvůj prohlížeč bohužel nepodporuje hlasové předčítání.");
+                    return;
+                }
+                window.speechSynthesis.cancel();
+                const cleanedText = text
+                    .replace(/\s*\/\s*/g, '. ')
+                    .replace(/,\s*/g, '. ');
+                const utterance = new SpeechSynthesisUtterance(cleanedText);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.88;
+                utterance.pitch = 1.0;
+
+                const frVoice = cachedFrenchVoice || loadFrenchVoice();
+                if (frVoice) {
+                    utterance.voice = frVoice;
+                }
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                showToast("Nepodařilo se přehrát výslovnost.");
+            }
+        }
+
+        /* ==========================================================================
+           SEKCE 0: SLOVNÍČEK
+           ========================================================================== */
+        function toggleTranslations() {
+            hideCzech = !hideCzech;
+            const btn = document.getElementById('btn-toggle-cz');
+            btn.textContent = hideCzech ? "👁️ Zobrazit české významy" : "👁️ Skrýt české významy";
+            renderVocabulary();
+        }
+
+        function renderVocabulary() {
+            const grid = document.getElementById('vocab-grid');
+            const query = document.getElementById('vocab-search').value.toLowerCase().trim();
+            grid.innerHTML = '';
+
+            const filtered = vocabulary.filter(item =>
+                item.fr.toLowerCase().includes(query) || item.cz.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-sm">Žádný výraz neodpovídá hledání.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200 transition";
+                
+                const czClass = hideCzech
+                    ? "blur-sm hover:blur-none select-none transition duration-200 cursor-pointer text-slate-600 text-sm"
+                    : "text-slate-600 text-sm";
+
+                card.innerHTML = `
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-900 text-sm sm:text-base truncate" title="${item.fr}">${item.fr}</div>
+                        <div class="${czClass}" title="${hideCzech ? 'Najeď myší pro odhalení' : ''}">${item.cz}</div>
+                    </div>
+                    <button onclick="speakFrench('${item.speak.replace(/'/g, "\\'")}')" 
+                            aria-label="Poslechnout výslovnost ${item.fr}"
+                            title="Poslechnout výslovnost"
+                            class="w-10 h-10 rounded-xl bg-white hover:bg-blue-600 text-blue-600 hover:text-white border border-slate-200 shadow-sm flex items-center justify-center shrink-0 transition cursor-pointer">
+                        🔊
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        /* ==========================================================================
+           CVIČENÍ 1: SPOJOVAČKA (16 bodů)
+           ========================================================================== */
+        const matchDataA = [
+            { id: 'a1', cz: "jít do kina", fr: "aller au cinéma" },
+            { id: 'a2', cz: "jezdit na kole", fr: "faire du vélo" },
+            { id: 'a3', cz: "poslouchat hudbu", fr: "écouter de la musique" },
+            { id: 'a4', cz: "hrát na hudební nástroj", fr: "jouer d'un instrument" },
+            { id: 'a5', cz: "běhat (kondičně)", fr: "faire du jogging" },
+            { id: 'a6', cz: "jít na procházku", fr: "faire une promenade" },
+            { id: 'a7', cz: "fotit / dělat fotky", fr: "prendre des photos" },
+            { id: 'a8', cz: "hrát šachy", fr: "jouer aux échecs" }
+        ];
+
+        const matchDataB = [
+            { id: 'b1', cz: "setkat se s přáteli", fr: "rencontrer des amis" },
+            { id: 'b2', cz: "surfovat na internetu", fr: "surfer sur Internet" },
+            { id: 'b3', cz: "psát dopisy", fr: "écrire des lettres" },
+            { id: 'b4', cz: "okukovat výlohy / chodit po obchodech", fr: "faire du lèche-vitrines" },
+            { id: 'b5', cz: "cvičit gymnastiku", fr: "faire de la gym / gymnastique" },
+            { id: 'b6', cz: "navštívit muzeum", fr: "visiter un musée" },
+            { id: 'b7', cz: "vařit", fr: "cuisiner" },
+            { id: 'b8', cz: "cestovat", fr: "voyager" }
+        ];
+
+        let matchState = {
+            selectedCz: null,
+            matchedIds: new Set()
+        };
+
+        function initExercise1() {
+            matchState.selectedCz = null;
+            matchState.matchedIds.clear();
+            scores.ex1 = 0;
+            document.getElementById('score-ex1').textContent = `0 / 16 správně`;
+            updateGlobalScore();
+
+            renderMatchSet('a', matchDataA);
+            renderMatchSet('b', matchDataB);
+        }
+
+        function renderMatchSet(setKey, data) {
+            const czContainer = document.getElementById(`match-cz-${setKey}`);
+            const frContainer = document.getElementById(`match-fr-${setKey}`);
+            czContainer.innerHTML = '';
+            frContainer.innerHTML = '';
+
+            shuffleArray(data).forEach(item => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "match-card w-full text-left px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-blue-400 font-medium text-sm text-slate-800 cursor-pointer";
+                btn.textContent = item.cz;
+                btn.onclick = () => handleSelectCz(setKey, item.id, btn);
+                czContainer.appendChild(btn);
+            });
+
+            shuffleArray(data).forEach(item => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "match-card w-full text-left px-4 py-3 rounded-xl border-2 border-slate-200 bg-slate-50 hover:border-blue-400 font-semibold text-sm text-slate-900 cursor-pointer";
+                btn.textContent = item.fr;
+                btn.onclick = () => handleSelectFr(setKey, item.id, item.fr, btn);
+                frContainer.appendChild(btn);
+            });
+        }
+
+        function handleSelectCz(setKey, id, el) {
+            if (matchState.matchedIds.has(id)) return;
+            if (matchState.selectedCz) {
+                matchState.selectedCz.el.classList.remove('border-blue-600', 'bg-blue-50', 'ring-2', 'ring-blue-200');
+            }
+            matchState.selectedCz = { set: setKey, id, el };
+            el.classList.add('border-blue-600', 'bg-blue-50', 'ring-2', 'ring-blue-200');
+        }
+
+        function handleSelectFr(setKey, id, frText, el) {
+            if (matchState.matchedIds.has(id)) return;
+            if (!matchState.selectedCz) {
+                showToast("Nejprve vyber český výraz v levém sloupci.");
+                return;
+            }
+            if (matchState.selectedCz.set !== setKey) {
+                showToast("Vybírej dvojice v rámci stejné části (A nebo B).");
+                return;
+            }
+
+            const czEl = matchState.selectedCz.el;
+            const czId = matchState.selectedCz.id;
+
+            if (czId === id) {
+                matchState.matchedIds.add(id);
+                czEl.classList.remove('border-blue-600', 'bg-blue-50', 'ring-2', 'ring-blue-200');
+                czEl.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'animate-pop');
+                czEl.disabled = true;
+
+                el.classList.remove('bg-slate-50', 'border-slate-200');
+                el.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900', 'animate-pop');
+                el.disabled = true;
+                el.innerHTML = `✓ ${frText}`;
+
+                matchState.selectedCz = null;
+                scores.ex1 = matchState.matchedIds.size;
+                document.getElementById('score-ex1').textContent = `${scores.ex1} / 16 správně`;
+                updateGlobalScore();
+                speakFrench(frText);
+            } else {
+                el.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                czEl.classList.add('border-rose-500', 'bg-rose-50');
+                setTimeout(() => {
+                    el.classList.remove('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                    czEl.classList.remove('border-rose-500', 'bg-rose-50', 'border-blue-600', 'bg-blue-50', 'ring-2', 'ring-blue-200');
+                }, 600);
+                matchState.selectedCz = null;
+            }
+        }
+
+        /* ==========================================================================
+           CVIČENÍ 2: POSLECHOVÝ KVÍZ (10 bodů)
+           ========================================================================== */
+        let ex2Items = [];
+        let ex2Answered = {};
+
+        function initExercise2() {
+            const selected10 = shuffleArray(vocabulary).slice(0, 10);
+
+            ex2Items = selected10.map(item => {
+                const distractors = shuffleArray(
+                    vocabulary.filter(v => v.cz !== item.cz).map(v => v.cz)
+                ).slice(0, 3);
+                const options = shuffleArray([item.cz, ...distractors]);
+                return {
+                    fr: item.fr,
+                    speak: item.speak,
+                    correctCz: item.cz,
+                    options
+                };
+            });
+
+            ex2Answered = {};
+            scores.ex2 = 0;
+            document.getElementById('score-ex2').textContent = `0 / 10 bodů`;
+            document.getElementById('final-summary-card').classList.add('hidden');
+            updateGlobalScore();
+            renderExercise2();
+        }
+
+        function renderExercise2() {
+            const container = document.getElementById('ex2-list');
+            container.innerHTML = '';
+
+            ex2Items.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.id = `ex2-card-${idx}`;
+                card.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between gap-3 transition";
+
+                const optsHtml = item.options.map((opt, optIdx) => `
+                    <button type="button" id="ex2-btn-${idx}-${optIdx}"
+                            onclick="answerExercise2(${idx}, ${optIdx})"
+                            class="w-full text-left px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:border-amber-400 text-xs sm:text-sm font-medium text-slate-800 transition cursor-pointer">
+                        ${opt}
+                    </button>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-bold text-slate-500 text-sm">Otázka ${idx + 1}</span>
+                        <button type="button" onclick="speakFrench('${item.speak.replace(/'/g, "\\'")}')"
+                                class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm shadow-xs flex items-center gap-2 transition cursor-pointer">
+                            <span>🔊</span> Přehrát francouzsky
+                        </button>
+                    </div>
+                    <div class="space-y-2">
+                        ${optsHtml}
+                    </div>
+                    <div id="ex2-reveal-${idx}" class="hidden text-xs font-bold pt-1"></div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function answerExercise2(qIdx, optIdx) {
+            if (ex2Answered[qIdx] !== undefined) return;
+            ex2Answered[qIdx] = optIdx;
+
+            const item = ex2Items[qIdx];
+            const chosenText = item.options[optIdx];
+            const isCorrect = chosenText === item.correctCz;
+
+            if (isCorrect) {
+                scores.ex2++;
+            }
+            document.getElementById('score-ex2').textContent = `${scores.ex2} / 10 bodů`;
+            updateGlobalScore();
+
+            item.options.forEach((optText, idx) => {
+                const btn = document.getElementById(`ex2-btn-${qIdx}-${idx}`);
+                btn.disabled = true;
+                btn.classList.remove('hover:border-amber-400', 'cursor-pointer');
+
+                if (optText === item.correctCz) {
+                    btn.classList.remove('bg-white', 'border-slate-200');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+                } else if (idx === optIdx && !isCorrect) {
+                    btn.classList.remove('bg-white', 'border-slate-200');
+                    btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900');
+                } else {
+                    btn.classList.add('opacity-60');
+                }
+            });
+
+            const card = document.getElementById(`ex2-card-${qIdx}`);
+            const reveal = document.getElementById(`ex2-reveal-${qIdx}`);
+            reveal.classList.remove('hidden');
+
+            if (isCorrect) {
+                card.classList.remove('border-slate-200', 'bg-slate-50');
+                card.classList.add('border-emerald-400', 'bg-emerald-50/40');
+                reveal.classList.add('text-emerald-700');
+                reveal.textContent = `✓ Správně! Slyšel(a) jsi: „${item.fr}“`;
+            } else {
+                card.classList.remove('border-slate-200', 'bg-slate-50');
+                card.classList.add('border-rose-400', 'bg-rose-50/40');
+                reveal.classList.add('text-rose-700');
+                reveal.textContent = `✗ Bohužel. V nahrávce zaznělo: „${item.fr}“ (${item.correctCz})`;
+            }
+        }
+
+        /* ==========================================================================
+           CVIČENÍ 3: VÝBĚR SPRÁVNÉ FRÁZE PODLE ČESKÉHO ZADÁNÍ (8 bodů)
+           ========================================================================== */
+        const ex3Questions = [
+            { cz: "okukovat výlohy / chodit po obchodech", answer: "faire du lèche-vitrines", distractors: ["faire une promenade", "visiter un musée"] },
+            { cz: "hrát na hudební nástroj", answer: "jouer d'un instrument", distractors: ["écouter de la musique", "jouer aux échecs"] },
+            { cz: "psát dopisy", answer: "écrire des lettres", distractors: ["lire", "prendre des photos"] },
+            { cz: "dívat se na televizi", answer: "regarder la télé", distractors: ["aller au cinéma", "surfer sur Internet"] },
+            { cz: "cvičit gymnastiku", answer: "faire de la gym / gymnastique", distractors: ["faire du jogging", "danser"] },
+            { cz: "setkat se s přáteli", answer: "rencontrer des amis", distractors: ["téléphoner", "voyager"] },
+            { cz: "hrát šachy", answer: "jouer aux échecs", distractors: ["jouer d'un instrument", "faire du vélo"] },
+            { cz: "vařit", answer: "cuisiner", distractors: ["lire", "cestovat"] }
+        ];
+        // Oprava posledního distraktoru na francouzský výraz ze slovníčku
+        ex3Questions[7].distractors = ["lire", "voyager"];
+
+        function initExercise3() {
+            const container = document.getElementById('ex3-list');
+            container.innerHTML = '';
+
+            ex3Questions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.id = `ex3-item-${idx}`;
+                card.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between gap-2.5 transition";
+
+                const opts = shuffleArray([q.answer, ...q.distractors])
+                    .map(o => `<option value="${o}">${o}</option>`)
+                    .join('');
+
+                card.innerHTML = `
+                    <div class="text-sm font-bold text-slate-900">
+                        <span class="text-slate-400 mr-1">${idx + 1}.</span> ${q.cz}
+                    </div>
+                    <select id="ex3-select-${idx}" aria-label="Vyber francouzský překlad pro ${q.cz}"
+                            class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white font-semibold text-blue-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        <option value="">--- Vyber francouzskou frázi ---</option>
+                        ${opts}
+                    </select>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function checkExercise3() {
+            let correctCount = 0;
+
+            ex3Questions.forEach((q, idx) => {
+                const select = document.getElementById(`ex3-select-${idx}`);
+                const card = document.getElementById(`ex3-item-${idx}`);
+                const val = select.value;
+
+                card.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50', 'border-amber-400', 'bg-amber-50', 'border-slate-200', 'bg-slate-50');
+
+                if (!val) {
+                    card.classList.add('border-amber-400', 'bg-amber-50');
+                } else if (val === q.answer) {
+                    correctCount++;
+                    card.classList.add('border-emerald-500', 'bg-emerald-50');
+                } else {
+                    card.classList.add('border-rose-500', 'bg-rose-50');
+                }
+            });
+
+            scores.ex3 = correctCount;
+            document.getElementById('score-ex3').textContent = `${correctCount} / 8 bodů`;
+            updateGlobalScore();
+
+            const fb = document.getElementById('ex3-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+            if (correctCount === ex3Questions.length) {
+                fb.classList.add('bg-emerald-100', 'text-emerald-900');
+                fb.textContent = "Skvělé! Všechny fráze ze slovníčku ovládáš bez jediné chyby.";
+            } else {
+                fb.classList.add('bg-amber-100', 'text-amber-900');
+                fb.textContent = `Máš správně ${correctCount} z 8 frází. Zkontroluj červeně označené položky ve slovníčku.`;
+            }
+        }
+
+        function resetExercise3() {
+            scores.ex3 = 0;
+            document.getElementById('score-ex3').textContent = `0 / 8 bodů`;
+            document.getElementById('ex3-feedback').classList.add('hidden');
+            updateGlobalScore();
+            initExercise3();
+        }
+
+        /* ==========================================================================
+           ZÁVĚREČNÉ VYHODNOCENÍ
+           ========================================================================== */
+        function showFinalSummary() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3;
+            const percent = Math.round((total / MAX_TOTAL) * 100);
+
+            const card = document.getElementById('final-summary-card');
+            const title = document.getElementById('final-title');
+            const msg = document.getElementById('final-message');
+            const scoreBig = document.getElementById('final-score-big');
+            const percentEl = document.getElementById('final-percent');
+
+            scoreBig.textContent = `${total} / ${MAX_TOTAL}`;
+            percentEl.textContent = `${percent} %`;
+
+            if (percent >= 90) {
+                title.textContent = "Fantastický výkon! Magnifique ! 🎉";
+                msg.textContent = "Slovní zásobu „Les loisirs“ znáš na jedničku. Můžeš se pustit do druhého pracovního listu se slovesy obliby!";
+            } else if (percent >= 70) {
+                title.textContent = "Velmi dobrá práce! Très bien ! 👍";
+                msg.textContent = "Většinu slovíček už bezpečně poznáš i podle poslechu. Zkus si ještě jednou projet slovníček se skrytými překlady.";
+            } else {
+                title.textContent = "Dobrý trénink! Continue ! 💪";
+                msg.textContent = "Vrať se na záložku Slovníček, poslechni si jednotlivé výrazy a zkus spojovačku nebo poslechový kvíz znovu.";
+            }
+
+            card.classList.remove('hidden');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        window.onload = function () {
+            renderVocabulary();
+            initExercise1();
+            initExercise2();
+            initExercise3();
+            updateGlobalScore();
+        };
+    </script>
+</body>
+</html>
