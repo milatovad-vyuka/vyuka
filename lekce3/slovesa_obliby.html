@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slovesa obliby a préférer – Francouzština (8. třída)</title>
+    <!-- Načtení Tailwind CSS pro moderní responzivní stylování -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Načtení Google Fontu Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tab-active {
+            background-color: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Horní lišta s názvem a ukazatelem skóre -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm shrink-0">
+                    FR
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Slovesa obliby a préférer</h1>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Pracovní list 2/2 • adorer, aimer, aimer bien, aimer mieux, préférer, détester • 8. třída</p>
+                </div>
+            </div>
+
+            <!-- Přehled celkového pokroku -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+                <div class="text-sm">
+                    <span class="text-slate-500">Celkové skóre:</span>
+                    <span id="total-score-text" class="font-bold text-indigo-600 ml-1">0 / 24</span>
+                </div>
+                <div class="w-24 sm:w-28 bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="total-progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <button onclick="resetAllExercises()" title="Vynulovat všechna cvičení" class="px-2.5 py-1 rounded-lg bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 text-xs font-semibold transition cursor-pointer">
+                    🔄 Resetovat vše
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigační záložky -->
+        <nav class="max-w-5xl mx-auto px-4 sm:px-6 pb-3 overflow-x-auto">
+            <div class="flex gap-2 min-w-max">
+                <button onclick="switchTab('gramatika')" id="tab-gramatika" class="tab-active px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    📘 Gramatický přehled
+                </button>
+                <button onclick="switchTab('cviceni1')" id="tab-cviceni1" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    1. Préférer a stupnice obliby (10)
+                </button>
+                <button onclick="switchTab('cviceni2')" id="tab-cviceni2" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    2. Obliba + celá fráze (8)
+                </button>
+                <button onclick="switchTab('cviceni3')" id="tab-cviceni3" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
+                    3. Sestav větu a kvíz (6)
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hlavní obsahová oblast -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+        <!-- Oznámení / stavová zpráva (místo alertu) -->
+        <div id="toast-message" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium transition-opacity duration-300"></div>
+
+        <!-- ==================== SEKCE 0: GRAMATICKÝ PŘEHLED ==================== -->
+        <section id="section-gramatika" class="space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-1">Gramatika • 8. třída</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Vyjadřování obliby a preferencí</h2>
+                    </div>
+                    <button onclick="speakFrench('J\'adore, j\'aime, j\'aime bien, je préfère, j\'aime mieux, je déteste')" class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold transition cursor-pointer border border-indigo-200">
+                        🔊 Poslechnout stupnici
+                    </button>
+                </div>
+
+                <!-- Tabulka stupnice obliby -->
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                    <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xl">😍</span>
+                            <span class="text-xs font-bold text-emerald-700">+++</span>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-base">adorer</div>
+                        <div class="text-xs text-slate-600 mt-0.5">zbožňovat, milovat</div>
+                        <div class="text-xs font-semibold text-emerald-800 mt-2 pt-2 border-t border-emerald-200/70">J'adore danser.</div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-teal-50 border border-teal-200 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xl">😊</span>
+                            <span class="text-xs font-bold text-teal-700">++</span>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-base">aimer</div>
+                        <div class="text-xs text-slate-600 mt-0.5">mít rád</div>
+                        <div class="text-xs font-semibold text-teal-800 mt-2 pt-2 border-t border-teal-200/70">J'aime écouter de la musique.</div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xl">🙂</span>
+                            <span class="text-xs font-bold text-sky-700">+</span>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-base">aimer bien</div>
+                        <div class="text-xs text-slate-600 mt-0.5">mít docela rád</div>
+                        <div class="text-xs font-semibold text-sky-800 mt-2 pt-2 border-t border-sky-200/70">J'aime bien voyager.</div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xl">⭐</span>
+                            <span class="text-xs font-bold text-indigo-700">A &gt; B</span>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-base leading-tight">préférer / aimer mieux</div>
+                        <div class="text-xs text-slate-600 mt-0.5">dávat přednost / mít raději</div>
+                        <div class="text-xs font-semibold text-indigo-800 mt-2 pt-2 border-t border-indigo-200/70">Je préfère lire.</div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xl">😖</span>
+                            <span class="text-xs font-bold text-rose-700">---</span>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-base">détester</div>
+                        <div class="text-xs text-slate-600 mt-0.5">nesnášet</div>
+                        <div class="text-xs font-semibold text-rose-800 mt-2 pt-2 border-t border-rose-200/70">Je déteste faire du jogging.</div>
+                    </div>
+                </div>
+
+                <!-- Tabulka časování slovesa PRÉFÉRER se změnou přízvuků + srovnání s AIMER -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-indigo-50/60 border border-indigo-200 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-extrabold text-indigo-950 text-base sm:text-lg flex items-center gap-2">
+                                <span>🎯</span> Časování slovesa <span class="underline decoration-indigo-400">préférer</span> (změna přízvuku é → è)
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-700 mt-1">
+                                V 1., 2., 3. osobě jednotného čísla a ve 3. osobě množného čísla („bota“) se druhý čárkovaný přízvuk <strong>é</strong> mění na obrácený <strong>è</strong> (vyslovuje se otevřeně [ɛ]). V 1. a 2. osobě množného čísla (<strong>nous, vous</strong>) zůstává <strong>é</strong>!
+                            </p>
+                        </div>
+                        <button onclick="speakFrench('Je préfère, tu préfères, il préfère, nous préférons, vous préférez, ils préfèrent')" class="self-start sm:self-auto px-3 py-2 rounded-xl bg-white hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition cursor-pointer border border-indigo-200 shrink-0">
+                            🔊 Poslechnout časování
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Tabulka PRÉFÉRER -->
+                        <div class="bg-white rounded-xl border border-indigo-200 overflow-hidden shadow-xs">
+                            <div class="bg-indigo-600 text-white px-4 py-2 text-xs sm:text-sm font-bold flex justify-between">
+                                <span>PRÉFÉRER (dávat přednost)</span>
+                                <span>é → è</span>
+                            </div>
+                            <div class="divide-y divide-slate-100 text-xs sm:text-sm">
+                                <div class="grid grid-cols-2 px-4 py-2.5 bg-amber-50/60">
+                                    <div>je préf<span class="px-1 rounded bg-amber-200 font-extrabold text-amber-950">è</span>re</div>
+                                    <div>nous préf<span class="px-1 rounded bg-emerald-100 font-extrabold text-emerald-900">é</span>rons</div>
+                                </div>
+                                <div class="grid grid-cols-2 px-4 py-2.5 bg-amber-50/60">
+                                    <div>tu préf<span class="px-1 rounded bg-amber-200 font-extrabold text-amber-950">è</span>res</div>
+                                    <div>vous préf<span class="px-1 rounded bg-emerald-100 font-extrabold text-emerald-900">é</span>rez</div>
+                                </div>
+                                <div class="grid grid-cols-2 px-4 py-2.5 bg-amber-50/60">
+                                    <div>il / elle / on préf<span class="px-1 rounded bg-amber-200 font-extrabold text-amber-950">è</span>re</div>
+                                    <div class="bg-amber-50/80">ils / elles préf<span class="px-1 rounded bg-amber-200 font-extrabold text-amber-950">è</span>rent</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Srovnávací tabulka AIMER (pravidelné -er) -->
+                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+                            <div class="bg-slate-700 text-white px-4 py-2 text-xs sm:text-sm font-bold flex justify-between">
+                                <span>Srovnání: AIMER (mít rád)</span>
+                                <span>pravidelné -er</span>
+                            </div>
+                            <div class="divide-y divide-slate-100 text-xs sm:text-sm">
+                                <div class="grid grid-cols-2 px-4 py-2.5">
+                                    <div><strong>j'</strong>aim<span class="font-bold text-indigo-700">e</span></div>
+                                    <div>nous aim<span class="font-bold text-indigo-700">ons</span></div>
+                                </div>
+                                <div class="grid grid-cols-2 px-4 py-2.5">
+                                    <div>tu aim<span class="font-bold text-indigo-700">es</span></div>
+                                    <div>vous aim<span class="font-bold text-indigo-700">ez</span></div>
+                                </div>
+                                <div class="grid grid-cols-2 px-4 py-2.5">
+                                    <div>il / elle / on aim<span class="font-bold text-indigo-700">e</span></div>
+                                    <div>ils / elles aim<span class="font-bold text-indigo-700">ent</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Klíčová pravidla (Infinitiv celé fráze + Elize) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 space-y-2">
+                        <h3 class="font-bold text-blue-950 text-sm sm:text-base flex items-center gap-2">
+                            <span>📌</span> Jak spojit sloveso obliby s frází ze slovníčku?
+                        </h3>
+                        <ul class="text-xs sm:text-sm text-slate-700 space-y-1.5 list-disc pl-5">
+                            <li><strong>Vyčasuješ jen první sloveso</strong> (<em>j'adore, tu aimes, nous préférons...</em>) a za něj připojíš <strong>celou frázi ze slovníčku přesně tak, jak je</strong> (v infinitivu):<br>
+                                <span class="text-blue-800 font-semibold">Je préfère faire du vélo.</span> (Raději jezdím na kole.)<br>
+                                <span class="text-blue-800 font-semibold">J'adore écouter de la musique.</span> (Zbožňuji poslouchat hudbu.)<br>
+                                <span class="text-blue-800 font-semibold">Je déteste faire du lèche-vitrines.</span> (Nesnáším chodit po obchodech.)
+                            </li>
+                            <li>Nikdy nečasuješ obě slovesa najednou (např. <del>J'adore écoute</del> je chyba).</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                        <h3 class="font-bold text-amber-950 text-sm sm:text-base flex items-center gap-2">
+                            <span>✍️</span> Pozor na elizi (J' vs. Je)
+                        </h3>
+                        <ul class="text-xs sm:text-sm text-slate-700 space-y-1.5 list-disc pl-5">
+                            <li><strong>Elize před samohláskou (a):</strong><br>
+                                <span class="text-emerald-800 font-bold">J'</span>aime, <span class="text-emerald-800 font-bold">J'</span>adore, <span class="text-emerald-800 font-bold">J'</span>aime bien, <span class="text-emerald-800 font-bold">J'</span>aime mieux
+                            </li>
+                            <li><strong>Bez elize před souhláskou (p, d):</strong><br>
+                                <span class="text-rose-800 font-bold">Je</span> préfère (nikoliv <del>J'préfère</del>!)<br>
+                                <span class="text-rose-800 font-bold">Je</span> déteste (nikoliv <del>J'déteste</del>!)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="switchTab('cviceni1')" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+                    Přejít na 1. cvičení →
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SEKCE 1: ČASOVÁNÍ PRÉFÉRER A STUPNICE OBLIBY (10 bodů) ==================== -->
+        <section id="section-cviceni1" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 1 • 10 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Časování slovesa PRÉFÉRER a sloves obliby</h2>
+                        <p class="text-sm text-slate-600 mt-1">V části A dopiš správný tvar slovesa <strong>préférer</strong> (pozor na přízvuky <strong>é / è</strong> – můžeš použít pomocná tlačítka). V části B vyber sloveso podle stupnice obliby.</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="score-ex1" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 10 bodů</span>
+                    </div>
+                </div>
+
+                <!-- Pomocná lišta pro vkládání francouzských znaků s přízvukem -->
+                <div class="mt-4 p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 flex flex-wrap items-center justify-between gap-3">
+                    <div class="text-xs sm:text-sm text-indigo-950">
+                        <strong>Klávesnice akcentů:</strong> Klikni do políčka v části A a vlož znak:
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="button" onmousedown="event.preventDefault(); insertAccent('é')" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-indigo-600 text-indigo-900 hover:text-white border border-indigo-300 font-extrabold text-sm shadow-xs transition cursor-pointer">
+                            é
+                        </button>
+                        <button type="button" onmousedown="event.preventDefault(); insertAccent('è')" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-indigo-600 text-indigo-900 hover:text-white border border-indigo-300 font-extrabold text-sm shadow-xs transition cursor-pointer">
+                            è
+                        </button>
+                        <button type="button" onmousedown="event.preventDefault(); insertAccent('ê')" class="px-3.5 py-1.5 rounded-lg bg-white hover:bg-indigo-600 text-indigo-900 hover:text-white border border-indigo-300 font-extrabold text-sm shadow-xs transition cursor-pointer">
+                            ê
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Část 1A: Doplňování tvarů slovesa PRÉFÉRER (6 bodů) -->
+                <div class="mt-5">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Část A – Doplň správný tvar slovesa PRÉFÉRER (6 bodů)</h3>
+                    <div id="ex1a-list" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <!-- Generováno JS -->
+                    </div>
+                </div>
+
+                <!-- Část 1B: Výběr ze stupnice obliby (4 body) -->
+                <div class="mt-7 pt-6 border-t border-slate-100">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část B – Vyber sloveso podle emotikonu a kontextu (4 body)</h3>
+                        <div class="text-xs text-slate-600 flex flex-wrap gap-3">
+                            <span>😍 <strong>adorer</strong></span>
+                            <span>😊 <strong>aimer</strong></span>
+                            <span>🙂 <strong>aimer bien</strong></span>
+                            <span>⭐ <strong>préférer / aimer mieux</strong></span>
+                            <span>😖 <strong>détester</strong></span>
+                        </div>
+                    </div>
+                    <div id="ex1b-list" class="space-y-3">
+                        <!-- Generováno JS -->
+                    </div>
+                </div>
+
+                <div id="ex1-feedback" class="hidden mt-5 p-4 rounded-xl text-sm font-medium"></div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="checkExercise1()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+                            ✓ Zkontrolovat odpovědi
+                        </button>
+                        <button onclick="resetExercise1()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition cursor-pointer">
+                            🔄 Vymazat
+                        </button>
+                    </div>
+                    <button onclick="switchTab('cviceni2')" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition cursor-pointer">
+                        Další cvičení →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SEKCE 2: SLOVESO OBLIBY + CELÁ FRÁZE (8 bodů) ==================== -->
+        <section id="section-cviceni2" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 2 • 8 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Spoj sloveso obliby s celou frází ze slovníčku</h2>
+                        <p class="text-sm text-slate-600 mt-1">Doplň správnou frázi ze slovníčku. Pamatuj, že po slovesech <strong>aimer, adorer, préférer, détester</strong> zůstává celá fráze ze slovníčku v základním tvaru (<strong>infinitivu</strong>).</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="score-ex2" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 8 bodů</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3.5 rounded-xl bg-purple-50 border border-purple-200 text-xs sm:text-sm text-purple-950">
+                    <strong>Tip:</strong> Časuje se pouze první sloveso (<em>j'aime, nous préférons, tu détestes...</em>). Druhé sloveso ve frázi se už nečasuje – vyber z nabídky přesně tu frázi, kterou znáš ze slovníčku!
+                </div>
+
+                <!-- Věty k doplnění -->
+                <div id="ex2-list" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Generováno JS -->
+                </div>
+
+                <div id="ex2-feedback" class="hidden mt-5 p-4 rounded-xl text-sm font-medium"></div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="checkExercise2()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+                            ✓ Zkontrolovat věty
+                        </button>
+                        <button onclick="resetExercise2()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition cursor-pointer">
+                            🔄 Vymazat
+                        </button>
+                    </div>
+                    <button onclick="switchTab('cviceni3')" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition cursor-pointer">
+                        Další cvičení →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SEKCE 3: SESTAV VĚTU A MINI-KVÍZ (6 bodů) ==================== -->
+        <section id="section-cviceni3" class="hidden space-y-6">
+            <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 3 • 6 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Sestav větu a chytáky na elizi a přízvuky</h2>
+                        <p class="text-sm text-slate-600 mt-1">V první části poskládej slova do správného francouzského slovosledu (klikáním na kartičky), ve druhé vyřeš 3 záludné kvízové otázky.</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span id="score-ex3" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 6 bodů</span>
+                    </div>
+                </div>
+
+                <!-- Část 3A: Sestav větu (3 věty) -->
+                <div class="space-y-5">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část A – Sestav větu ze slov (3 body)</h3>
+                    <div id="ex3-sentences" class="space-y-5">
+                        <!-- Generováno JS -->
+                    </div>
+                </div>
+
+                <!-- Část 3B: Mini-kvíz na chytáky (3 otázky) -->
+                <div class="pt-6 border-t border-slate-100 space-y-5">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část B – Mini-kvíz na chytáky (3 body)</h3>
+                    <div id="ex3-quiz" class="space-y-5">
+                        <!-- Generováno JS -->
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="resetExercise3()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition cursor-pointer">
+                        🔄 Spustit 3. cvičení znovu
+                    </button>
+                    <button onclick="showFinalSummary()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-sm shadow-md transition cursor-pointer">
+                        🏆 Vyhodnotit slovesa obliby
+                    </button>
+                </div>
+            </div>
+
+            <!-- Závěrečná karta s celkovým hodnocením -->
+            <div id="final-summary-card" class="hidden bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider mb-2">Výsledek – Slovesa obliby</span>
+                        <h3 id="final-title" class="text-2xl sm:text-3xl font-extrabold">Skvělá práce!</h3>
+                        <p id="final-message" class="text-indigo-100 mt-2 text-sm sm:text-base max-w-xl">
+                            Dokončil(a) jsi procvičování sloves obliby a časování slovesa préférer.
+                        </p>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm px-6 py-4 rounded-2xl text-center shrink-0 border border-white/20">
+                        <div class="text-xs uppercase tracking-wider text-indigo-100 font-semibold">Celkový zisk</div>
+                        <div id="final-score-big" class="text-3xl sm:text-4xl font-extrabold mt-1">0 / 24</div>
+                        <div id="final-percent" class="text-sm font-bold text-amber-300 mt-1">0 %</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Patička -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400">
+            Pracovní list 2/2 • Francouzský jazyk (8. třída) • adorer, aimer, aimer bien, aimer mieux, préférer, détester
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           STAV APLIKACE A SKÓRE
+           ========================================================================== */
+        let lastFocusedInput = null;
+        const scores = {
+            ex1: 0, // max 10
+            ex2: 0, // max 8
+            ex3: 0  // max 6
+        };
+        const MAX_TOTAL = 24;
+
+        function updateGlobalScore() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3;
+            const percent = Math.round((total / MAX_TOTAL) * 100);
+            document.getElementById('total-score-text').textContent = `${total} / ${MAX_TOTAL}`;
+            document.getElementById('total-progress-bar').style.width = `${percent}%`;
+        }
+
+        function resetAllExercises() {
+            resetExercise1();
+            resetExercise2();
+            resetExercise3();
+            showToast("Všechna cvičení byla vynulována.");
+        }
+
+        function insertAccent(char) {
+            if (!lastFocusedInput) {
+                showToast("Nejprve klikni do textového políčka ve cvičení 1A.");
+                return;
+            }
+            const start = lastFocusedInput.selectionStart || 0;
+            const end = lastFocusedInput.selectionEnd || 0;
+            const val = lastFocusedInput.value;
+            lastFocusedInput.value = val.slice(0, start) + char + val.slice(end);
+            lastFocusedInput.focus();
+            lastFocusedInput.setSelectionRange(start + 1, start + 1);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-message');
+            toast.textContent = msg;
+            toast.classList.remove('hidden', 'opacity-0');
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        /* ==========================================================================
+           NAVIGACE MEZI ZÁLOŽKAMI
+           ========================================================================== */
+        function switchTab(tabName) {
+            const sections = ['gramatika', 'cviceni1', 'cviceni2', 'cviceni3'];
+            sections.forEach(sec => {
+                const secEl = document.getElementById(`section-${sec}`);
+                const tabEl = document.getElementById(`tab-${sec}`);
+                if (sec === tabName) {
+                    secEl.classList.remove('hidden');
+                    tabEl.classList.add('tab-active');
+                    tabEl.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+                } else {
+                    secEl.classList.add('hidden');
+                    tabEl.classList.remove('tab-active');
+                    tabEl.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ==========================================================================
+           WEB SPEECH API: Výslovnost francouzštiny
+           ========================================================================== */
+        let cachedFrenchVoice = null;
+
+        function loadFrenchVoice() {
+            if (!('speechSynthesis' in window)) return null;
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return null;
+            cachedFrenchVoice =
+                voices.find(v => v.lang === 'fr-FR' && /google|thomas|amélie|denise|hortense|paul|julie/i.test(v.name)) ||
+                voices.find(v => v.lang === 'fr-FR') ||
+                voices.find(v => v.lang.toLowerCase().startsWith('fr')) ||
+                null;
+            return cachedFrenchVoice;
+        }
+
+        if ('speechSynthesis' in window && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+            window.speechSynthesis.onvoiceschanged = loadFrenchVoice;
+        }
+
+        function speakFrench(text) {
+            try {
+                if (!('speechSynthesis' in window)) {
+                    showToast("Tvůj prohlížeč bohužel nepodporuje hlasové předčítání.");
+                    return;
+                }
+                window.speechSynthesis.cancel();
+                const cleanedText = text
+                    .replace(/\s*\/\s*/g, '. ')
+                    .replace(/,\s*/g, '. ');
+                const utterance = new SpeechSynthesisUtterance(cleanedText);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.88;
+                utterance.pitch = 1.0;
+
+                const frVoice = cachedFrenchVoice || loadFrenchVoice();
+                if (frVoice) {
+                    utterance.voice = frVoice;
+                }
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                showToast("Nepodařilo se přehrát výslovnost.");
+            }
+        }
+
+        /* ==========================================================================
+           CVIČENÍ 1: ČASOVÁNÍ PRÉFÉRER (6 bodů) + STUPNICE OBLIBY (4 body) = 10 bodů
+           ========================================================================== */
+        const ex1aQuestions = [
+            {
+                before: "Je",
+                answer: "préfère",
+                after: "aller au cinéma.",
+                hint: "1. os. j. č. (é → è)"
+            },
+            {
+                before: "Nous",
+                answer: "préférons",
+                after: "faire du vélo.",
+                hint: "1. os. mn. č. (zůstává é)"
+            },
+            {
+                before: "Tu",
+                answer: "préfères",
+                after: "jouer aux échecs ou surfer sur Internet ?",
+                hint: "2. os. j. č. (é → è + s)"
+            },
+            {
+                before: "Vous",
+                answer: "préférez",
+                after: "visiter un musée ou faire une promenade ?",
+                hint: "2. os. mn. č. (zůstává é)"
+            },
+            {
+                before: "Elle",
+                answer: "préfère",
+                after: "écouter de la musique.",
+                hint: "3. os. j. č. (é → è)"
+            },
+            {
+                before: "Ils",
+                answer: "préfèrent",
+                after: "rencontrer des amis.",
+                hint: "3. os. mn. č. (é → è + ent)"
+            }
+        ];
+
+        const ex1bQuestions = [
+            {
+                emoji: "😍",
+                before: "",
+                options: ["J'adore", "Je adore", "Je déteste"],
+                answer: "J'adore",
+                after: "écouter de la musique et danser !"
+            },
+            {
+                emoji: "😖",
+                before: "",
+                options: ["J'déteste", "Je déteste", "Je préfère"],
+                answer: "Je déteste",
+                after: "faire du lèche-vitrines, c'est ennuyeux."
+            },
+            {
+                emoji: "⭐",
+                before: "Entre faire du jogging et faire de la gym,",
+                options: ["je préfère", "j'préfère", "je déteste"],
+                answer: "je préfère",
+                after: "faire de la gym."
+            },
+            {
+                emoji: "🙂",
+                before: "Tu",
+                options: ["aimes bien", "aime bien", "préfères"],
+                answer: "aimes bien",
+                after: "regarder la télé le soir."
+            }
+        ];
+
+        function initExercise1() {
+            const containerA = document.getElementById('ex1a-list');
+            containerA.innerHTML = '';
+
+            ex1aQuestions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.id = `ex1a-item-${idx}`;
+                card.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between gap-2 transition";
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center gap-2 text-sm sm:text-base font-medium text-slate-900">
+                        <span class="font-bold text-slate-400">${idx + 1}.</span>
+                        <span>${q.before}</span>
+                        <input type="text" id="ex1a-input-${idx}" autocomplete="off" spellcheck="false"
+                               placeholder="préf..."
+                               aria-label="Doplň tvar slovesa préférer pro větu ${idx + 1}"
+                               class="w-32 px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <span>${q.after}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-slate-500">
+                        <span class="italic">Nápověda: ${q.hint}</span>
+                        <span id="ex1a-sol-${idx}" class="font-bold text-rose-700 hidden"></span>
+                    </div>
+                `;
+                containerA.appendChild(card);
+
+                const inputEl = card.querySelector('input');
+                inputEl.addEventListener('focus', () => {
+                    lastFocusedInput = inputEl;
+                });
+            });
+
+            const containerB = document.getElementById('ex1b-list');
+            containerB.innerHTML = '';
+
+            ex1bQuestions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.id = `ex1b-item-${idx}`;
+                card.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-wrap items-center gap-2 transition";
+
+                const optionsHtml = q.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+
+                card.innerHTML = `
+                    <div class="flex flex-wrap items-center gap-2 text-sm sm:text-base font-medium text-slate-900">
+                        <span class="text-xl" title="Úroveň obliby">${q.emoji}</span>
+                        <span class="font-bold text-slate-400">${idx + 7}.</span>
+                        ${q.before ? `<span>${q.before}</span>` : ''}
+                        <select id="ex1b-select-${idx}" aria-label="Vyber tvar slovesa obliby pro větu ${idx + 7}"
+                                class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer">
+                            <option value="">---</option>
+                            ${optionsHtml}
+                        </select>
+                        <span>${q.after}</span>
+                    </div>
+                `;
+                containerB.appendChild(card);
+            });
+        }
+
+        function checkExercise1() {
+            let correctCount = 0;
+
+            ex1aQuestions.forEach((q, idx) => {
+                const input = document.getElementById(`ex1a-input-${idx}`);
+                const card = document.getElementById(`ex1a-item-${idx}`);
+                const solEl = document.getElementById(`ex1a-sol-${idx}`);
+                const val = input.value.trim().toLowerCase();
+
+                card.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50', 'border-amber-400', 'bg-amber-50', 'border-slate-200', 'bg-slate-50');
+                solEl.classList.add('hidden');
+
+                if (!val) {
+                    card.classList.add('border-amber-400', 'bg-amber-50');
+                } else if (val === q.answer) {
+                    correctCount++;
+                    card.classList.add('border-emerald-500', 'bg-emerald-50');
+                } else {
+                    card.classList.add('border-rose-500', 'bg-rose-50');
+                    solEl.textContent = `Správně: ${q.answer}`;
+                    solEl.classList.remove('hidden');
+                }
+            });
+
+            ex1bQuestions.forEach((q, idx) => {
+                const select = document.getElementById(`ex1b-select-${idx}`);
+                const card = document.getElementById(`ex1b-item-${idx}`);
+                const val = select.value;
+
+                card.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50', 'border-amber-400', 'bg-amber-50', 'border-slate-200', 'bg-slate-50');
+
+                if (!val) {
+                    card.classList.add('border-amber-400', 'bg-amber-50');
+                } else if (val === q.answer) {
+                    correctCount++;
+                    card.classList.add('border-emerald-500', 'bg-emerald-50');
+                } else {
+                    card.classList.add('border-rose-500', 'bg-rose-50');
+                }
+            });
+
+            scores.ex1 = correctCount;
+            document.getElementById('score-ex1').textContent = `${correctCount} / 10 bodů`;
+            updateGlobalScore();
+
+            const fb = document.getElementById('ex1-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+            if (correctCount === 10) {
+                fb.classList.add('bg-emerald-100', 'text-emerald-900');
+                fb.textContent = "Skvělé! Časování slovesa préférer včetně změny přízvuků é → è i ostatní slovesa obliby ovládáš bez chyby!";
+            } else {
+                fb.classList.add('bg-amber-100', 'text-amber-900');
+                fb.textContent = `Máš správně ${correctCount} z 10 položek. Zkontroluj u červených vět přízvuky (je préfère × nous préférons).`;
+            }
+        }
+
+        function resetExercise1() {
+            scores.ex1 = 0;
+            lastFocusedInput = null;
+            document.getElementById('score-ex1').textContent = `0 / 10 bodů`;
+            document.getElementById('ex1-feedback').classList.add('hidden');
+            updateGlobalScore();
+            initExercise1();
+        }
+
+        /* ==========================================================================
+           CVIČENÍ 2: SLOVESO OBLIBY + CELÁ FRÁZE ZE SLOVNÍČKU (8 bodů)
+           ========================================================================== */
+        const ex2Questions = [
+            {
+                before: "J'aime beaucoup",
+                options: ["faire du vélo", "fais du vélo", "faites du vélo"],
+                answer: "faire du vélo",
+                after: "dans le parc.",
+                hint: "jezdit na kole"
+            },
+            {
+                before: "Elle préfère",
+                options: ["jouer aux échecs", "joue aux échecs", "jouons aux échecs"],
+                answer: "jouer aux échecs",
+                after: "avec son grand-père.",
+                hint: "hrát šachy"
+            },
+            {
+                before: "Je déteste",
+                options: ["écrire des lettres", "écris des lettres", "écrivez des lettres"],
+                answer: "écrire des lettres",
+                after: ", je préfère téléphoner.",
+                hint: "psát dopisy"
+            },
+            {
+                before: "Nous préférons",
+                options: ["faire une promenade", "faisons une promenade", "font une promenade"],
+                answer: "faire une promenade",
+                after: "en forêt.",
+                hint: "jít na procházku"
+            },
+            {
+                before: "Tu aimes bien",
+                options: ["jouer d'un instrument", "joues d'un instrument", "jouez d'un instrument"],
+                answer: "jouer d'un instrument",
+                after: "?",
+                hint: "hrát na hudební nástroj"
+            },
+            {
+                before: "Ils adorent",
+                options: ["surfer sur Internet", "surfent sur Internet", "surfez sur Internet"],
+                answer: "surfer sur Internet",
+                after: "le week-end.",
+                hint: "surfovat na internetu"
+            },
+            {
+                before: "Je préfère",
+                options: ["prendre des photos", "prends des photos", "prenez des photos"],
+                answer: "prendre des photos",
+                after: "en vacances.",
+                hint: "fotit / dělat fotky"
+            },
+            {
+                before: "Vous aimez mieux",
+                options: ["visiter un musée", "visitez un musée", "visite un musée"],
+                answer: "visiter un musée",
+                after: "ou aller au cinéma ?",
+                hint: "navštívit muzeum"
+            }
+        ];
+
+        function initExercise2() {
+            const container = document.getElementById('ex2-list');
+            container.innerHTML = '';
+
+            ex2Questions.forEach((q, idx) => {
+                const row = document.createElement('div');
+                row.id = `ex2-item-${idx}`;
+                row.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between gap-2 transition";
+
+                const shuffledOpts = shuffleArray(q.options);
+                const opts = shuffledOpts.map(o => `<option value="${o}">${o}</option>`).join('');
+
+                row.innerHTML = `
+                    <div class="flex flex-wrap items-center gap-2 text-sm sm:text-base text-slate-900 font-medium">
+                        <span class="font-bold text-slate-400">${idx + 1}.</span>
+                        <span>${q.before}</span>
+                        <select id="ex2-select-${idx}" aria-label="Vyber celou frázi do věty ${idx + 1}"
+                                class="px-3 py-1.5 rounded-lg border border-slate-300 bg-white font-bold text-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer">
+                            <option value="">---</option>
+                            ${opts}
+                        </select>
+                        <span>${q.after}</span>
+                    </div>
+                    <div class="text-xs text-slate-500 italic">Význam fráze: ${q.hint}</div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function checkExercise2() {
+            let correctCount = 0;
+
+            ex2Questions.forEach((q, idx) => {
+                const select = document.getElementById(`ex2-select-${idx}`);
+                const row = document.getElementById(`ex2-item-${idx}`);
+                const val = select.value;
+
+                row.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50', 'border-amber-400', 'bg-amber-50', 'border-slate-200', 'bg-slate-50');
+
+                if (!val) {
+                    row.classList.add('border-amber-400', 'bg-amber-50');
+                } else if (val === q.answer) {
+                    correctCount++;
+                    row.classList.add('border-emerald-500', 'bg-emerald-50');
+                } else {
+                    row.classList.add('border-rose-500', 'bg-rose-50');
+                }
+            });
+
+            scores.ex2 = correctCount;
+            document.getElementById('score-ex2').textContent = `${correctCount} / 8 bodů`;
+            updateGlobalScore();
+
+            const fb = document.getElementById('ex2-feedback');
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+
+            if (correctCount === ex2Questions.length) {
+                fb.classList.add('bg-emerald-100', 'text-emerald-900');
+                fb.textContent = "Perfektní! Všechny fráze jsou správně v základním tvaru (infinitivu).";
+            } else {
+                fb.classList.add('bg-amber-100', 'text-amber-900');
+                fb.textContent = `Správně máš ${correctCount} z 8 vět. Pamatuj: časuje se jen první sloveso (obliba), celá fráze zůstává v infinitivu!`;
+            }
+        }
+
+        function resetExercise2() {
+            scores.ex2 = 0;
+            document.getElementById('score-ex2').textContent = `0 / 8 bodů`;
+            document.getElementById('ex2-feedback').classList.add('hidden');
+            updateGlobalScore();
+            initExercise2();
+        }
+
+        /* ==========================================================================
+           CVIČENÍ 3: SESTAV VĚTU (3 body) + MINI-KVÍZ NA CHYTÁKY (3 body) = 6 bodů
+           ========================================================================== */
+        const sentenceBuilders = [
+            {
+                cz: "Dávám přednost návštěvě muzea před chozením po obchodech.",
+                words: ["Je préfère", "visiter un musée", "à", "faire du lèche-vitrines."],
+                correctSentence: "Je préfère visiter un musée à faire du lèche-vitrines."
+            },
+            {
+                cz: "Raději se setkáváme s přáteli a posloucháme hudbu.",
+                words: ["Nous", "préférons", "rencontrer des amis", "et écouter de la musique."],
+                correctSentence: "Nous préférons rencontrer des amis et écouter de la musique."
+            },
+            {
+                cz: "Zbožňují cestování a focení.",
+                words: ["Ils", "adorent", "voyager", "et prendre des photos."],
+                correctSentence: "Ils adorent voyager et prendre des photos."
+            }
+        ];
+
+        const ex3QuizQuestions = [
+            {
+                question: "Jak správně řekneš francouzsky: „Dávám přednost jízdě na kole“?",
+                options: [
+                    "J'préfère faire du vélo.",
+                    "Je préfère faire du vélo.",
+                    "Je préfére faire du vélo."
+                ],
+                correctIndex: 1,
+                explanation: "Správně! Před souhláskou „p“ (préfère) se „Je“ nezkracuje a v 1. osobě jednotného čísla se druhý přízvuk mění na obrácený: préfère."
+            },
+            {
+                question: "Který tvar slovesa PRÉFÉRER je napsán pravopisně SPRÁVNĚ?",
+                options: [
+                    "nous préfèrons",
+                    "vous préférez",
+                    "ils préférent"
+                ],
+                correctIndex: 1,
+                explanation: "Výborně! Ve 2. osobě množného čísla (vous préférez) a 1. osobě množného čísla (nous préférons) zůstává původní čárkovaný přízvuk é."
+            },
+            {
+                question: "Která věta je gramaticky SPRÁVNĚ?",
+                options: [
+                    "J'adore écoute de la musique.",
+                    "J'adore écouter de la musique.",
+                    "Je adore écouter de la musique."
+                ],
+                correctIndex: 1,
+                explanation: "Přesně tak! Před samohláskou „a“ píšeme „J'adore“ a druhé sloveso v pořadí musí být v infinitivu: „écouter de la musique“."
+            }
+        ];
+
+        let builderStates = [];
+        let builderSolved = [false, false, false];
+        let quizAnswered = {};
+
+        function recalculateEx3Score() {
+            const solvedSentencesCount = builderSolved.filter(Boolean).length;
+            let correctQuizCount = 0;
+            Object.keys(quizAnswered).forEach(k => {
+                const idx = Number(k);
+                if (quizAnswered[idx] === ex3QuizQuestions[idx].correctIndex) {
+                    correctQuizCount++;
+                }
+            });
+            scores.ex3 = solvedSentencesCount + correctQuizCount;
+            document.getElementById('score-ex3').textContent = `${scores.ex3} / 6 bodů`;
+            updateGlobalScore();
+        }
+
+        function initExercise3() {
+            builderStates = sentenceBuilders.map(sb => ({
+                bank: shuffleArray(sb.words.map((w, i) => ({ id: i, text: w }))),
+                selected: []
+            }));
+            builderSolved = [false, false, false];
+            quizAnswered = {};
+            scores.ex3 = 0;
+            document.getElementById('score-ex3').textContent = `0 / 6 bodů`;
+            document.getElementById('final-summary-card').classList.add('hidden');
+            updateGlobalScore();
+
+            renderSentenceBuilders();
+            renderEx3Quiz();
+        }
+
+        function renderSentenceBuilders() {
+            const container = document.getElementById('ex3-sentences');
+            container.innerHTML = '';
+
+            sentenceBuilders.forEach((sb, sIdx) => {
+                const state = builderStates[sIdx];
+                const isSolved = builderSolved[sIdx];
+
+                const box = document.createElement('div');
+                box.className = `p-4 rounded-xl border ${isSolved ? 'border-emerald-500 bg-emerald-50/70' : 'border-slate-200 bg-slate-50'} space-y-3`;
+
+                const selectedHtml = state.selected.length > 0
+                    ? state.selected.map((wordObj, pos) => `
+                        <button type="button" ${isSolved ? 'disabled' : `onclick="removeWordFromSentence(${sIdx}, ${pos})"`}
+                                class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold text-sm shadow-sm ${isSolved ? 'bg-emerald-600 cursor-default' : 'hover:bg-indigo-700 cursor-pointer'} transition">
+                            ${wordObj.text}
+                        </button>
+                    `).join('')
+                    : `<span class="text-xs text-slate-400 italic">Klikni na slova níže a poskládej větu...</span>`;
+
+                const bankHtml = state.bank.map((wordObj, bIdx) => `
+                    <button type="button" ${isSolved ? 'disabled' : `onclick="addWordToSentence(${sIdx}, ${bIdx})"`}
+                            class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 hover:border-indigo-500 text-slate-800 font-semibold text-sm shadow-xs transition cursor-pointer">
+                        ${wordObj.text}
+                    </button>
+                `).join('');
+
+                box.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="text-sm font-bold text-slate-800">${sIdx + 1}. Přelož a poskládej: <span class="text-indigo-700">„${sb.cz}“</span></div>
+                        ${isSolved ? `<button type="button" onclick="speakFrench('${sb.correctSentence.replace(/'/g, "\\'")}')" class="text-xs px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 font-bold cursor-pointer">🔊 Poslechnout</button>` : ''}
+                    </div>
+                    <div class="min-h-[46px] p-2.5 rounded-xl bg-white border-2 border-dashed ${isSolved ? 'border-emerald-400' : 'border-slate-300'} flex flex-wrap items-center gap-2">
+                        ${selectedHtml}
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex flex-wrap gap-2">${bankHtml}</div>
+                        ${!isSolved && state.selected.length > 0 ? `
+                            <button type="button" onclick="clearSingleSentence(${sIdx})" class="text-xs text-slate-500 hover:text-slate-800 underline cursor-pointer">
+                                Vymazat řádek
+                            </button>
+                        ` : ''}
+                    </div>
+                    <div id="sb-msg-${sIdx}" class="text-xs font-bold ${isSolved ? 'text-emerald-700' : 'hidden'}">
+                        ${isSolved ? '✓ Výborně! Věta je poskládaná správně.' : ''}
+                    </div>
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        function addWordToSentence(sIdx, bankIdx) {
+            if (builderSolved[sIdx]) return;
+            const state = builderStates[sIdx];
+            const [moved] = state.bank.splice(bankIdx, 1);
+            state.selected.push(moved);
+
+            if (state.bank.length === 0) {
+                const assembled = state.selected.map(w => w.text).join(' ');
+                if (assembled === sentenceBuilders[sIdx].correctSentence) {
+                    builderSolved[sIdx] = true;
+                    recalculateEx3Score();
+                    speakFrench(assembled);
+                } else {
+                    renderSentenceBuilders();
+                    const msgEl = document.getElementById(`sb-msg-${sIdx}`);
+                    msgEl.classList.remove('hidden');
+                    msgEl.classList.add('text-rose-600');
+                    msgEl.textContent = "✗ Slovosled ještě úplně nesedí. Klikni na slova ve větě pro jejich vrácení a zkus jiné pořadí.";
+                    return;
+                }
+            }
+            renderSentenceBuilders();
+        }
+
+        function removeWordFromSentence(sIdx, selectedPos) {
+            if (builderSolved[sIdx]) return;
+            const state = builderStates[sIdx];
+            const [removed] = state.selected.splice(selectedPos, 1);
+            state.bank.push(removed);
+            renderSentenceBuilders();
+        }
+
+        function clearSingleSentence(sIdx) {
+            if (builderSolved[sIdx]) return;
+            const sb = sentenceBuilders[sIdx];
+            builderStates[sIdx] = {
+                bank: shuffleArray(sb.words.map((w, i) => ({ id: i, text: w }))),
+                selected: []
+            };
+            renderSentenceBuilders();
+        }
+
+        function renderEx3Quiz() {
+            const container = document.getElementById('ex3-quiz');
+            container.innerHTML = '';
+
+            ex3QuizQuestions.forEach((q, qIdx) => {
+                const block = document.createElement('div');
+                block.className = "p-4 sm:p-5 rounded-xl border border-slate-200 bg-slate-50";
+
+                const buttonsHtml = q.options.map((opt, optIdx) => `
+                    <button type="button" id="quiz-btn-${qIdx}-${optIdx}"
+                            onclick="answerQuiz(${qIdx}, ${optIdx})"
+                            class="w-full text-left px-4 py-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 text-sm font-medium text-slate-800 transition cursor-pointer">
+                        <span class="inline-block w-6 font-bold text-slate-400">${String.fromCharCode(65 + optIdx)})</span> ${opt}
+                    </button>
+                `).join('');
+
+                block.innerHTML = `
+                    <h4 class="font-bold text-slate-900 text-sm sm:text-base mb-3">${qIdx + 4}. ${q.question}</h4>
+                    <div class="space-y-2" id="quiz-opts-${qIdx}">
+                        ${buttonsHtml}
+                    </div>
+                    <div id="quiz-exp-${qIdx}" class="hidden mt-3 p-3 rounded-lg text-xs sm:text-sm font-medium"></div>
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        function answerQuiz(qIdx, selectedIdx) {
+            if (quizAnswered[qIdx] !== undefined) return;
+            quizAnswered[qIdx] = selectedIdx;
+
+            const question = ex3QuizQuestions[qIdx];
+            const isCorrect = selectedIdx === question.correctIndex;
+
+            recalculateEx3Score();
+
+            question.options.forEach((_, optIdx) => {
+                const btn = document.getElementById(`quiz-btn-${qIdx}-${optIdx}`);
+                btn.disabled = true;
+                btn.classList.remove('hover:border-indigo-400', 'cursor-pointer');
+
+                if (optIdx === question.correctIndex) {
+                    btn.classList.remove('bg-white', 'border-slate-200');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+                } else if (optIdx === selectedIdx && !isCorrect) {
+                    btn.classList.remove('bg-white', 'border-slate-200');
+                    btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900');
+                } else {
+                    btn.classList.add('opacity-60');
+                }
+            });
+
+            const expEl = document.getElementById(`quiz-exp-${qIdx}`);
+            expEl.classList.remove('hidden');
+            if (isCorrect) {
+                expEl.classList.add('bg-emerald-100/80', 'text-emerald-900');
+                expEl.textContent = `✓ ${question.explanation}`;
+            } else {
+                expEl.classList.add('bg-rose-100/80', 'text-rose-900');
+                expEl.textContent = `✗ Chyba. ${question.explanation}`;
+            }
+        }
+
+        function resetExercise3() {
+            initExercise3();
+        }
+
+        /* ==========================================================================
+           ZÁVĚREČNÉ VYHODNOCENÍ
+           ========================================================================== */
+        function showFinalSummary() {
+            const total = scores.ex1 + scores.ex2 + scores.ex3;
+            const percent = Math.round((total / MAX_TOTAL) * 100);
+
+            const card = document.getElementById('final-summary-card');
+            const title = document.getElementById('final-title');
+            const msg = document.getElementById('final-message');
+            const scoreBig = document.getElementById('final-score-big');
+            const percentEl = document.getElementById('final-percent');
+
+            scoreBig.textContent = `${total} / ${MAX_TOTAL}`;
+            percentEl.textContent = `${percent} %`;
+
+            if (percent >= 90) {
+                title.textContent = "Fantastický výkon! Magnifique ! 🎉";
+                msg.textContent = "Slovesa obliby včetně časování préférer a elize ovládáš na jedničku.";
+            } else if (percent >= 70) {
+                title.textContent = "Velmi dobrá práce! Très bien ! 👍";
+                msg.textContent = "Většinu učiva už skvěle znáš. Zkontroluj si ještě pár detailů u přízvuků é / è nebo elize (J' vs. Je).";
+            } else {
+                title.textContent = "Dobrý začátek! Continue ! 💪";
+                msg.textContent = "Vrať se na záložku Gramatický přehled, prohlédni si tabulku časování préférer a zkus cvičení ještě jednou.";
+            }
+
+            card.classList.remove('hidden');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        window.onload = function () {
+            initExercise1();
+            initExercise2();
+            initExercise3();
+            updateGlobalScore();
+        };
+    </script>
+</body>
+</html>
