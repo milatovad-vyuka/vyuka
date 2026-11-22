@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz z francouzštiny – 7. třída</title>
+    <style>
+        /* Základní reset a typografie */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #6366f1 100%);
+            color: #1e293b;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Horní navigační lišta */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 14px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            border-bottom: 4px solid #ef4444;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flag-icon {
+            display: flex;
+            width: 32px;
+            height: 22px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+        .flag-blue { flex: 1; background: #002395; }
+        .flag-white { flex: 1; background: #ffffff; }
+        .flag-red { flex: 1; background: #ed2939; }
+
+        .brand h1 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #1e3a8a;
+            letter-spacing: -0.02em;
+        }
+
+        /* Přepínač záložek */
+        .nav-tabs {
+            display: flex;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 999px;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #475569;
+            background: transparent;
+        }
+
+        .tab-btn:hover {
+            color: #1e3a8a;
+        }
+
+        .tab-btn.active {
+            background: #1e3a8a;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(30, 58, 138, 0.3);
+        }
+
+        .sound-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-small:hover {
+            background: #e2e8f0;
+        }
+
+        /* Hlavní rozložení pro Záložku 1 */
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 960px) {
+            .quiz-grid {
+                grid-template-columns: 400px 1fr;
+            }
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Časomíra */
+        .timer-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .mode-switch {
+            display: flex;
+            width: 100%;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 14px;
+            gap: 6px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #64748b;
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active {
+            background: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+        }
+
+        .timer-circle {
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            border: 10px solid #3b82f6;
+            box-shadow: inset 0 4px 15px rgba(0,0,0,0.06), 0 8px 20px rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .timer-circle.warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            box-shadow: inset 0 4px 15px rgba(0,0,0,0.06), 0 8px 25px rgba(245, 158, 11, 0.35);
+        }
+
+        .timer-circle.danger {
+            background: #fef2f2;
+            border-color: #ef4444;
+            animation: pulseRed 0.8s infinite;
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            50% { transform: scale(1.03); box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+        }
+
+        .timer-status {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #3b82f6;
+            margin-bottom: 4px;
+        }
+
+        .timer-circle.warning .timer-status { color: #d97706; }
+        .timer-circle.danger .timer-status { color: #dc2626; }
+
+        .timer-number {
+            font-size: 5.2rem;
+            font-weight: 900;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            color: #1e3a8a;
+        }
+
+        .timer-circle.warning .timer-number { color: #b45309; }
+        .timer-circle.danger .timer-number { color: #dc2626; }
+
+        .timer-unit {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .timer-actions {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            background: #10b981;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        .btn-primary:hover { background: #059669; }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary.paused {
+            background: #f59e0b;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+        }
+        .btn-primary.paused:hover { background: #d97706; }
+
+        .btn-secondary {
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: #e2e8f0;
+            color: #334155;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover { background: #cbd5e1; }
+
+        .hint-text {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Bodování týmů */
+        .scoreboard-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .scoreboard-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e3a8a;
+        }
+
+        .btn-next-team {
+            border: none;
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: #ffffff;
+            padding: 12px 22px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(234, 88, 12, 0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .btn-next-team:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(234, 88, 12, 0.45);
+        }
+
+        .btn-next-team:active {
+            transform: scale(0.97);
+        }
+
+        .teams-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .team-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: #f8fafc;
+            border: 3px solid #e2e8f0;
+            transition: all 0.25s ease;
+        }
+
+        .team-row.active-turn {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25), 0 8px 20px rgba(245, 158, 11, 0.15);
+            transform: scale(1.01);
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .team-badge-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #1e3a8a;
+            color: #ffffff;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .team-row.active-turn .team-badge-num {
+            background: #ea580c;
+        }
+
+        .team-name-input {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #1e293b;
+            background: transparent;
+            border: 1px dashed transparent;
+            border-radius: 8px;
+            padding: 4px 8px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .team-name-input:hover, .team-name-input:focus {
+            border-color: #94a3b8;
+            background: #ffffff;
+            outline: none;
+        }
+
+        .turn-pill {
+            background: #ea580c;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 999px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .team-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-box {
+            min-width: 56px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #1e3a8a;
+            font-variant-numeric: tabular-nums;
+            margin-right: 6px;
+        }
+
+        .btn-point {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn-point:active { transform: scale(0.92); }
+
+        .btn-plus2 {
+            background: #10b981;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+        }
+        .btn-plus2:hover { background: #059669; }
+
+        .btn-plus1 {
+            background: #3b82f6;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+        }
+        .btn-plus1:hover { background: #2563eb; }
+
+        .btn-minus1 {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+        .btn-minus1:hover {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .scoreboard-footer {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 2px solid #f1f5f9;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .btn-reset-all {
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* Záložka 2: Finále ÊTRE */
+        .finale-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 960px) {
+            .finale-grid {
+                grid-template-columns: 1fr 360px;
+            }
+        }
+
+        .finale-title {
+            font-size: 1.9rem;
+            font-weight: 900;
+            color: #1e3a8a;
+            margin-bottom: 6px;
+        }
+
+        .finale-title span {
+            color: #ef4444;
+            font-style: italic;
+        }
+
+        .finale-subtitle {
+            font-size: 1.05rem;
+            color: #475569;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .pronouns-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 600px) {
+            .pronouns-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .pronoun-item {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .pronoun-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #3b82f6;
+            color: #ffffff;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .pronoun-text {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .blank-line {
+            color: #94a3b8;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .bonus-banner {
+            margin-top: 24px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 3px solid #f59e0b;
+            border-radius: 18px;
+            padding: 18px 22px;
+        }
+
+        .bonus-label {
+            font-size: 0.85rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #b45309;
+            margin-bottom: 4px;
+        }
+
+        .bonus-task {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .bonus-task strong {
+            color: #991b1b;
+        }
+
+        .btn-back {
+            width: 100%;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #1e3a8a;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #e2e8f0;
+        }
+
+        /* Skrytí neaktivní záložky */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Vlastní potvrzovací lišta pro reset bodů */
+        .confirm-bar {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .confirm-bar span {
+            font-weight: 700;
+            color: #991b1b;
+            font-size: 0.9rem;
+        }
+        .confirm-btns {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-danger-yes {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-danger-no {
+            background: #ffffff;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HORNÍ NAVIGAČNÍ LIŠTA -->
+        <header class="header">
+            <div class="brand">
+                <div class="flag-icon" title="Francie">
+                    <div class="flag-blue"></div>
+                    <div class="flag-white"></div>
+                    <div class="flag-red"></div>
+                </div>
+                <h1>Kvíz z francouzštiny – 7. třída</h1>
+            </div>
+
+            <nav class="nav-tabs">
+                <button id="tab1Btn" class="tab-btn active" onclick="switchTab('quiz')">⏱️ Kvíz &amp; Bodování</button>
+                <button id="tab2Btn" class="tab-btn" onclick="switchTab('finale')">✍️ Finále: Sloveso ÊTRE</button>
+            </nav>
+
+            <div class="sound-controls">
+                <button id="muteBtn" class="btn-small" onclick="toggleMute()">🔊 Zvuk ZAP</button>
+                <button class="btn-small" onclick="playGong()">🔔 Test zvuku</button>
+            </div>
+        </header>
+
+        <!-- ZÁLOŽKA 1: KVÍZ A BODOVÁNÍ -->
+        <main id="quizView" class="quiz-grid">
+            <!-- Časomíra -->
+            <section class="card timer-card">
+                <div class="mode-switch">
+                    <button id="mode15Btn" class="mode-btn active" onclick="setTimerMode(15)">15 s (Otázka)</button>
+                    <button id="mode90Btn" class="mode-btn" onclick="setTimerMode(90)">90 s (Finále)</button>
+                </div>
+
+                <div id="mainCircle" class="timer-circle">
+                    <span id="mainStatus" class="timer-status">Připraveno</span>
+                    <div id="mainDisplay" class="timer-number">15</div>
+                    <span class="timer-unit">sekund</span>
+                </div>
+
+                <div class="timer-actions">
+                    <button id="mainStartBtn" class="btn-primary" onclick="toggleMainTimer()">▶ START</button>
+                    <button class="btn-secondary" onclick="resetMainTimer()">↺ Reset</button>
+                </div>
+
+                <p class="hint-text">Tip: Časomíru spustíš i <strong>mezerníkem</strong> na klávesnici.</p>
+            </section>
+
+            <!-- Počítadlo bodů pro 5 týmů -->
+            <section class="card">
+                <div class="scoreboard-header">
+                    <h2>🏆 Pořadí a body týmů</h2>
+                    <button class="btn-next-team" onclick="nextTeam()">Další tým v pořadí ➔</button>
+                </div>
+
+                <div id="teamsContainer" class="teams-list">
+                    <!-- Týmy se vykreslí pomocí JavaScriptu -->
+                </div>
+
+                <!-- Potvrzení vynulování bodů -->
+                <div id="resetConfirmBox" class="confirm-bar hidden">
+                    <span>Opravdu chcete vynulovat body všech týmů?</span>
+                    <div class="confirm-btns">
+                        <button class="btn-danger-yes" onclick="executeResetScores()">Ano, vynulovat</button>
+                        <button class="btn-danger-no" onclick="hideResetConfirm()">Zrušit</button>
+                    </div>
+                </div>
+
+                <div class="scoreboard-footer">
+                    <span>Kliknutím na název týmu jej můžete přejmenovat.</span>
+                    <button class="btn-reset-all" onclick="showResetConfirm()">Vynulovat všechny body</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- ZÁLOŽKA 2: FINÁLE SLOVESO ÊTRE -->
+        <main id="finaleView" class="finale-grid hidden">
+            <!-- Zadání pro promítnutí -->
+            <section class="card">
+                <h2 class="finale-title">Finále: Vyčasujte sloveso <span>ÊTRE</span> (být)</h2>
+                <p class="finale-subtitle">Napište na papírek číslo vašeho týmu a doplňte správné tvary:</p>
+
+                <div class="pronouns-grid">
+                    <div class="pronoun-item">
+                        <span class="pronoun-num">1</span>
+                        <span class="pronoun-text">Je <span class="blank-line">________</span></span>
+                    </div>
+                    <div class="pronoun-item">
+                        <span class="pronoun-num">4</span>
+                        <span class="pronoun-text">Nous <span class="blank-line">________</span></span>
+                    </div>
+                    <div class="pronoun-item">
+                        <span class="pronoun-num">2</span>
+                        <span class="pronoun-text">Tu <span class="blank-line">________</span></span>
+                    </div>
+                    <div class="pronoun-item">
+                        <span class="pronoun-num">5</span>
+                        <span class="pronoun-text">Vous <span class="blank-line">________</span></span>
+                    </div>
+                    <div class="pronoun-item">
+                        <span class="pronoun-num">3</span>
+                        <span class="pronoun-text">Il / Elle <span class="blank-line">________</span></span>
+                    </div>
+                    <div class="pronoun-item">
+                        <span class="pronoun-num">6</span>
+                        <span class="pronoun-text">Ils / Elles <span class="blank-line">________</span></span>
+                    </div>
+                </div>
+
+                <div class="bonus-banner">
+                    <div class="bonus-label">⭐ BONUS (+2 body)</div>
+                    <div class="bonus-task">Napište francouzsky: <strong>„My jsme v Paříži.“</strong></div>
+                </div>
+            </section>
+
+            <!-- 90s odpočet pro finále -->
+            <section class="card timer-card">
+                <div style="font-weight: 800; color: #1e3a8a; font-size: 1.05rem;">⏳ Časový limit na finále</div>
+
+                <div id="finaleCircle" class="timer-circle">
+                    <span id="finaleStatus" class="timer-status">Připraveno (1,5 min)</span>
+                    <div id="finaleDisplay" class="timer-number">90</div>
+                    <span class="timer-unit">sekund</span>
+                </div>
+
+                <div class="timer-actions">
+                    <button id="finaleStartBtn" class="btn-primary" onclick="toggleFinaleTimer()">▶ START</button>
+                    <button class="btn-secondary" onclick="resetFinaleTimer()">↺ Reset</button>
+                </div>
+
+                <button class="btn-back" onclick="switchTab('quiz')">← Zpět na zapsání bodů týmům</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- STAV APLIKACE ---
+        let activeTab = 'quiz';
+
+        // Hlavní časomíra (Záložka 1)
+        let mainDefaultSeconds = 15;
+        let mainSecondsLeft = 15;
+        let mainTimerId = null;
+        let mainRunning = false;
+
+        // Finálová časomíra (Záložka 2)
+        let finaleSecondsLeft = 90;
+        let finaleTimerId = null;
+        let finaleRunning = false;
+
+        // Zvuk (Web Audio API)
+        let isMuted = false;
+        let audioContext = null;
+
+        // Týmy (15 dětí = 5 týmů)
+        let teams = [
+            { name: 'Tým 1', score: 0 },
+            { name: 'Tým 2', score: 0 },
+            { name: 'Tým 3', score: 0 },
+            { name: 'Tým 4', score: 0 },
+            { name: 'Tým 5', score: 0 }
+        ];
+        let activeTeamIndex = 0;
+
+        // --- ZVUKOVÉ EFEKTY ---
+        function ensureAudio() {
+            if (!audioContext) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioCtx();
+            }
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        function playTick() {
+            if (isMuted) return;
+            ensureAudio();
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioContext.currentTime);
+            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.09);
+        }
+
+        function playGong() {
+            if (isMuted) return;
+            ensureAudio();
+            const now = audioContext.currentTime;
+            // Příjemný dvojzvuk (gong)
+            [523.25, 659.25].forEach((freq, idx) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                gain.gain.setValueAtTime(0.3, now + idx * 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.9);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start(now + idx * 0.12);
+                osc.stop(now + idx * 0.12 + 0.95);
+            });
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('muteBtn');
+            btn.textContent = isMuted ? '🔇 Zvuk VYP' : '🔊 Zvuk ZAP';
+        }
+
+        // --- PŘEPÍNÁNÍ ZÁLOŽEK ---
+        function switchTab(tab) {
+            activeTab = tab;
+            const quizView = document.getElementById('quizView');
+            const finaleView = document.getElementById('finaleView');
+            const tab1Btn = document.getElementById('tab1Btn');
+            const tab2Btn = document.getElementById('tab2Btn');
+
+            if (tab === 'quiz') {
+                if (finaleRunning) toggleFinaleTimer();
+                quizView.classList.remove('hidden');
+                finaleView.classList.add('hidden');
+                tab1Btn.classList.add('active');
+                tab2Btn.classList.remove('active');
+            } else {
+                if (mainRunning) toggleMainTimer();
+                finaleView.classList.remove('hidden');
+                quizView.classList.add('hidden');
+                tab2Btn.classList.add('active');
+                tab1Btn.classList.remove('active');
+            }
+        }
+
+        // --- HLAVNÍ ČASOMÍRA (ZÁLOŽKA 1) ---
+        function setTimerMode(seconds) {
+            mainDefaultSeconds = seconds;
+            document.getElementById('mode15Btn').classList.toggle('active', seconds === 15);
+            document.getElementById('mode90Btn').classList.toggle('active', seconds === 90);
+            resetMainTimer();
+        }
+
+        function updateMainTimerUI() {
+            const display = document.getElementById('mainDisplay');
+            const circle = document.getElementById('mainCircle');
+            const status = document.getElementById('mainStatus');
+            const startBtn = document.getElementById('mainStartBtn');
+
+            display.textContent = mainSecondsLeft;
+            circle.classList.remove('warning', 'danger');
+
+            if (mainSecondsLeft === 0) {
+                circle.classList.add('danger');
+                status.textContent = 'Čas vypršel!';
+            } else if (mainSecondsLeft <= 3) {
+                circle.classList.add('danger');
+                status.textContent = mainRunning ? 'Poslední vteřiny!' : 'Pozastaveno';
+            } else if (mainSecondsLeft <= 5) {
+                circle.classList.add('warning');
+                status.textContent = mainRunning ? 'Pozor, čas běží!' : 'Pozastaveno';
+            } else {
+                status.textContent = mainRunning ? 'Porada týmu...' : 'Připraveno';
+            }
+
+            if (mainRunning) {
+                startBtn.textContent = '⏸ PAUZA';
+                startBtn.classList.add('paused');
+            } else {
+                startBtn.textContent = mainSecondsLeft === 0 ? '↺ ZNOVU' : '▶ START';
+                startBtn.classList.remove('paused');
+            }
+        }
+
+        function toggleMainTimer() {
+            ensureAudio();
+            if (mainRunning) {
+                clearInterval(mainTimerId);
+                mainRunning = false;
+                updateMainTimerUI();
+            } else {
+                if (mainSecondsLeft === 0) {
+                    mainSecondsLeft = mainDefaultSeconds;
+                }
+                mainRunning = true;
+                updateMainTimerUI();
+
+                mainTimerId = setInterval(() => {
+                    mainSecondsLeft--;
+                    if (mainSecondsLeft > 0 && mainSecondsLeft <= 3) {
+                        playTick();
+                    }
+                    if (mainSecondsLeft <= 0) {
+                        mainSecondsLeft = 0;
+                        clearInterval(mainTimerId);
+                        mainRunning = false;
+                        playGong();
+                    }
+                    updateMainTimerUI();
+                }, 1000);
+            }
+        }
+
+        function resetMainTimer() {
+            clearInterval(mainTimerId);
+            mainRunning = false;
+            mainSecondsLeft = mainDefaultSeconds;
+            updateMainTimerUI();
+        }
+
+        // --- FINÁLOVÁ ČASOMÍRA (ZÁLOŽKA 2) ---
+        function updateFinaleTimerUI() {
+            const display = document.getElementById('finaleDisplay');
+            const circle = document.getElementById('finaleCircle');
+            const status = document.getElementById('finaleStatus');
+            const startBtn = document.getElementById('finaleStartBtn');
+
+            display.textContent = finaleSecondsLeft;
+            circle.classList.remove('warning', 'danger');
+
+            if (finaleSecondsLeft === 0) {
+                circle.classList.add('danger');
+                status.textContent = 'Konec! Tužky položit!';
+            } else if (finaleSecondsLeft <= 5) {
+                circle.classList.add('danger');
+                status.textContent = finaleRunning ? 'Poslední vteřiny!' : 'Pozastaveno';
+            } else if (finaleSecondsLeft <= 15) {
+                circle.classList.add('warning');
+                status.textContent = finaleRunning ? 'Finišujeme!' : 'Pozastaveno';
+            } else {
+                status.textContent = finaleRunning ? 'Týmy píšou...' : 'Připraveno (1,5 min)';
+            }
+
+            if (finaleRunning) {
+                startBtn.textContent = '⏸ PAUZA';
+                startBtn.classList.add('paused');
+            } else {
+                startBtn.textContent = finaleSecondsLeft === 0 ? '↺ ZNOVU' : '▶ START';
+                startBtn.classList.remove('paused');
+            }
+        }
+
+        function toggleFinaleTimer() {
+            ensureAudio();
+            if (finaleRunning) {
+                clearInterval(finaleTimerId);
+                finaleRunning = false;
+                updateFinaleTimerUI();
+            } else {
+                if (finaleSecondsLeft === 0) {
+                    finaleSecondsLeft = 90;
+                }
+                finaleRunning = true;
+                updateFinaleTimerUI();
+
+                finaleTimerId = setInterval(() => {
+                    finaleSecondsLeft--;
+                    if (finaleSecondsLeft > 0 && finaleSecondsLeft <= 3) {
+                        playTick();
+                    }
+                    if (finaleSecondsLeft <= 0) {
+                        finaleSecondsLeft = 0;
+                        clearInterval(finaleTimerId);
+                        finaleRunning = false;
+                        playGong();
+                    }
+                    updateFinaleTimerUI();
+                }, 1000);
+            }
+        }
+
+        function resetFinaleTimer() {
+            clearInterval(finaleTimerId);
+            finaleRunning = false;
+            finaleSecondsLeft = 90;
+            updateFinaleTimerUI();
+        }
+
+        // --- SPRÁVA TÝMŮ A BODŮ ---
+        function renderTeams() {
+            const container = document.getElementById('teamsContainer');
+            container.innerHTML = '';
+
+            teams.forEach((team, index) => {
+                const isActive = index === activeTeamIndex;
+                const row = document.createElement('div');
+                row.className = 'team-row' + (isActive ? ' active-turn' : '');
+
+                row.innerHTML = `
+                    <div class="team-info">
+                        <div class="team-badge-num" title="Kliknutím označíte tým jako aktivní" onclick="selectTeam(${index})">${index + 1}</div>
+                        <input class="team-name-input" type="text" value="${team.name}" onchange="renameTeam(${index}, this.value)" aria-label="Název týmu ${index + 1}">
+                        ${isActive ? '<span class="turn-pill">NA ŘADĚ</span>' : ''}
+                    </div>
+                    <div class="team-controls">
+                        <div class="score-box">${team.score}</div>
+                        <button class="btn-point btn-plus2" onclick="changeScore(${index}, 2)" title="Správná odpověď + dobrá výslovnost">+2</button>
+                        <button class="btn-point btn-plus1" onclick="changeScore(${index}, 1)" title="Správná odpověď / krádež bodu">+1</button>
+                        <button class="btn-point btn-minus1" onclick="changeScore(${index}, -1)" title="Odebrat 1 bod">-1</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function selectTeam(index) {
+            activeTeamIndex = index;
+            renderTeams();
+        }
+
+        function renameTeam(index, newName) {
+            const trimmed = newName.trim();
+            teams[index].name = trimmed || `Tým ${index + 1}`;
+            renderTeams();
+        }
+
+        function changeScore(index, delta) {
+            teams[index].score = Math.max(0, teams[index].score + delta);
+            renderTeams();
+        }
+
+        function nextTeam() {
+            activeTeamIndex = (activeTeamIndex + 1) % teams.length;
+            renderTeams();
+            // Automaticky přepne na 15s a resetuje časomíru
+            setTimerMode(15);
+        }
+
+        function showResetConfirm() {
+            document.getElementById('resetConfirmBox').classList.remove('hidden');
+        }
+
+        function hideResetConfirm() {
+            document.getElementById('resetConfirmBox').classList.add('hidden');
+        }
+
+        function executeResetScores() {
+            teams.forEach(t => t.score = 0);
+            activeTeamIndex = 0;
+            hideResetConfirm();
+            renderTeams();
+        }
+
+        // Ovládání mezerníkem (pokud uživatel zrovna nepíše do názvu týmu)
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'BUTTON') {
+                e.preventDefault();
+                if (activeTab === 'quiz') {
+                    toggleMainTimer();
+                } else {
+                    toggleFinaleTimer();
+                }
+            }
+        });
+
+        // Inicializace
+        window.onload = function() {
+            updateMainTimerUI();
+            updateFinaleTimerUI();
+            renderTeams();
+        };
+    </script>
+</body>
+</html>
