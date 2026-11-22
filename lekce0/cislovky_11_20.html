@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francouzština: Čísla 11 až 20 (Nové učivo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Okamžitá vizuální odezva aktivní karty/tlačítka při přehrávání */
+        .speaking-active {
+            background-color: #eff6ff !important;
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+            transform: scale(1.02);
+        }
+        .speaking-btn-active {
+            background-color: #1d4ed8 !important;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.35) !important;
+            transform: scale(1.05);
+        }
+        /* Francouzská trikolóra jako tenký akcent nahoře */
+        .tricolore-bar {
+            background: linear-gradient(90deg, #002395 33.33%, #ffffff 33.33%, #ffffff 66.66%, #ed2939 66.66%);
+            height: 6px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Horní barevná lišta ve stylu francouzské vlajky -->
+    <div class="tricolore-bar w-full shadow-sm"></div>
+
+    <!-- Hlavička aplikace -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-700 text-white flex items-center justify-center font-extrabold text-lg shadow-sm shrink-0">
+                    FR
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">
+                        Les nombres : 11 – 20
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">
+                        Nové učivo • Výslovnost, poslech a pravopis
+                    </p>
+                </div>
+            </div>
+
+            <!-- Přepínač rychlosti výslovnosti -->
+            <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl self-start sm:self-auto">
+                <span class="text-xs font-semibold text-slate-600 pl-2">Rychlost hlasu:</span>
+                <button type="button" id="speed-normal" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-blue-700 shadow-sm transition cursor-pointer">
+                    Normální
+                </button>
+                <button type="button" id="speed-slow" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer">
+                    🐢 Pomalu
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigační záložky (Taby) -->
+        <nav class="max-w-5xl mx-auto px-4 flex gap-1 sm:gap-2 overflow-x-auto pb-0">
+            <button type="button" id="tab-learn" class="tab-btn px-4 py-3 text-sm font-bold border-b-2 border-blue-700 text-blue-700 whitespace-nowrap transition flex items-center gap-2 cursor-pointer">
+                <span>1. Přehled a výslovnost</span>
+            </button>
+            <button type="button" id="tab-quiz" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap transition flex items-center gap-2 cursor-pointer">
+                <span>2. Poslechový kvíz</span>
+            </button>
+            <button type="button" id="tab-write" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap transition flex items-center gap-2 cursor-pointer">
+                <span>3. Psaní a pravopis</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hlavní obsah -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6 sm:py-8">
+
+        <!-- Nenápadná informace, pokud prohlížeč/náhled blokuje zvukový výstup -->
+        <div id="voice-warning" class="hidden mb-6 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl text-sm flex items-start gap-3">
+            <span class="text-base shrink-0">🔇</span>
+            <div>
+                <strong>Zvukový výstup není v tomto okně dostupný:</strong> Prohlížeč nebo náhledový režim blokuje hlasový syntezátor. Všechna cvičení fungují normálně dál a u každého čísla máte přesný český přepis výslovnosti s vlnovkou.
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SEKCE 1: PŘEHLED A VÝSLOVNOST (NOVÉ UČIVO)                 -->
+        <!-- ========================================================= -->
+        <section id="section-learn" class="space-y-6">
+            <!-- Didaktický tip pro žáky -->
+            <div class="bg-blue-50/90 border border-blue-200 rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+                <div class="space-y-1.5">
+                    <h2 class="text-base font-bold text-blue-900 flex items-center gap-2">
+                        <span>💡</span> Jak si čísla 11–20 snadno zapamatovat?
+                    </h2>
+                    <div class="text-sm text-blue-800 leading-relaxed space-y-1">
+                        <p>• Čísla <strong>11 až 16</strong> končí všechna na <strong>-ze</strong> (vyslovujeme znělé <em>[z]</em>).</p>
+                        <p>• Čísla <strong>17 až 19</strong> se tvoří spojením <strong>dix-</strong> (deset) + číslo 7, 8, 9 se spojovníkem.</p>
+                        <p>• Číslo <strong>20 (vingt)</strong> má na konci němé <em>-gt</em> (vyslovujeme nosově <em>[vẽ]</em>).</p>
+                        <p class="pt-1 text-blue-950 bg-blue-100/70 px-3 py-1.5 rounded-lg border border-blue-200/80">
+                            <strong>Nosovky s vlnovkou (~):</strong> Znaky <strong>õ</strong> (např. 11 <em>[õz]</em>) a <strong>ẽ</strong> (např. 15 <em>[kẽz]</em>, 20 <em>[vẽ]</em>) značí nosovou samohlásku – vyslovíme ji nosem a samotné „n“ na konci již neříkáme.
+                        </p>
+                    </div>
+                </div>
+                <button type="button" id="btn-play-all" class="shrink-0 w-full sm:w-auto justify-center bg-blue-700 hover:bg-blue-800 active:scale-95 text-white font-semibold text-sm px-5 py-3.5 rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer">
+                    <span id="play-all-icon">▶️</span>
+                    <span id="play-all-text">Přehrát všechna čísla (11–20)</span>
+                </button>
+            </div>
+
+            <!-- Mřížka kartiček 11-20 -->
+            <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Kartičky se vygenerují dynamicky přes JS -->
+            </div>
+
+            <div class="text-center pt-4">
+                <button type="button" id="btn-go-quiz" class="bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-semibold px-6 py-3.5 rounded-xl shadow-sm transition inline-flex items-center gap-2 cursor-pointer">
+                    <span>Mám naposloucháno, jdu na kvíz</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SEKCE 2: POSLECHOVÝ KVÍZ (POZNEJ ČÍSLO PODLE SLUCHU)       -->
+        <!-- ========================================================= -->
+        <section id="section-quiz" class="hidden max-w-2xl mx-auto space-y-6">
+            <div id="quiz-card-container" class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm text-center space-y-6">
+                
+                <!-- Horní lišta postupu -->
+                <div class="flex items-center justify-between text-sm font-semibold text-slate-500">
+                    <span id="quiz-progress-text">Otázka 1 z 10</span>
+                    <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
+                        Skóre: <strong id="quiz-score">0</strong>
+                    </span>
+                </div>
+
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div id="quiz-progress-bar" class="bg-blue-600 h-full transition-all duration-300" style="width: 10%"></div>
+                </div>
+
+                <!-- Hlavní otázka s tlačítkem přehrávání -->
+                <div class="py-3 space-y-4">
+                    <p class="text-slate-600 font-medium">Poslechni si francouzské číslo a vyber správnou číslici:</p>
+                    
+                    <div class="flex flex-col items-center justify-center gap-3">
+                        <button type="button" id="quiz-play-btn" class="w-24 h-24 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white shadow-lg flex items-center justify-center transition group cursor-pointer" aria-label="Přehrát číslo">
+                            <svg class="w-11 h-11 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                            </svg>
+                        </button>
+                        <button type="button" id="quiz-slow-btn" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-700 hover:bg-blue-50 transition flex items-center gap-1 cursor-pointer">
+                            <span>🐢 Přehrát pomaleji</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Možnosti výběru (4 tlačítka) -->
+                <div id="quiz-options" class="grid grid-cols-2 gap-3 sm:gap-4">
+                    <!-- Možnosti se vygenerují dynamicky -->
+                </div>
+
+                <!-- Zpětná vazba po odpovědi -->
+                <div id="quiz-feedback" class="hidden rounded-xl p-4 text-sm font-medium"></div>
+
+                <!-- Tlačítko Další otázka -->
+                <div id="quiz-next-container" class="hidden pt-2">
+                    <button type="button" id="btn-quiz-next" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-semibold px-8 py-3.5 rounded-xl transition cursor-pointer">
+                        Další číslo →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Závěrečná karta výsledků kvízu -->
+            <div id="quiz-summary" class="hidden bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-5 shadow-sm">
+                <div class="text-5xl">🎉</div>
+                <h2 class="text-2xl font-bold text-slate-900">Poslechový kvíz je hotový!</h2>
+                <p class="text-slate-600 text-lg">
+                    Tvoje úspěšnost: <strong id="quiz-final-score" class="text-blue-700">0 / 10</strong>
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                    <button type="button" id="btn-quiz-restart" class="px-6 py-3 rounded-xl border border-slate-300 font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
+                        Zkusit znovu
+                    </button>
+                    <button type="button" id="btn-quiz-to-write" class="px-6 py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-semibold transition cursor-pointer">
+                        Pokračovat na psaní →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SEKCE 3: PSANÍ A PRAVOPIS                                 -->
+        <!-- ========================================================= -->
+        <section id="section-write" class="hidden max-w-2xl mx-auto space-y-6">
+            <div id="write-card" class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+                
+                <!-- Horní lišta -->
+                <div class="flex items-center justify-between text-sm font-semibold text-slate-500">
+                    <span id="write-progress-text">Příklad 1 z 10</span>
+                    <span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
+                        Správně: <strong id="write-score">0</strong>
+                    </span>
+                </div>
+
+                <!-- Zadání -->
+                <div class="text-center space-y-3 py-2">
+                    <p class="text-sm font-medium text-slate-500">Napiš francouzsky toto číslo:</p>
+                    <div class="flex items-center justify-center gap-4">
+                        <span id="write-target-number" class="text-6xl font-extrabold text-blue-700 tracking-tight">14</span>
+                        <button type="button" id="btn-write-audio" title="Poslechnout si číslo" class="w-12 h-12 rounded-xl bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-700 flex items-center justify-center border border-blue-200 transition cursor-pointer">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vstupní pole -->
+                <form id="write-form" class="space-y-4">
+                    <div>
+                        <input type="text" id="write-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                            placeholder="Napiš francouzské slovo..."
+                            class="w-full text-center text-xl font-semibold px-4 py-4 rounded-xl border-2 border-slate-300 focus:border-blue-600 focus:outline-none transition">
+                    </div>
+
+                    <!-- Pomocná tlačítka (spojovník pro 17-19 a nápověda) -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-500 font-medium">Pomůcka:</span>
+                            <button type="button" id="btn-insert-hyphen" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 font-bold rounded-lg border border-slate-300 transition cursor-pointer">
+                                Vložit spojovník ( - )
+                            </button>
+                        </div>
+                        <button type="button" id="btn-write-hint" class="px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-50 font-semibold transition cursor-pointer">
+                            💡 Potřebuji nápovědu
+                        </button>
+                    </div>
+
+                    <!-- Box pro nápovědu -->
+                    <div id="write-hint-box" class="hidden bg-amber-50 border border-amber-200 text-amber-900 px-4 py-2.5 rounded-xl text-sm text-center">
+                        <!-- Text nápovědy -->
+                    </div>
+
+                    <!-- Zpětná vazba -->
+                    <div id="write-feedback" class="hidden rounded-xl p-4 text-sm font-medium text-center"></div>
+
+                    <!-- Akční tlačítka -->
+                    <div class="pt-2 flex justify-center">
+                        <button type="submit" id="btn-write-submit" class="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 active:scale-95 text-white font-bold px-8 py-3.5 rounded-xl shadow-sm transition cursor-pointer">
+                            Zkontrolovat odpověď
+                        </button>
+                        <button type="button" id="btn-write-next" class="hidden w-full sm:w-auto bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold px-8 py-3.5 rounded-xl shadow-sm transition cursor-pointer">
+                            Další číslo →
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Závěrečné hodnocení psaní -->
+            <div id="write-summary" class="hidden bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-5 shadow-sm">
+                <div class="text-5xl">🏆</div>
+                <h2 class="text-2xl font-bold text-slate-900">Výborně! Procvičení psaní je u konce.</h2>
+                <p class="text-slate-600 text-lg">
+                    Správně napsáno: <strong id="write-final-score" class="text-emerald-600">0 / 10</strong>
+                </p>
+                <div class="pt-2">
+                    <button type="button" id="btn-write-restart" class="px-6 py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-semibold transition cursor-pointer">
+                        Procvičit psaní znovu
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Patička -->
+    <footer class="border-t border-slate-200 bg-white py-4 px-4 text-center text-xs text-slate-400">
+        Interaktivní pomůcka pro výuku francouzského jazyka • Číslovky 11–20 (Les nombres de 11 à 20)
+    </footer>
+
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT LOGIKA (BEZPEČNÁ A NEBLOKUJÍCÍ)                -->
+    <!-- ========================================================= -->
+    <script>
+        (function () {
+            // Databáze slovní zásoby (11 až 20) dle zadání
+            const numbersData = [
+                { num: 11, fr: "onze", phonetic: "[õz]", group: "-ze", note: "Nosové 'on' [õ] na začátku, znělé 'z' na konci." },
+                { num: 12, fr: "douze", phonetic: "[duz]", group: "-ze", note: "Skupina 'ou' se čte vždy jako české [u]." },
+                { num: 13, fr: "treize", phonetic: "[tréz]", group: "-ze", note: "Skupina 'ei' se čte jako otevřené [é]." },
+                { num: 14, fr: "quatorze", phonetic: "[katorz]", group: "-ze", note: "'qu' na začátku se čte jednoduše jako [k]." },
+                { num: 15, fr: "quinze", phonetic: "[kẽz]", group: "-ze", note: "'qu' = [k], 'in' = nosové [ẽ] (bez vyslovení 'n')." },
+                { num: 16, fr: "seize", phonetic: "[séz]", group: "-ze", note: "Stejná koncovka jako u 13 (treize)." },
+                { num: 17, fr: "dix-sept", phonetic: "[di-set]", group: "dix-", note: "Pozor na spojovník! 'x' i 'p' jsou zde němé." },
+                { num: 18, fr: "dix-huit", phonetic: "[diz-wit]", group: "dix-", note: "Vázání: 'x' se před němým 'h' čte jako [z]." },
+                { num: 19, fr: "dix-neuf", phonetic: "[diz-nöf]", group: "dix-", note: "Vázání: 'x' se před 'n' čte jako [z]." },
+                { num: 20, fr: "vingt", phonetic: "[vẽ]", group: "20", note: "Nosové 'in' [ẽ]; písmena 'g' a 't' se vůbec nevyslovují!" }
+            ];
+
+            // Globální stav
+            let speechRate = 0.95;
+            let frenchVoice = null;
+            let speechSupported = false;
+            let activeVisualTimeout = null;
+            let activeHighlightedEl = null;
+
+            // Stav pro hromadné přehrávání řady (11–20)
+            let sequenceTimer = null;
+            let sequenceIndex = 0;
+            let isSequencePlaying = false;
+
+            // Stav pro Poslechový kvíz
+            let quizQuestions = [];
+            let quizIndex = 0;
+            let quizScore = 0;
+            let quizAnswered = false;
+
+            // Stav pro Psaní
+            let writeQuestions = [];
+            let writeIndex = 0;
+            let writeScore = 0;
+            let writeAnswered = false;
+
+            // Bezpečná inicializace hlasové syntézy
+            function initSpeech() {
+                try {
+                    if (typeof window !== 'undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
+                        speechSupported = true;
+                        const updateVoices = () => {
+                            try {
+                                const voices = window.speechSynthesis.getVoices() || [];
+                                frenchVoice = voices.find(v => v.lang === 'fr-FR') || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('fr')) || null;
+                                if (voices.length > 0 && !frenchVoice) {
+                                    document.getElementById('voice-warning').classList.remove('hidden');
+                                }
+                            } catch (e) {
+                                // Ignorujeme chyby přístupu k hlasům v omezeném iframe
+                            }
+                        };
+                        updateVoices();
+                        window.speechSynthesis.onvoiceschanged = updateVoices;
+                    } else {
+                        document.getElementById('voice-warning').classList.remove('hidden');
+                    }
+                } catch (e) {
+                    speechSupported = false;
+                    document.getElementById('voice-warning').classList.remove('hidden');
+                }
+            }
+
+            // Okamžité zrušení jakéhokoli rozběhnutého hlasu a zvýraznění
+            function cancelSpeechAndHighlight() {
+                if (activeVisualTimeout) {
+                    clearTimeout(activeVisualTimeout);
+                    activeVisualTimeout = null;
+                }
+                if (activeHighlightedEl) {
+                    activeHighlightedEl.classList.remove('speaking-active', 'speaking-btn-active');
+                    activeHighlightedEl = null;
+                }
+                if (speechSupported) {
+                    try {
+                        window.speechSynthesis.cancel();
+                    } catch (e) {
+                        // Bezpečné zachycení výjimky v sandboxed iframe
+                    }
+                }
+            }
+
+            // Zastavení hromadného přehrávání 11–20
+            function stopAllSequence() {
+                isSequencePlaying = false;
+                if (sequenceTimer) {
+                    clearTimeout(sequenceTimer);
+                    sequenceTimer = null;
+                }
+                cancelSpeechAndHighlight();
+                const btn = document.getElementById('btn-play-all');
+                const icon = document.getElementById('play-all-icon');
+                const text = document.getElementById('play-all-text');
+                if (btn && icon && text) {
+                    btn.classList.remove('bg-rose-600', 'hover:bg-rose-700');
+                    btn.classList.add('bg-blue-700', 'hover:bg-blue-800');
+                    icon.textContent = '▶️';
+                    text.textContent = 'Přehrát všechna čísla (11–20)';
+                }
+            }
+
+            // Neblokující přehrávání francouzského slova s garantovaným odblokováním UI přes setTimeout
+            function speakFrench(text, customRate = null, targetElement = null, isRoundButton = false) {
+                cancelSpeechAndHighlight();
+
+                const rate = customRate !== null ? customRate : speechRate;
+                const highlightDuration = rate < 0.8 ? 1100 : 750;
+
+                // 1. Okamžitá vizuální odezva (funguje vždy, i když prohlížeč zvuk blokuje)
+                if (targetElement) {
+                    const activeClass = isRoundButton ? 'speaking-btn-active' : 'speaking-active';
+                    targetElement.classList.add(activeClass);
+                    activeHighlightedEl = targetElement;
+                    activeVisualTimeout = setTimeout(() => {
+                        if (activeHighlightedEl === targetElement) {
+                            targetElement.classList.remove('speaking-active', 'speaking-btn-active');
+                            activeHighlightedEl = null;
+                        }
+                    }, highlightDuration);
+                }
+
+                // 2. Zvukový výstup přes Web Speech API s bezpečným ošetřením chyb
+                if (!speechSupported) return;
+
+                try {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'fr-FR';
+                    if (frenchVoice) {
+                        utterance.voice = frenchVoice;
+                    }
+                    utterance.rate = rate;
+
+                    // Pojistka: pokud by speechSynthesis zůstal v některých prohlížečích pozastavený (paused)
+                    if (window.speechSynthesis.paused) {
+                        window.speechSynthesis.resume();
+                    }
+
+                    window.speechSynthesis.speak(utterance);
+                } catch (e) {
+                    // Pokud prohlížeč vyhodí chybu, nezablokujeme UI, jen zobrazíme info lištu
+                    document.getElementById('voice-warning').classList.remove('hidden');
+                }
+            }
+
+            // Změna rychlosti řeči
+            function setSpeechRate(rate) {
+                speechRate = rate;
+                const btnNormal = document.getElementById('speed-normal');
+                const btnSlow = document.getElementById('speed-slow');
+
+                if (rate >= 0.9) {
+                    btnNormal.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-blue-700 shadow-sm transition cursor-pointer";
+                    btnSlow.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer";
+                } else {
+                    btnSlow.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-blue-700 shadow-sm transition cursor-pointer";
+                    btnNormal.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer";
+                }
+            }
+
+            // Přepínání záložek (1. Přehled, 2. Kvíz, 3. Psaní)
+            function switchTab(tabName) {
+                stopAllSequence();
+
+                ['learn', 'quiz', 'write'].forEach(t => {
+                    document.getElementById(`section-${t}`).classList.add('hidden');
+                    const btn = document.getElementById(`tab-${t}`);
+                    btn.classList.remove('border-blue-700', 'text-blue-700', 'font-bold');
+                    btn.classList.add('border-transparent', 'text-slate-500', 'font-semibold');
+                });
+
+                document.getElementById(`section-${tabName}`).classList.remove('hidden');
+                const activeBtn = document.getElementById(`tab-${tabName}`);
+                activeBtn.classList.remove('border-transparent', 'text-slate-500', 'font-semibold');
+                activeBtn.classList.add('border-blue-700', 'text-blue-700', 'font-bold');
+
+                if (tabName === 'quiz' && quizQuestions.length === 0) {
+                    initQuiz();
+                }
+                if (tabName === 'write' && writeQuestions.length === 0) {
+                    initWrite();
+                }
+            }
+
+            // =========================================================
+            // 1. LOGIKA PRO PŘEHLED A VÝSLOVNOST
+            // =========================================================
+            function renderLearnCards() {
+                const grid = document.getElementById('cards-grid');
+                grid.innerHTML = '';
+
+                numbersData.forEach(item => {
+                    let badgeColor = "bg-blue-100 text-blue-800";
+                    if (item.group === "dix-") badgeColor = "bg-rose-100 text-rose-800";
+                    if (item.group === "20") badgeColor = "bg-emerald-100 text-emerald-800";
+
+                    const card = document.createElement('div');
+                    card.id = `learn-card-${item.num}`;
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.className = "bg-white border border-slate-200 hover:border-blue-400 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all duration-150 flex flex-col justify-between cursor-pointer group select-none";
+                    
+                    const triggerSpeak = () => {
+                        if (isSequencePlaying) stopAllSequence();
+                        speakFrench(item.fr, null, card, false);
+                    };
+
+                    card.addEventListener('click', triggerSpeak);
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            triggerSpeak();
+                        }
+                    });
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-3xl font-extrabold text-slate-900">${item.num}</span>
+                                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md ${badgeColor}">${item.group}</span>
+                            </div>
+                            <div class="text-xl font-bold text-blue-700 group-hover:text-blue-800 transition">
+                                ${item.fr}
+                            </div>
+                            <div class="text-sm font-semibold text-slate-600 mt-0.5">
+                                ${item.phonetic}
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <span class="text-xs text-slate-500 leading-snug">${item.note}</span>
+                            <div class="w-9 h-9 shrink-0 rounded-full bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            // Bezpečné postupné přehrávání řízené výhradně spolehlivým setTimeoutem (nikdy nezamrzne)
+            function togglePlayAllSequence() {
+                if (isSequencePlaying) {
+                    stopAllSequence();
+                    return;
+                }
+
+                isSequencePlaying = true;
+                sequenceIndex = 0;
+
+                const btn = document.getElementById('btn-play-all');
+                const icon = document.getElementById('play-all-icon');
+                const text = document.getElementById('play-all-text');
+                btn.classList.remove('bg-blue-700', 'hover:bg-blue-800');
+                btn.classList.add('bg-rose-600', 'hover:bg-rose-700');
+                icon.textContent = '⏹️';
+                text.textContent = 'Zastavit přehrávání';
+
+                function stepSequence() {
+                    if (!isSequencePlaying || sequenceIndex >= numbersData.length) {
+                        stopAllSequence();
+                        return;
+                    }
+
+                    const item = numbersData[sequenceIndex];
+                    const card = document.getElementById(`learn-card-${item.num}`);
+                    speakFrench(item.fr, null, card, false);
+
+                    sequenceIndex++;
+                    const stepDelay = speechRate < 0.8 ? 1650 : 1200;
+                    sequenceTimer = setTimeout(stepSequence, stepDelay);
+                }
+
+                stepSequence();
+            }
+
+            // =========================================================
+            // 2. LOGIKA PRO POSLECHOVÝ KVÍZ
+            // =========================================================
+            function shuffleArray(array) {
+                const copy = [...array];
+                for (let i = copy.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [copy[i], copy[j]] = [copy[j], copy[i]];
+                }
+                return copy;
+            }
+
+            function initQuiz() {
+                quizQuestions = shuffleArray(numbersData);
+                quizIndex = 0;
+                quizScore = 0;
+                document.getElementById('quiz-score').textContent = '0';
+                document.getElementById('quiz-summary').classList.add('hidden');
+                document.getElementById('quiz-card-container').classList.remove('hidden');
+                loadQuizQuestion();
+            }
+
+            function loadQuizQuestion() {
+                quizAnswered = false;
+                const current = quizQuestions[quizIndex];
+
+                document.getElementById('quiz-progress-text').textContent = `Otázka ${quizIndex + 1} z ${quizQuestions.length}`;
+                document.getElementById('quiz-progress-bar').style.width = `${((quizIndex + 1) / quizQuestions.length) * 100}%`;
+                document.getElementById('quiz-feedback').classList.add('hidden');
+                document.getElementById('quiz-next-container').classList.add('hidden');
+
+                const distractors = shuffleArray(numbersData.filter(n => n.num !== current.num)).slice(0, 3);
+                const options = shuffleArray([current, ...distractors]);
+
+                const optionsContainer = document.getElementById('quiz-options');
+                optionsContainer.innerHTML = '';
+
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = "quiz-opt-btn py-5 px-4 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 text-3xl font-extrabold text-slate-800 transition active:scale-95 cursor-pointer";
+                    btn.textContent = opt.num;
+                    btn.addEventListener('click', () => handleQuizAnswer(opt.num, btn));
+                    optionsContainer.appendChild(btn);
+                });
+
+                // Přehrání aktuálního čísla s krátkým zpožděním po překreslení
+                setTimeout(() => playQuizAudio(), 150);
+            }
+
+            function playQuizAudio(customRate = null) {
+                if (!quizQuestions[quizIndex]) return;
+                const current = quizQuestions[quizIndex];
+                const btn = document.getElementById('quiz-play-btn');
+                speakFrench(current.fr, customRate, btn, true);
+            }
+
+            function handleQuizAnswer(selectedNum, btnElement) {
+                if (quizAnswered) return;
+                quizAnswered = true;
+
+                const current = quizQuestions[quizIndex];
+                const feedback = document.getElementById('quiz-feedback');
+                const allButtons = document.querySelectorAll('.quiz-opt-btn');
+
+                allButtons.forEach(b => {
+                    b.disabled = true;
+                    b.classList.remove('cursor-pointer', 'hover:border-blue-500', 'hover:bg-blue-50/50');
+                    const val = parseInt(b.textContent, 10);
+                    if (val === current.num) {
+                        b.classList.remove('border-slate-200');
+                        b.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
+                    }
+                });
+
+                if (selectedNum === current.num) {
+                    quizScore++;
+                    document.getElementById('quiz-score').textContent = quizScore;
+                    feedback.className = "rounded-xl p-4 text-sm font-medium bg-emerald-50 border border-emerald-200 text-emerald-800";
+                    feedback.innerHTML = `✅ <strong>Výborně!</strong> Slyšel(a) jsi číslo <strong>${current.num} – ${current.fr}</strong> ${current.phonetic}.`;
+                } else {
+                    btnElement.classList.remove('border-slate-200');
+                    btnElement.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-800');
+                    feedback.className = "rounded-xl p-4 text-sm font-medium bg-rose-50 border border-rose-200 text-rose-800";
+                    feedback.innerHTML = `❌ <strong>Nevadí, zkus příště!</strong> Správná odpověď byla <strong>${current.num} – ${current.fr}</strong> ${current.phonetic}.`;
+                }
+
+                feedback.classList.remove('hidden');
+                document.getElementById('quiz-next-container').classList.remove('hidden');
+            }
+
+            function nextQuizQuestion() {
+                quizIndex++;
+                if (quizIndex < quizQuestions.length) {
+                    loadQuizQuestion();
+                } else {
+                    document.getElementById('quiz-card-container').classList.add('hidden');
+                    document.getElementById('quiz-final-score').textContent = `${quizScore} / ${quizQuestions.length}`;
+                    document.getElementById('quiz-summary').classList.remove('hidden');
+                }
+            }
+
+            // =========================================================
+            // 3. LOGIKA PRO PSANÍ A PRAVOPIS
+            // =========================================================
+            function initWrite() {
+                writeQuestions = shuffleArray(numbersData);
+                writeIndex = 0;
+                writeScore = 0;
+                document.getElementById('write-score').textContent = '0';
+                document.getElementById('write-summary').classList.add('hidden');
+                document.getElementById('write-card').classList.remove('hidden');
+                loadWriteQuestion();
+            }
+
+            function loadWriteQuestion() {
+                writeAnswered = false;
+                const current = writeQuestions[writeIndex];
+
+                document.getElementById('write-progress-text').textContent = `Příklad ${writeIndex + 1} z ${writeQuestions.length}`;
+                document.getElementById('write-target-number').textContent = current.num;
+
+                const input = document.getElementById('write-input');
+                input.value = '';
+                input.disabled = false;
+                input.className = "w-full text-center text-xl font-semibold px-4 py-4 rounded-xl border-2 border-slate-300 focus:border-blue-600 focus:outline-none transition";
+                input.focus();
+
+                document.getElementById('write-hint-box').classList.add('hidden');
+                document.getElementById('write-feedback').classList.add('hidden');
+                document.getElementById('btn-write-submit').classList.remove('hidden');
+                document.getElementById('btn-write-next').classList.add('hidden');
+            }
+
+            function playWriteAudio() {
+                if (!writeQuestions[writeIndex]) return;
+                const current = writeQuestions[writeIndex];
+                const btn = document.getElementById('btn-write-audio');
+                speakFrench(current.fr, null, btn, false);
+            }
+
+            function insertHyphen() {
+                const input = document.getElementById('write-input');
+                if (input.disabled) return;
+                input.value += '-';
+                input.focus();
+            }
+
+            function showWriteHint() {
+                const current = writeQuestions[writeIndex];
+                const hintBox = document.getElementById('write-hint-box');
+                const firstLetter = current.fr.charAt(0);
+                hintBox.innerHTML = `Slovo začíná na písmeno <strong>"${firstLetter}..."</strong>, má ${current.fr.length} znaků a čte se <strong>${current.phonetic}</strong>.`;
+                hintBox.classList.remove('hidden');
+            }
+
+            function checkWriteAnswer(event) {
+                event.preventDefault();
+                if (writeAnswered) {
+                    nextWriteQuestion();
+                    return;
+                }
+
+                const input = document.getElementById('write-input');
+                const userVal = input.value.trim().toLowerCase().replace(/\s+/g, '');
+                if (!userVal) {
+                    input.focus();
+                    return;
+                }
+
+                writeAnswered = true;
+                input.disabled = true;
+
+                const current = writeQuestions[writeIndex];
+                const feedback = document.getElementById('write-feedback');
+
+                speakFrench(current.fr);
+
+                if (userVal === current.fr) {
+                    writeScore++;
+                    document.getElementById('write-score').textContent = writeScore;
+                    input.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+                    feedback.className = "rounded-xl p-4 text-sm font-medium bg-emerald-50 border border-emerald-200 text-emerald-800 text-center";
+                    feedback.innerHTML = `✅ <strong>Perfektní!</strong> Číslo ${current.num} se píše <strong>${current.fr}</strong> ${current.phonetic}.`;
+                } else {
+                    input.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                    feedback.className = "rounded-xl p-4 text-sm font-medium bg-rose-50 border border-rose-200 text-rose-800 text-center";
+                    feedback.innerHTML = `❌ <strong>Těsně vedle!</strong> Napsal(a) jsi <em>"${input.value.trim()}"</em>. Správný pravopis je <strong>${current.fr}</strong> ${current.phonetic}.`;
+                }
+
+                feedback.classList.remove('hidden');
+                document.getElementById('btn-write-submit').classList.add('hidden');
+                document.getElementById('btn-write-next').classList.remove('hidden');
+            }
+
+            function nextWriteQuestion() {
+                writeIndex++;
+                if (writeIndex < writeQuestions.length) {
+                    loadWriteQuestion();
+                } else {
+                    document.getElementById('write-card').classList.add('hidden');
+                    document.getElementById('write-final-score').textContent = `${writeScore} / ${writeQuestions.length}`;
+                    document.getElementById('write-summary').classList.remove('hidden');
+                }
+            }
+
+            // Připojení všech posluchačů událostí čistě při startu
+            function bindEvents() {
+                document.getElementById('speed-normal').addEventListener('click', () => setSpeechRate(0.95));
+                document.getElementById('speed-slow').addEventListener('click', () => setSpeechRate(0.6));
+
+                document.getElementById('tab-learn').addEventListener('click', () => switchTab('learn'));
+                document.getElementById('tab-quiz').addEventListener('click', () => switchTab('quiz'));
+                document.getElementById('tab-write').addEventListener('click', () => switchTab('write'));
+
+                document.getElementById('btn-play-all').addEventListener('click', togglePlayAllSequence);
+                document.getElementById('btn-go-quiz').addEventListener('click', () => switchTab('quiz'));
+
+                document.getElementById('quiz-play-btn').addEventListener('click', () => playQuizAudio());
+                document.getElementById('quiz-slow-btn').addEventListener('click', () => playQuizAudio(0.55));
+                document.getElementById('btn-quiz-next').addEventListener('click', nextQuizQuestion);
+                document.getElementById('btn-quiz-restart').addEventListener('click', initQuiz);
+                document.getElementById('btn-quiz-to-write').addEventListener('click', () => switchTab('write'));
+
+                document.getElementById('btn-write-audio').addEventListener('click', playWriteAudio);
+                document.getElementById('write-form').addEventListener('submit', checkWriteAnswer);
+                document.getElementById('btn-insert-hyphen').addEventListener('click', insertHyphen);
+                document.getElementById('btn-write-hint').addEventListener('click', showWriteHint);
+                document.getElementById('btn-write-next').addEventListener('click', nextWriteQuestion);
+                document.getElementById('btn-write-restart').addEventListener('click', initWrite);
+            }
+
+            // Inicializace aplikace
+            initSpeech();
+            renderLearnCards();
+            bindEvents();
+        })();
+    </script>
+</body>
+</html>
