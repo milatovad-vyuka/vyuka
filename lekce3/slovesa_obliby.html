@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Slovesa obliby a préférer</h1>
-                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Pracovní list 2/2 • adorer, aimer, aimer bien, aimer mieux, préférer, détester • 8. třída</p>
+                    <p class="text-xs sm:text-sm text-slate-500 font-medium">Pracovní list 2/2 • adorer, aimer, aimer bien, préférer, ne pas aimer, détester • 8. třída</p>
                 </div>
             </div>
 
@@ -53,7 +53,7 @@
             <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
                 <div class="text-sm">
                     <span class="text-slate-500">Celkové skóre:</span>
-                    <span id="total-score-text" class="font-bold text-indigo-600 ml-1">0 / 24</span>
+                    <span id="total-score-text" class="font-bold text-indigo-600 ml-1">0 / 26</span>
                 </div>
                 <div class="w-24 sm:w-28 bg-slate-200 rounded-full h-2.5 overflow-hidden">
                     <div id="total-progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -71,13 +71,13 @@
                     📘 Gramatický přehled
                 </button>
                 <button onclick="switchTab('cviceni1')" id="tab-cviceni1" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
-                    1. Préférer a stupnice obliby (10)
+                    1. Préférer a stupnice obliby (11)
                 </button>
                 <button onclick="switchTab('cviceni2')" id="tab-cviceni2" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
                     2. Obliba + celá fráze (8)
                 </button>
                 <button onclick="switchTab('cviceni3')" id="tab-cviceni3" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
-                    3. Sestav větu a kvíz (6)
+                    3. Sestav větu a kvíz (7)
                 </button>
             </div>
         </nav>
@@ -95,15 +95,15 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
                     <div>
                         <span class="inline-block px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-1">Gramatika • 8. třída</span>
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Vyjadřování obliby a preferencí</h2>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Vyjadřování obliby, záporu a preferencí</h2>
                     </div>
-                    <button onclick="speakFrench('J\'adore, j\'aime, j\'aime bien, je préfère, j\'aime mieux, je déteste')" class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold transition cursor-pointer border border-indigo-200">
+                    <button onclick="speakFrench('J\'adore, j\'aime, j\'aime bien, je préfère, je n\'aime pas, je déteste')" class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold transition cursor-pointer border border-indigo-200">
                         🔊 Poslechnout stupnici
                     </button>
                 </div>
 
-                <!-- Tabulka stupnice obliby -->
-                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                <!-- Tabulka stupnice obliby (6 stupňů vč. ne pas aimer) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
                     <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex flex-col justify-between">
                         <div class="flex items-center justify-between mb-1">
                             <span class="text-xl">😍</span>
@@ -142,6 +142,16 @@
                         <div class="font-extrabold text-slate-900 text-base leading-tight">préférer / aimer mieux</div>
                         <div class="text-xs text-slate-600 mt-0.5">dávat přednost / mít raději</div>
                         <div class="text-xs font-semibold text-indigo-800 mt-2 pt-2 border-t border-indigo-200/70">Je préfère lire.</div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xl">🙁</span>
+                            <span class="text-xs font-bold text-amber-700">-</span>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-base">ne pas aimer</div>
+                        <div class="text-xs text-slate-600 mt-0.5">nemít rád</div>
+                        <div class="text-xs font-semibold text-amber-900 mt-2 pt-2 border-t border-amber-200/70">Je n'aime pas cuisiner.</div>
                     </div>
 
                     <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex flex-col justify-between">
@@ -218,16 +228,16 @@
                     </div>
                 </div>
 
-                <!-- Klíčová pravidla (Infinitiv celé fráze + Elize) -->
+                <!-- Klíčová pravidla (Infinitiv celé fráze + Elize + Zápor Je n'aime pas) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 space-y-2">
                         <h3 class="font-bold text-blue-950 text-sm sm:text-base flex items-center gap-2">
                             <span>📌</span> Jak spojit sloveso obliby s frází ze slovníčku?
                         </h3>
                         <ul class="text-xs sm:text-sm text-slate-700 space-y-1.5 list-disc pl-5">
-                            <li><strong>Vyčasuješ jen první sloveso</strong> (<em>j'adore, tu aimes, nous préférons...</em>) a za něj připojíš <strong>celou frázi ze slovníčku přesně tak, jak je</strong> (v infinitivu):<br>
+                            <li><strong>Vyčasuješ jen první sloveso</strong> (<em>j'adore, je n'aime pas, nous préférons...</em>) a za něj připojíš <strong>celou frázi ze slovníčku přesně tak, jak je</strong> (v infinitivu):<br>
                                 <span class="text-blue-800 font-semibold">Je préfère faire du vélo.</span> (Raději jezdím na kole.)<br>
-                                <span class="text-blue-800 font-semibold">J'adore écouter de la musique.</span> (Zbožňuji poslouchat hudbu.)<br>
+                                <span class="text-blue-800 font-semibold">Je n'aime pas regarder la télé.</span> (Nerada se dívám na televizi.)<br>
                                 <span class="text-blue-800 font-semibold">Je déteste faire du lèche-vitrines.</span> (Nesnáším chodit po obchodech.)
                             </li>
                             <li>Nikdy nečasuješ obě slovesa najednou (např. <del>J'adore écoute</del> je chyba).</li>
@@ -236,15 +246,18 @@
 
                     <div class="p-4 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
                         <h3 class="font-bold text-amber-950 text-sm sm:text-base flex items-center gap-2">
-                            <span>✍️</span> Pozor na elizi (J' vs. Je)
+                            <span>✍️</span> Pozor na elizi (J' vs. Je) a zápor (Je n'aime pas)
                         </h3>
                         <ul class="text-xs sm:text-sm text-slate-700 space-y-1.5 list-disc pl-5">
                             <li><strong>Elize před samohláskou (a):</strong><br>
                                 <span class="text-emerald-800 font-bold">J'</span>aime, <span class="text-emerald-800 font-bold">J'</span>adore, <span class="text-emerald-800 font-bold">J'</span>aime bien, <span class="text-emerald-800 font-bold">J'</span>aime mieux
                             </li>
                             <li><strong>Bez elize před souhláskou (p, d):</strong><br>
-                                <span class="text-rose-800 font-bold">Je</span> préfère (nikoliv <del>J'préfère</del>!)<br>
-                                <span class="text-rose-800 font-bold">Je</span> déteste (nikoliv <del>J'déteste</del>!)
+                                <span class="text-rose-800 font-bold">Je</span> préfère (nikoliv <del>J'préfère</del>!) • <span class="text-rose-800 font-bold">Je</span> déteste
+                            </li>
+                            <li><strong>Zápor obklopuje sloveso (ne ... pas):</strong><br>
+                                Před <em>aimer</em> se <em>ne</em> zkracuje na <strong>n'</strong> a za <strong>Je</strong> už nedáváme apostrof:<br>
+                                <span class="text-indigo-900 font-bold">Je n'aime pas</span> (nikoliv <del>J'n'aime pas</del>!) • <em>Il n'aime pas</em> • <em>Nous n'aimons pas</em>
                             </li>
                         </ul>
                     </div>
@@ -258,17 +271,17 @@
             </div>
         </section>
 
-        <!-- ==================== SEKCE 1: ČASOVÁNÍ PRÉFÉRER A STUPNICE OBLIBY (10 bodů) ==================== -->
+        <!-- ==================== SEKCE 1: ČASOVÁNÍ PRÉFÉRER A STUPNICE OBLIBY (11 bodů) ==================== -->
         <section id="section-cviceni1" class="hidden space-y-6">
             <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                     <div>
-                        <span class="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 1 • 10 bodů</span>
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Časování slovesa PRÉFÉRER a sloves obliby</h2>
-                        <p class="text-sm text-slate-600 mt-1">V části A dopiš správný tvar slovesa <strong>préférer</strong> (pozor na přízvuky <strong>é / è</strong> – můžeš použít pomocná tlačítka). V části B vyber sloveso podle stupnice obliby.</p>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 1 • 11 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Časování slovesa PRÉFÉRER a stupnice obliby</h2>
+                        <p class="text-sm text-slate-600 mt-1">V části A dopiš správný tvar slovesa <strong>préférer</strong> (pozor na přízvuky <strong>é / è</strong> – můžeš použít pomocná tlačítka). V části B vyber sloveso podle emotikonu a kontextu.</p>
                     </div>
                     <div class="text-right shrink-0">
-                        <span id="score-ex1" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 10 bodů</span>
+                        <span id="score-ex1" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 11 bodů</span>
                     </div>
                 </div>
 
@@ -298,15 +311,16 @@
                     </div>
                 </div>
 
-                <!-- Část 1B: Výběr ze stupnice obliby (4 body) -->
+                <!-- Část 1B: Výběr ze stupnice obliby vč. je n'aime pas (5 bodů) -->
                 <div class="mt-7 pt-6 border-t border-slate-100">
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část B – Vyber sloveso podle emotikonu a kontextu (4 body)</h3>
+                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část B – Vyber sloveso podle emotikonu a kontextu (5 bodů)</h3>
                         <div class="text-xs text-slate-600 flex flex-wrap gap-3">
                             <span>😍 <strong>adorer</strong></span>
                             <span>😊 <strong>aimer</strong></span>
                             <span>🙂 <strong>aimer bien</strong></span>
-                            <span>⭐ <strong>préférer / aimer mieux</strong></span>
+                            <span>⭐ <strong>préférer</strong></span>
+                            <span>🙁 <strong>ne pas aimer</strong></span>
                             <span>😖 <strong>détester</strong></span>
                         </div>
                     </div>
@@ -340,7 +354,7 @@
                     <div>
                         <span class="inline-block px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 2 • 8 bodů</span>
                         <h2 class="text-lg sm:text-xl font-bold text-slate-900">Spoj sloveso obliby s celou frází ze slovníčku</h2>
-                        <p class="text-sm text-slate-600 mt-1">Doplň správnou frázi ze slovníčku. Pamatuj, že po slovesech <strong>aimer, adorer, préférer, détester</strong> zůstává celá fráze ze slovníčku v základním tvaru (<strong>infinitivu</strong>).</p>
+                        <p class="text-sm text-slate-600 mt-1">Doplň správnou frázi ze slovníčku. Pamatuj, že po slovesech <strong>aimer, adorer, préférer, ne pas aimer, détester</strong> zůstává celá fráze ze slovníčku v základním tvaru (<strong>infinitivu</strong>).</p>
                     </div>
                     <div class="text-right shrink-0">
                         <span id="score-ex2" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 8 bodů</span>
@@ -348,7 +362,7 @@
                 </div>
 
                 <div class="mt-4 p-3.5 rounded-xl bg-purple-50 border border-purple-200 text-xs sm:text-sm text-purple-950">
-                    <strong>Tip:</strong> Časuje se pouze první sloveso (<em>j'aime, nous préférons, tu détestes...</em>). Druhé sloveso ve frázi se už nečasuje – vyber z nabídky přesně tu frázi, kterou znáš ze slovníčku!
+                    <strong>Tip:</strong> Časuje se pouze první sloveso (<em>j'aime, je n'aime pas, nous préférons, tu détestes...</em>). Druhé sloveso ve frázi se už nečasuje – vyber z nabídky přesně tu frázi, kterou znáš ze slovníčku!
                 </div>
 
                 <!-- Věty k doplnění -->
@@ -374,17 +388,17 @@
             </div>
         </section>
 
-        <!-- ==================== SEKCE 3: SESTAV VĚTU A MINI-KVÍZ (6 bodů) ==================== -->
+        <!-- ==================== SEKCE 3: SESTAV VĚTU A MINI-KVÍZ (7 bodů) ==================== -->
         <section id="section-cviceni3" class="hidden space-y-6">
             <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-8">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                     <div>
-                        <span class="inline-block px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 3 • 6 bodů</span>
-                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Sestav větu a chytáky na elizi a přízvuky</h2>
-                        <p class="text-sm text-slate-600 mt-1">V první části poskládej slova do správného francouzského slovosledu (klikáním na kartičky), ve druhé vyřeš 3 záludné kvízové otázky.</p>
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">Cvičení 3 • 7 bodů</span>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">Sestav větu a chytáky na zápor, elizi a přízvuky</h2>
+                        <p class="text-sm text-slate-600 mt-1">V první části poskládej slova do správného francouzského slovosledu (klikáním na kartičky), ve druhé vyřeš 4 záludné kvízové otázky.</p>
                     </div>
                     <div class="text-right shrink-0">
-                        <span id="score-ex3" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 6 bodů</span>
+                        <span id="score-ex3" class="inline-block px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 font-bold text-sm">0 / 7 bodů</span>
                     </div>
                 </div>
 
@@ -396,9 +410,9 @@
                     </div>
                 </div>
 
-                <!-- Část 3B: Mini-kvíz na chytáky (3 otázky) -->
+                <!-- Část 3B: Mini-kvíz na chytáky (4 otázky) -->
                 <div class="pt-6 border-t border-slate-100 space-y-5">
-                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část B – Mini-kvíz na chytáky (3 body)</h3>
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Část B – Mini-kvíz na chytáky (4 body)</h3>
                     <div id="ex3-quiz" class="space-y-5">
                         <!-- Generováno JS -->
                     </div>
@@ -421,12 +435,12 @@
                         <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider mb-2">Výsledek – Slovesa obliby</span>
                         <h3 id="final-title" class="text-2xl sm:text-3xl font-extrabold">Skvělá práce!</h3>
                         <p id="final-message" class="text-indigo-100 mt-2 text-sm sm:text-base max-w-xl">
-                            Dokončil(a) jsi procvičování sloves obliby a časování slovesa préférer.
+                            Dokončil(a) jsi procvičování sloves obliby, záporu je n'aime pas a časování slovesa préférer.
                         </p>
                     </div>
                     <div class="bg-white/15 backdrop-blur-sm px-6 py-4 rounded-2xl text-center shrink-0 border border-white/20">
                         <div class="text-xs uppercase tracking-wider text-indigo-100 font-semibold">Celkový zisk</div>
-                        <div id="final-score-big" class="text-3xl sm:text-4xl font-extrabold mt-1">0 / 24</div>
+                        <div id="final-score-big" class="text-3xl sm:text-4xl font-extrabold mt-1">0 / 26</div>
                         <div id="final-percent" class="text-sm font-bold text-amber-300 mt-1">0 %</div>
                     </div>
                 </div>
@@ -438,7 +452,7 @@
     <!-- Patička -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-8">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400">
-            Pracovní list 2/2 • Francouzský jazyk (8. třída) • adorer, aimer, aimer bien, aimer mieux, préférer, détester
+            Pracovní list 2/2 • Francouzský jazyk (8. třída) • adorer, aimer, aimer bien, aimer mieux, préférer, ne pas aimer, détester
         </div>
     </footer>
 
@@ -448,11 +462,11 @@
            ========================================================================== */
         let lastFocusedInput = null;
         const scores = {
-            ex1: 0, // max 10
+            ex1: 0, // max 11
             ex2: 0, // max 8
-            ex3: 0  // max 6
+            ex3: 0  // max 7
         };
-        const MAX_TOTAL = 24;
+        const MAX_TOTAL = 26;
 
         function updateGlobalScore() {
             const total = scores.ex1 + scores.ex2 + scores.ex3;
@@ -569,7 +583,7 @@
         }
 
         /* ==========================================================================
-           CVIČENÍ 1: ČASOVÁNÍ PRÉFÉRER (6 bodů) + STUPNICE OBLIBY (4 body) = 10 bodů
+           CVIČENÍ 1: ČASOVÁNÍ PRÉFÉRER (6 bodů) + STUPNICE OBLIBY (5 bodů) = 11 bodů
            ========================================================================== */
         const ex1aQuestions = [
             {
@@ -614,9 +628,16 @@
             {
                 emoji: "😍",
                 before: "",
-                options: ["J'adore", "Je adore", "Je déteste"],
+                options: ["J'adore", "Je adore", "Je n'aime pas"],
                 answer: "J'adore",
                 after: "écouter de la musique et danser !"
+            },
+            {
+                emoji: "🙁",
+                before: "",
+                options: ["Je n'aime pas", "J'n'aime pas", "Je ne aime pas"],
+                answer: "Je n'aime pas",
+                after: "faire du jogging le matin."
             },
             {
                 emoji: "😖",
@@ -628,14 +649,14 @@
             {
                 emoji: "⭐",
                 before: "Entre faire du jogging et faire de la gym,",
-                options: ["je préfère", "j'préfère", "je déteste"],
+                options: ["je préfère", "j'préfère", "je n'aime pas"],
                 answer: "je préfère",
                 after: "faire de la gym."
             },
             {
                 emoji: "🙂",
                 before: "Tu",
-                options: ["aimes bien", "aime bien", "préfères"],
+                options: ["aimes bien", "aime bien", "n'aimes pas"],
                 answer: "aimes bien",
                 after: "regarder la télé le soir."
             }
@@ -742,25 +763,25 @@
             });
 
             scores.ex1 = correctCount;
-            document.getElementById('score-ex1').textContent = `${correctCount} / 10 bodů`;
+            document.getElementById('score-ex1').textContent = `${correctCount} / 11 bodů`;
             updateGlobalScore();
 
             const fb = document.getElementById('ex1-feedback');
             fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
 
-            if (correctCount === 10) {
+            if (correctCount === 11) {
                 fb.classList.add('bg-emerald-100', 'text-emerald-900');
-                fb.textContent = "Skvělé! Časování slovesa préférer včetně změny přízvuků é → è i ostatní slovesa obliby ovládáš bez chyby!";
+                fb.textContent = "Skvělé! Časování slovesa préférer včetně změny přízvuků é → è i zápor Je n'aime pas ovládáš bez chyby!";
             } else {
                 fb.classList.add('bg-amber-100', 'text-amber-900');
-                fb.textContent = `Máš správně ${correctCount} z 10 položek. Zkontroluj u červených vět přízvuky (je préfère × nous préférons).`;
+                fb.textContent = `Máš správně ${correctCount} z 11 položek. Zkontroluj u červených vět přízvuky (je préfère × nous préférons) a zápis záporu Je n'aime pas.`;
             }
         }
 
         function resetExercise1() {
             scores.ex1 = 0;
             lastFocusedInput = null;
-            document.getElementById('score-ex1').textContent = `0 / 10 bodů`;
+            document.getElementById('score-ex1').textContent = `0 / 11 bodů`;
             document.getElementById('ex1-feedback').classList.add('hidden');
             updateGlobalScore();
             initExercise1();
@@ -778,11 +799,11 @@
                 hint: "jezdit na kole"
             },
             {
-                before: "Elle préfère",
-                options: ["jouer aux échecs", "joue aux échecs", "jouons aux échecs"],
-                answer: "jouer aux échecs",
-                after: "avec son grand-père.",
-                hint: "hrát šachy"
+                before: "Je n'aime pas",
+                options: ["cuisiner", "cuisine", "cuisinons"],
+                answer: "cuisiner",
+                after: ", je préfère aller au restaurant.",
+                hint: "vařit"
             },
             {
                 before: "Je déteste",
@@ -799,7 +820,7 @@
                 hint: "jít na procházku"
             },
             {
-                before: "Tu aimes bien",
+                before: "Tu n'aimes pas",
                 options: ["jouer d'un instrument", "joues d'un instrument", "jouez d'un instrument"],
                 answer: "jouer d'un instrument",
                 after: "?",
@@ -902,7 +923,7 @@
         }
 
         /* ==========================================================================
-           CVIČENÍ 3: SESTAV VĚTU (3 body) + MINI-KVÍZ NA CHYTÁKY (3 body) = 6 bodů
+           CVIČENÍ 3: SESTAV VĚTU (3 body) + MINI-KVÍZ NA CHYTÁKY (4 body) = 7 bodů
            ========================================================================== */
         const sentenceBuilders = [
             {
@@ -911,9 +932,9 @@
                 correctSentence: "Je préfère visiter un musée à faire du lèche-vitrines."
             },
             {
-                cz: "Raději se setkáváme s přáteli a posloucháme hudbu.",
-                words: ["Nous", "préférons", "rencontrer des amis", "et écouter de la musique."],
-                correctSentence: "Nous préférons rencontrer des amis et écouter de la musique."
+                cz: "Nemám rád běhání, raději jezdím na kole.",
+                words: ["Je n'aime pas", "faire du jogging,", "je préfère", "faire du vélo."],
+                correctSentence: "Je n'aime pas faire du jogging, je préfère faire du vélo."
             },
             {
                 cz: "Zbožňují cestování a focení.",
@@ -923,6 +944,16 @@
         ];
 
         const ex3QuizQuestions = [
+            {
+                question: "Jak správně napíšeš francouzsky: „Nemám rád televizi“ (s infinitivem: „Nerada se dívám na televizi“)?",
+                options: [
+                    "J'n'aime pas regarder la télé.",
+                    "Je n'aime pas regarder la télé.",
+                    "Je ne aime pas regarder la télé."
+                ],
+                correctIndex: 1,
+                explanation: "Výborně! Zájmeno „Je“ končí na samohlásku a „n'aime“ začíná souhláskou „n“, takže zůstává plné „Je n'aime pas“."
+            },
             {
                 question: "Jak správně řekneš francouzsky: „Dávám přednost jízdě na kole“?",
                 options: [
@@ -941,7 +972,7 @@
                     "ils préférent"
                 ],
                 correctIndex: 1,
-                explanation: "Výborně! Ve 2. osobě množného čísla (vous préférez) a 1. osobě množného čísla (nous préférons) zůstává původní čárkovaný přízvuk é."
+                explanation: "Přesně tak! Ve 2. osobě množného čísla (vous préférez) a 1. osobě množného čísla (nous préférons) zůstává původní čárkovaný přízvuk é."
             },
             {
                 question: "Která věta je gramaticky SPRÁVNĚ?",
@@ -951,7 +982,7 @@
                     "Je adore écouter de la musique."
                 ],
                 correctIndex: 1,
-                explanation: "Přesně tak! Před samohláskou „a“ píšeme „J'adore“ a druhé sloveso v pořadí musí být v infinitivu: „écouter de la musique“."
+                explanation: "Skvěle! Před samohláskou „a“ píšeme „J'adore“ a druhé sloveso v pořadí musí být v infinitivu: „écouter de la musique“."
             }
         ];
 
@@ -969,7 +1000,7 @@
                 }
             });
             scores.ex3 = solvedSentencesCount + correctQuizCount;
-            document.getElementById('score-ex3').textContent = `${scores.ex3} / 6 bodů`;
+            document.getElementById('score-ex3').textContent = `${scores.ex3} / 7 bodů`;
             updateGlobalScore();
         }
 
@@ -981,7 +1012,7 @@
             builderSolved = [false, false, false];
             quizAnswered = {};
             scores.ex3 = 0;
-            document.getElementById('score-ex3').textContent = `0 / 6 bodů`;
+            document.getElementById('score-ex3').textContent = `0 / 7 bodů`;
             document.getElementById('final-summary-card').classList.add('hidden');
             updateGlobalScore();
 
@@ -1167,13 +1198,13 @@
 
             if (percent >= 90) {
                 title.textContent = "Fantastický výkon! Magnifique ! 🎉";
-                msg.textContent = "Slovesa obliby včetně časování préférer a elize ovládáš na jedničku.";
+                msg.textContent = "Slovesa obliby včetně záporu je n'aime pas a časování préférer ovládáš na jedničku.";
             } else if (percent >= 70) {
                 title.textContent = "Velmi dobrá práce! Très bien ! 👍";
-                msg.textContent = "Většinu učiva už skvěle znáš. Zkontroluj si ještě pár detailů u přízvuků é / è nebo elize (J' vs. Je).";
+                msg.textContent = "Většinu učiva už skvěle znáš. Zkontroluj si ještě pár detailů u přízvuků é / è nebo záporu Je n'aime pas.";
             } else {
                 title.textContent = "Dobrý začátek! Continue ! 💪";
-                msg.textContent = "Vrať se na záložku Gramatický přehled, prohlédni si tabulku časování préférer a zkus cvičení ještě jednou.";
+                msg.textContent = "Vrať se na záložku Gramatický přehled, prohlédni si tabulku časování préférer a zápis záporu Je n'aime pas a zkus cvičení ještě jednou.";
             }
 
             card.classList.remove('hidden');
